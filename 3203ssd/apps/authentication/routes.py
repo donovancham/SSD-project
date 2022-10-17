@@ -98,6 +98,11 @@ def logout():
     return redirect(url_for('authentication_blueprint.login'))
 
 
+@blueprint.route('/bookAppointment.html', methods=['GET', 'POST'])
+def bookAppt():
+
+    return render_template('home/bookAppointment.html', segment="bookAppointment")
+
 # Errors
 
 @login_manager.unauthorized_handler
