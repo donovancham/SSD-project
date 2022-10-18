@@ -20,8 +20,18 @@ docker-compose up --build
 - [Workflow](docs/devnotes/workflow.md)
 - [Task-list](docs/devnotes/tasklist.md)
 - [Testing](docs/devnotes/testing.md)
+- [Architecture](docs/architecture.md)
 
 ## Changelog
 - v0.0
-  - Added guides for setup
-  - Added workflow documentations
+  - Added Guides for setup
+    - `README.md`
+    - `docs/devnotes/git-guide.md`
+    - `docs/devnotes/init.md`
+    - `requirements.txt`
+  - Added Workflow Documentations
+    - `docs/devnotes/tasklist.md`
+    - `docs/devnotes/testing.md`
+    - `docs/devnotes/workflow.md`
+  - Added Project Documentations
+    - `docs/architecture.md`

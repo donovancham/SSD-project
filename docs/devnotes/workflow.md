@@ -40,6 +40,11 @@ pip freeze > requirements.txt
 
 ## Processes
 
+### Pull Request Checklist
+- [ ] Changelog filled up
+- [ ] Update the implementation
+- [ ] Commit Message = Changelog
+
 ### Branching
 - Main Branch
   - The main branch will be **protected**
@@ -57,6 +62,7 @@ pip freeze > requirements.txt
 - Changes should be written in the changelog
 - Versioning does not matter for dev, production requires full number builds (1.0, 2.0)
 - File changes should be explained
+- Commit message same as changelog (just copy paste)
 
 ```md
 - v0.1.1

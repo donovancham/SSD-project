@@ -1,0 +1,5 @@
+.git
+.gitignore
+private/
+venv
+requirements.txt
