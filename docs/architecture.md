@@ -24,6 +24,6 @@ Documents the general architecture of the project.
   - UFW
   - WAF?
 
-## Folder Structure
+## Folder Structure (TBD)
 - /
 
