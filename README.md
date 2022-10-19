@@ -1,5 +1,5 @@
 # Clinic Management System
-
+ 
 ## Software Requirements
 - [Python](https://www.python.org/downloads/release/python-3104/) >= 3.10.4
 - [Docker Desktop](https://www.docker.com/) ([WSL2](https://docs.docker.com/desktop/windows/wsl/) is optional but recommended)
