@@ -1,5 +1,5 @@
 # Git Guide
-This guide details how to properly use the `git` tool to get updates from remote or push changes to remote.
+This guide details how to properly use the `git` tool to get updates from remote or push changes to remote. All code is done in **Git Bash**.
 
 ## Project set up steps:
 
@@ -12,16 +12,16 @@ This guide details how to properly use the `git` tool to get updates from remote
 
 1. Checkout your branch
 
-```sh
-git checkout <branchname>
+```console
+$ git checkout <branchname>
 ```
 
 2. Code and test your code
 
 3. Stage your changes to the branch (best practice to add the files that you modified only) 
 
-```sh
-git add <file name>
+```console
+$ git add <file name>
 ```
 
 4. Commit your changes `git commit -m “<commit message>”` or `git commit`. Press enter and type the summary and description for the commit. Then press `esc` and type `:wq`
@@ -35,20 +35,24 @@ git add <file name>
 3. Change back to your branch `git checkout <branchname>`
 4. Merge main branch code to your branch `git merge main`
 
-## Once your feature is completed, merge it to main branch:
+## Once your feature is completed, merge it to main branch
 
-You can create a pull request in Github to merge your branch to main branch (Please do not commit the merge by yourself)
+**NOTE:** Ensure Changelog is updated before PR
 
-### OR
+You can create a pull request in Github to merge your branch to main branch (Please do not commit the merge by yourself).
+
+### OR (NOT ALLOWED)
 
 1. Checkout main branch `git checkout main`
 2. Merge your branch to main branch `git merge <branchname>`
 3. Push merged code to main branch in Github `git push`
 
 ## Stashing
+Use this feature when you realise you are working on the wrong branch
 
 1. `git stash` to store changes
-2. `git stash pop` to restore changes
+2. (Optional) `git checkout <branch>` to switch to other branch
+3. `git stash pop` to restore changes
 
 ## Switch Branches
 
