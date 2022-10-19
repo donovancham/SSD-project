@@ -55,6 +55,9 @@ KEY_CONTENT....
 # git config --global gpg.program "C:\Program Files (x86)\GnuPG\bin\gpg.exe"
 # git config --global user.signingkey 3AA5C34371567BD2
 # git config --global commit.gpgsign true
+
+IMPORTANT: Ensure environment variable set
+$env:GNUPGHOME='C:\Users\user\AppData\Roaming\gnupg'
 ```
 
 **Linux**
