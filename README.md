@@ -5,12 +5,12 @@
 - [Docker Desktop](https://www.docker.com/) ([WSL2](https://docs.docker.com/desktop/windows/wsl/) is optional but recommended)
 
 ## Quickstart
-```sh
-# Dev Quickstart
-flask run --host=0.0.0.0 --port=5000
+```console
+Dev Quickstart
+$ flask run --host=0.0.0.0 --port=5000
 
-# Production Testing
-docker-compose up --build
+Production Testing
+$ docker-compose up --build
 ```
 
 ## Docs
@@ -35,3 +35,15 @@ docker-compose up --build
     - `docs/devnotes/workflow.md`
   - Added Project Documentations
     - `docs/architecture.md`
+- v0.1
+  - Updated GPG Key generation for verified signature
+    - `docs/devnotes/env-setup.md`
+  - Updated documentation tasks
+    - `docs/devnotes/tasklist.md`
+  - Added branch protection documentation
+    - `docs/devnotes/workflow.md`
+  - Updated codeblocks for accurate depiction of linux/windows code
+    - `docs/devnotes/init.md`
+    - `README.md`
+    - `docs/devnotes/env-setup.md`
+

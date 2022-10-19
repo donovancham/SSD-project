@@ -45,6 +45,15 @@ pip freeze > requirements.txt
 - [ ] Update the implementation
 - [ ] Commit Message = Changelog
 
+### Branch Protection
+- [Branch Protection Configuration Guide](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/defining-the-mergeability-of-pull-requests/managing-a-branch-protection-rule)
+- Protected Branch (main)
+  - Require a pull request before merging
+    - Require approvals
+  - Require signed commits
+    - Users are required to sign their identity using
+    - `git config --global commit.gpgsign true`
+
 ### Branching
 - Main Branch
   - The main branch will be **protected**

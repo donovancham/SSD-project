@@ -6,19 +6,19 @@ This page details how to setup the git repo. Recommended to use [the easy way](#
 ## Setting up Repo locally
 1. Initialize the local folder
 
-```sh
-cd <project_folder>
-git init .
+```console 
+$ cd <project_folder>
+$ git init .
 ```
 
 2. Configure Remote
 
-```sh
-# git remote add <shortname> <url>
-git remote add origin https://github.com/donovancham/SSD-project.git
+```console 
+git remote add <shortname> <url>
+$ git remote add origin https://github.com/donovancham/SSD-project.git
 
-# Update remote data
-git fetch origin
+Update remote data
+$ git fetch origin
 ```
 
 ## Clone Existing (Easiest)
