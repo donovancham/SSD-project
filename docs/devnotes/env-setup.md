@@ -15,6 +15,16 @@ Key Size: 4096
 Expiry: No expire
 Name: <Github username>
 Email: <Github email>
+
+NOTE: To check your git configured email and name
+# git config --list
+# git config --global --list
+# git config user.email
+# git config user.name
+
+To set Email and name
+# git config --global user.name <name>
+# git config --global user.email <email>
 ```
 
 ### 3. Check if key exists
