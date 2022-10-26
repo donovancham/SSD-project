@@ -5,12 +5,23 @@
 - [Docker Desktop](https://www.docker.com/) ([WSL2](https://docs.docker.com/desktop/windows/wsl/) is optional but recommended)
 
 ## Quickstart
+**Windows**
 ```console
-Dev Quickstart
-$ flask run --host=0.0.0.0 --port=5000
+$ cd services\web
+$ .\env\Scripts\activate
+$ pip install -r requirements.txt
+```
 
-Production Testing
-$ docker-compose up --build
+**Linux**
+```console
+$ cd services/web
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+```
+
+**Development**
+```console
+$ docker-compose up -d --build
 ```
 
 ## Docs
@@ -21,6 +32,7 @@ $ docker-compose up --build
 - [Task-list](docs/devnotes/tasklist.md)
 - [Testing](docs/devnotes/testing.md)
 - [Architecture](docs/architecture.md)
+- [App Structure Documentation](https://docs.appseed.us/boilerplate-code/flask#codebase-structure)
 
 ## Changelog
 - v0.0
@@ -47,3 +59,6 @@ $ docker-compose up --build
     - `README.md`
     - `docs/devnotes/env-setup.md`
 
+- Added basic configuration setup of web stack
+- Added documentation for `env-setup`
+- Added documentation of flask app

@@ -12,30 +12,73 @@ All major and minor objectives for the project's achievement can be added here.
 - [x] Finish Git GPG setup guide
 - [x] Update all command lines to `console` for markdown codeblock format
 - [ ] Document folder structure to `architecture.md` once planned
+- [ ] Document Secret setup for azure vault
 
 ## Environment Setup
-- [ ] Docker
-- [ ] Python Flask
-  - [ ] Basic Folder Structure
-  - [ ] Quickstart Documentation
-  - [ ] Code Documentation
-  - [ ] Testing Documentation
-- [ ] Jenkins
-  - [ ] Configure Jenkins Server
-  - [ ] Configure CI/CD
+- [ ] Web App
+  - [ ] Python Flask
+    - [x] Basic Folder Structure
+    - [ ] Quickstart Documentation
+    - [ ] Update environment variables to use secrets
+  - [ ] Postgresql
+    - [x] Basic setup
+    - [ ] Update environment variables to use secrets
+  - [ ] Gunicorn
+    - [ ] Basic setup
+    - [ ] Secure setup
+  - [ ] Nginx
+    - [ ] Basic setup
+    - [ ] Security
+    - [ ] Optimze `Dockerfile`
+  - [ ] Docker
+    - [ ] Docker Secrets
+    - [ ] Docker Swarm
+    - [ ] [Dockerfile setup](https://testdriven.io/blog/docker-best-practices/)
+- [x] Jenkins
+  - [x] Configure Jenkins Server
 - [ ] Environment Security
   - [x] Configure Branch security
-  - [ ] Remote Vault
+  - [ ] Remote Vault (Azure Key Vault)
     - [ ] Setup Remote vault for secure credential/key storage
     - [ ] Link remote vault to CI/CD pipeline
 
+## Jenkins
+- [ ] Configure OWASP Plugin
+- [ ] Configure General plugins
+- [ ] Configure CI testing
+- [ ] Configure CD once production level is staged
+- [ ] Configure TLS/SSL for Apache
+
 ## Production
+- [ ] Refine `docker-compose.yml` for production deployment
 - [ ] Configure Domain name
   - [ ] Configure subdomains
     - [ ] Jenkins
     - [ ] Nginx Proxy
 - [ ] Configure HTTPS
 - [ ] Firewall Configurations
+
+## Web App Dev
+
+### Features Checklist
+- [ ] (Copy and fill up from the Deliverable 1 documentation)
+
+### Database
+- [ ] Learn SQLAlchemy
+- [ ] Create models
+  - [ ] Accounts
+  - [ ] Users
+  - [ ] Appointments
+  - [ ] Records
+- [ ] 
+
+
+
+## General
+- [ ] Code Documentation
+- [ ] Testing Documentation
+
+
 
 ## Security
 

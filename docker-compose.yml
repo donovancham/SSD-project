@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  nginx:
+    container_name: cmsapp-proxy
+    build: ./services/nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - web
+    networks:
+      - frontend
+  web:
+    container_name: cmsapp-web
+    build: ./services/web
+    command: gunicorn --bind 0.0.0.0:32984 manage:app
+    expose:
+      - 32984
+    env_file:
+      - ./.env.dev
+    depends_on:
+      - db
+    networks:
+      - frontend
+      - backend
+  db:
+    container_name: cmsapp-db
+    image: postgres:13-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env.db.dev
+    networks:
+      - backend
+
+networks:
+  frontend:
+  backend:
+
+volumes:
+  postgres_data:
