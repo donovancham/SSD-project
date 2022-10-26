@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
+from wtforms import StringField, PasswordField, DateField, TimeField, IntegerField, SelectField, SubmitField
 from wtforms.validators import Email, DataRequired
 
 # login and registration
@@ -26,3 +26,12 @@ class CreateAccountForm(FlaskForm):
     password = PasswordField('Password', 
                              id='pwd_create',
                              validators=[DataRequired()])
+
+class BookApptForm(FlaskForm):
+    inputDate = DateField(label='inputDate:', validators=[ DataRequired()])
+    inputTime = SelectField("inputTime", validators=[DataRequired()],
+                                            choices =['08:00', '08:30', '09:00', '09:30', '10:00', '10:30',
+                                            '11:00', '11:30', '12:00', '12:30', '13:00', '13:30',
+                                            '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00'])
+    inputDetail = SelectField("inputDetail", validators=[DataRequired()],
+                                            choices =['Eye Checkup', 'Heart Checkup', 'Body Checkup'])
