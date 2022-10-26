@@ -9,10 +9,12 @@ from flask_login import (
 
 from apps import db, login_manager
 from apps.authentication import blueprint
-from apps.authentication.forms import LoginForm, CreateAccountForm
+from apps.authentication.forms import LoginForm, CreateAccountForm, BookApptForm
 from apps.authentication.models import Users
 
 from apps.authentication.util import verify_pass
+
+import sys
 
 
 @blueprint.route('/')
@@ -100,8 +102,18 @@ def logout():
 
 @blueprint.route('/bookAppointment.html', methods=['GET', 'POST'])
 def bookAppt():
+    form = BookApptForm()
+    if request.method == "POST":
+        #if form.validate_on_submit():
+            inputDate = request.form['inputDate']
+            inputTime = request.form['inputTime']
+            inputDetail = request.form['inputDetail']
 
-    return render_template('home/bookAppointment.html', segment="bookAppointment")
+            # entry = employment(year,schoolName,degName,employmentRate,salary,industry)
+            print("Date: " + str(inputDate) + " Time: " + str(inputTime) + " Detail: " + str(inputDetail))
+            return render_template('home/viewAppointment.html', segment="viewAppointment")
+
+    return render_template('home/bookAppointment.html', segment="bookAppointment", form=form)
 
 # Errors
 
