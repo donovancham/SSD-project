@@ -7,15 +7,27 @@
                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                 Dashboard
             </a>
+
             <div class="sb-sidenav-menu-heading">Appointments</div>
             <a class="nav-link {% if 'bookAppointment' in segment %} active {% endif %}" href="bookAppointment.html">
-                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                Book New Appointment
+                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                Book Appointment
             </a>
             <a class="nav-link {% if 'viewAppointment' in segment %} active {% endif %}" href="viewAppointment.html">
-                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                View All Appointments
+                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                View Appointments
             </a>
+
+            <div class="sb-sidenav-menu-heading">Records</div>
+            <a class="nav-link {% if 'createRecord' in segment %} active {% endif %}" href="createRecord.html">
+                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                Create Record
+            </a>
+            <a class="nav-link {% if 'viewRecord' in segment %} active {% endif %}" href="viewRecord.html">
+                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                View Record
+            </a>
+
             <div class="sb-sidenav-menu-heading">Interface</div>
             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                 <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>

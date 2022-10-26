@@ -35,3 +35,8 @@ class BookApptForm(FlaskForm):
                                             '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00'])
     inputDetail = SelectField("inputDetail", validators=[DataRequired()],
                                             choices =['Eye Checkup', 'Heart Checkup', 'Body Checkup'])
+
+class CreateRecordForm(FlaskForm):
+    defaultDate = StringField('defaultDate', id='defaultDate', validators=[DataRequired()])
+    inputNRIC = StringField('inputNRIC', id='inputNRIC', validators=[DataRequired()])
+    inputDescription = StringField('inputDescription', id='inputDescription', validators=[DataRequired()])
