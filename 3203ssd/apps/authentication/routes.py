@@ -10,7 +10,7 @@ from flask_login import (
 from apps import db, login_manager
 from apps.authentication import blueprint
 from apps.authentication.forms import LoginForm, CreateAccountForm, BookApptForm, CreateRecordForm
-from apps.authentication.models import Users
+from apps.authentication.models import Appointment, Users
 
 from apps.authentication.util import verify_pass
 
@@ -109,9 +109,14 @@ def bookAppt():
             inputTime = request.form['inputTime']
             inputDetail = request.form['inputDetail']
 
-            # entry = employment(year,schoolName,degName,employmentRate,salary,industry)
-            print("Date: " + str(inputDate) + " Time: " + str(inputTime) + " Detail: " + str(inputDetail))
-            return render_template('home/viewAppointment.html', segment="viewAppointment")
+            inputNRIC = request.form['inputNRIC']
+            inputName = request.form['inputName']
+
+            newAppt = Appointment(appointmentDate = inputDate, appointmentTime = inputTime, patientName = inputName, patientNRIC = inputNRIC, appointmentDetail = inputDetail)
+            db.session.add(newAppt)
+            db.session.commit()
+
+            return redirect('/viewAppointment.html')
 
     return render_template('home/bookAppointment.html', segment="bookAppointment", form=form)
 
@@ -129,6 +134,13 @@ def createRecord():
             return render_template('home/viewRecord.html', segment="viewRecord")
 
     return render_template('home/createRecord.html', segment="createRecord", form=form)
+
+
+@blueprint.route('/viewAppointment.html')
+def viewAppt():
+    data = Appointment.query.all()
+
+    return render_template('home/viewAppointment.html', segment="viewAppointment", data=data)
 
 # Errors
 
