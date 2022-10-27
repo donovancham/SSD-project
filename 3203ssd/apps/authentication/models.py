@@ -50,5 +50,14 @@ class Appointment(db.Model):
     appointmentDate = db.Column(db.String(64), nullable = False)
     appointmentTime = db.Column(db.String(64), nullable = False)
     patientName = db.Column(db.String(64), nullable = False)
-    patientNRIC = db.Column(db.String(64), unique=True, nullable = False)
+    patientNRIC = db.Column(db.String(64), nullable = False)
     appointmentDetail = db.Column(db.String(64), nullable = False)
+
+class Record(db.Model):
+    __tablename__ = 'Record'
+    recordID = db.Column(db.Integer, primary_key=True)
+    dateCreated = db.Column(db.String(64), nullable = False)
+    createdBy = db.Column(db.String(64), nullable = False)
+    patientName = db.Column(db.String(64), nullable = False)
+    patientNRIC = db.Column(db.String(64), nullable = False)
+    description = db.Column(db.String(64), nullable = False)
