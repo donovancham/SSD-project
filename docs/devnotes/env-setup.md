@@ -90,12 +90,12 @@ Try committing to git and you should see the `Verified` badge at the side of the
 
 ## Prerequisites
 Ensure the following software are installed before continuing.
-- `Python 3.10.7`
+- `Python 3.8+`
 - `pip`
 - `venv`
 
 ## Configure Python Environment
-1. Install `Python 3.10.7` in the environment of choice
+1. Install `Python 3.8+` in the environment of choice
 
 ```console
 # Verify Python Install

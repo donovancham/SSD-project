@@ -14,25 +14,21 @@
                     <div class="card shadow-lg border-0 rounded-lg mt-5">
                         <div class="card-header"><h3 class="text-center font-weight-light my-4">Book New Appointment</h3></div>
                         <div class="card-body">
-                            <form>
+                            <form role="form" method="post" action="">
                                 <div class="form-floating mb-3">
-                                    <input class="form-control" id="inputDate" type="date" placeholder="Select Date" onkeydown="return false"/>
+                                    {{ form.inputDate(placeholder="Select Date", class="form-control", onkeydown="return false") }}
                                     <label for="inputDate">Date</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input class="form-control" id="inputTime" type="time" placeholder="Select Time" onkeydown="return false" step="600"/>
+                                    {{ form.inputTime(placeholder="Select Time", class="form-control", onkeydown="return false") }}
                                     <label for="inputTime">Time</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <select class="form-control" id="inputDetail" name="inputDetail" placeholder="Appointment Detail">
-                                        <option value="heart">Heart Checkup</option>
-                                        <option value="eye">Eye Checkup</option>
-                                        <option value="eye">Body Checkup</option>
-                                    </select>
+                                    {{ form.inputDetail(class="form-control")}}
                                     <label for="inputDetail">Appointment Detail:</label>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                    <input class="btn btn-primary" id="bookApptBtn" type="submit" value="Book Appointment">
+                                    <button class="btn btn-primary" id="bookApptBtn" type="submit">Book Appointment</button>
                                 </div>
                             </form>
                         </div>
@@ -51,10 +47,27 @@
     date = new Date(); 
     year = date.getFullYear(); 
     month = date.getMonth() + 1; 
-    hour = date.getHours(),
-    mins  = date.getMinutes();
     day = date.getDate(); 
+    hour = date.getHours();
+    mins = date.getMinutes();
     
+    if (date.getMinutes() < 30){
+        mins = 30;
+    }
+    else {
+        mins = 0;
+    }
+
+    if (date.getHours() < 8){
+        hour = 8;
+        mins = 0;
+    }
+    else if (date.getHours() >= 17){
+        day = date.getDate() + 1;
+        hour = 8
+        mins = 0;
+    }
+
     month = (month < 10 ? "0" : "") + month;
     day = (day < 10 ? "0" : "") + day;
     hour = (hour < 10 ? "0" : "") + hour;
