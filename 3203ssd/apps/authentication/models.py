@@ -16,6 +16,7 @@ class Users(db.Model, UserMixin):
     password = db.Column(db.LargeBinary)
     userrole=db.Column(db.String(64))
     nric=db.Column(db.String(64), unique=True)
+    name=db.Column(db.String(64))
 
     def __init__(self, **kwargs):
         for property, value in kwargs.items():
