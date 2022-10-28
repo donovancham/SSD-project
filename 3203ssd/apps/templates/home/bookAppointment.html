@@ -28,11 +28,11 @@
                                     <label for="inputDetail">Appointment Detail:</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    {{ form.inputNRIC(class="form-control") }}
+                                    {{ form.inputNRIC(class="form-control", value=current_user.nric, readonly="readonly") }}
                                     <label for="inputNRIC"> Patient NRIC (Last 4 Digit)</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    {{ form.inputName(class="form-control")}}
+                                    {{ form.inputName(class="form-control", value=current_user.name, readonly="readonly")}}
                                     <label for="inputName">Patient Name:</label>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between mt-4 mb-0">

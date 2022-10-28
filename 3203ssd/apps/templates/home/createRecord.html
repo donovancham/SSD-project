@@ -27,12 +27,9 @@
                                     {{ form.inputDescription(class="form-control")}}
                                     <label for="inputDescription">Description:</label>
                                 </div>
+
                                 <div class="form-floating mb-3">
-                                    {{ form.inputName(class="form-control") }}
-                                    <label for="inputName">Patient Name</label>
-                                </div>
-                                <div class="form-floating mb-3">
-                                    {{ form.inputCreatedBy(class="form-control")}}
+                                    {{ form.inputCreatedBy(class="form-control", value=current_user.name, readonly="readonly")}}
                                     <label for="inputCreatedBy">Created By:</label>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-between mt-4 mb-0">

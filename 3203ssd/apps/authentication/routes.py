@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 
-from flask import render_template, redirect, request, url_for
+from flask import render_template, redirect, request, url_for, flash
 from flask_login import (
     current_user,
     login_user,
@@ -137,13 +137,22 @@ def createRecord():
             inputNRIC = request.form['inputNRIC']
             inputDescription = request.form['inputDescription']
 
-            inputName = request.form['inputName']
+            # inputName = request.form['inputName']
+            inputName = ""
             inputCreatedBy = request.form['inputCreatedBy']
 
-            newRecord = Record(dateCreated = defaultDate, createdBy = inputCreatedBy, patientName = inputName, patientNRIC = inputNRIC, description = inputDescription)
-            db.session.add(newRecord)
-            db.session.commit()
-            return redirect('/viewRecord.html')
+            checkUsers = Users.query.all()
+            for eachUser in checkUsers:
+                if eachUser.nric == inputNRIC:
+                    inputName = eachUser.name
+
+            if (inputName == ""):
+                print("No such NRIC in User Database")
+            else:
+                newRecord = Record(dateCreated = defaultDate, createdBy = inputCreatedBy, patientName = inputName, patientNRIC = inputNRIC, description = inputDescription)
+                db.session.add(newRecord)
+                db.session.commit()
+                return redirect('/viewRecord.html')
 
     return render_template('home/createRecord.html', segment="createRecord", form=form)
 
