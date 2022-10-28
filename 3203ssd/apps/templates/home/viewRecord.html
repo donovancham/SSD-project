@@ -23,27 +23,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>17/10/2022</td>
-                                <td>Dr Low</td>
-                                <td>Jason Wong</td>
-                                <td>123D</td>
-                                <td>Condition good. Prescriped - medicine.</td>
-                            </tr>
-                            <tr>
-                                <td>19/10/2022</td>
-                                <td>Dr Tong</td>
-                                <td>John Low</td>
-                                <td>987D</td>
-                                <td>Condition bad. Prescriped - medicine.</td>
-                            </tr>
-                            <tr>
-                                <td>20/11/2022</td>
-                                <td>Dr Wong</td>
-                                <td>Lee Wok Kong</td>
-                                <td>876D</td>
-                                <td>Condition good. Prescriped - medicine.</td>
-                            </tr>
+                            {% for rec in data %}
+                                <tr>
+                                    <td>{{rec.dateCreated}}</td>
+                                    <td>{{rec.createdBy}}</td>
+                                    <td>{{rec.patientName}}</td>
+                                    <td>{{rec.patientNRIC}}</td>
+                                    <td>{{rec.description}}</td>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
