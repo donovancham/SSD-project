@@ -2,7 +2,7 @@
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, DateField, TimeField, IntegerField, SelectField, SubmitField
-from wtforms.validators import Email, DataRequired
+from wtforms.validators import DataRequired, Length, Email
 
 # login and registration
 
@@ -25,12 +25,16 @@ class CreateAccountForm(FlaskForm):
                         validators=[DataRequired(), Email()])
     password = PasswordField('Password', 
                              id='pwd_create',
-                             validators=[DataRequired()])
+                             validators=[DataRequired(), Length(min=6, max=40)])
     userrole = SelectField("userrole", validators=[DataRequired()],
                                             choices =['Doctor', 'Patient', 'Nurse'])   
     nric = StringField('nric', 
                            id='nric_create', 
-                           validators=[DataRequired()])                  
+                           validators=[DataRequired(), Length(min=4, max=4)])   
+    name = StringField('name', 
+                           id='name_create', 
+                           validators=[DataRequired()])
+
                              
 
 class BookApptForm(FlaskForm):

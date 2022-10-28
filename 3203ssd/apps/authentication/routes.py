@@ -154,6 +154,11 @@ def viewAppt():
 
     return render_template('home/viewAppointment.html', segment="viewAppointment", data=data)
 
+@blueprint.route('/changepassword.html')
+def changepassword():
+
+    return render_template('home/changepassword.html')
+
 @blueprint.route('/viewRecord.html')
 def viewRecord():
     data = Record.query.all()
