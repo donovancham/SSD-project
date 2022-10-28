@@ -60,6 +60,7 @@ def register():
 
         username = request.form['username']
         email = request.form['email']
+        nric= request.form['nric']
 
         # Check usename exists
         user = Users.query.filter_by(username=username).first()
@@ -74,6 +75,13 @@ def register():
         if user:
             return render_template('accounts/register.html',
                                    msg='Email already registered',
+                                   success=False,
+                                   form=create_account_form)
+        # Check nric exists
+        user = Users.query.filter_by(nric=nric).first()
+        if user:
+            return render_template('accounts/register.html',
+                                   msg='Nric already registered',
                                    success=False,
                                    form=create_account_form)
 

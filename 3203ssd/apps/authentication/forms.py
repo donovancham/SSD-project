@@ -26,6 +26,12 @@ class CreateAccountForm(FlaskForm):
     password = PasswordField('Password', 
                              id='pwd_create',
                              validators=[DataRequired()])
+    userrole = SelectField("userrole", validators=[DataRequired()],
+                                            choices =['Doctor', 'Patient', 'Nurse'])   
+    nric = StringField('nric', 
+                           id='nric_create', 
+                           validators=[DataRequired()])                  
+                             
 
 class BookApptForm(FlaskForm):
     inputDate = DateField(label='inputDate:', validators=[ DataRequired()])
