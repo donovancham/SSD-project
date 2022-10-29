@@ -1,0 +1,8 @@
+# Autodetect text files
+* text=auto
+
+# ...Unless the name matches the following
+# overriding patterns
+
+# Ensure those won't be messed up with
+entrypoint.sh binary
