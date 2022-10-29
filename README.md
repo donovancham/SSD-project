@@ -19,6 +19,11 @@ $ source venv/bin/activate
 $ pip install -r requirements.txt
 ```
 
+**App Dev**
+```
+$ gunicorn --bind 0.0.0.0:32984 manage:app
+```
+
 **Development**
 ```console
 $ docker-compose up -d --build
@@ -58,7 +63,20 @@ $ docker-compose up -d --build
     - `docs/devnotes/init.md`
     - `README.md`
     - `docs/devnotes/env-setup.md`
-
-- Added basic configuration setup of web stack
-- Added documentation for `env-setup`
-- Added documentation of flask app
+- v1.0
+  - Added basic configuration setup of web stack
+    - Copied existing development to `services/web`
+    - Migrated existing development processes
+      - For these files, `import apps` change to import `cmsapp` (double check pylance for syntax highlighting)
+        - `authentication/models.py`
+        - `authentication/routes.py`
+        - `home/routes.py`
+      - Updated as of commit `d7ef544e5c5d9bf8c16b79ecf6779446ed6fb3b0`
+    - Using `manage.py` for database updates
+      - Run `python manage.py create_db` to create db
+      - Run `python manage.py delete_db` to delete db
+  - Added documentation for `env-setup`
+  - Added documentation of flask app
+  - Added documentation for `devnotes/workflow`
+    - Added things to note before committing changes
+    - Added documentation for how to check the db changes

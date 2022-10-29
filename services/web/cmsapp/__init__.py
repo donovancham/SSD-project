@@ -1,29 +1,54 @@
-from flask import Flask, jsonify
+import os
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from dotenv import load_dotenv
+from flask_login import LoginManager
+from flask_migrate import Migrate
+from flask_minify  import Minify
+from importlib import import_module
+from dotenv import load_dotenv, find_dotenv
+from cmsapp.config import config_dict
+
+
+def register_extensions(app: Flask):
+    db.init_app(app)
+    login_manager.init_app(app)
+
+
+def register_blueprints(app: Flask):
+    for module_name in ('authentication', 'home'):
+        module = import_module('cmsapp.{}.routes'.format(module_name))
+        app.register_blueprint(module.blueprint)
+
+
+# Configure the database
+# db: SQLAlchemy = SQLAlchemy(app)
+db: SQLAlchemy = SQLAlchemy()
+
+# Configure login manager
+login_manager: LoginManager = LoginManager()
 
 # Initialize project with name
 app = Flask(__name__)
-# Get config variables from config.py
-app.config.from_object("cmsapp.config.Config")
 # Load environment variables from `.env`
-load_dotenv("../../.env.dev")
+load_dotenv(find_dotenv(".env.dev"))
 
-# Configure the database
-db = SQLAlchemy(app)
+# Init flask app
+DEBUG = (os.getenv('DEBUG', 'False') == 'True')
+get_config_mode = 'Debug' if DEBUG else 'Production'
 
-# Database model for users
-# To be moved to `model.py`
-class User(db.Model):
-  __tablename__ = "users"
+# Load the configuration using the default values
+app_config = config_dict[get_config_mode.capitalize()]
 
-  id = db.Column(db.Integer, primary_key=True)
-  email = db.Column(db.String(128), unique=True, nullable=False)
-  active = db.Column(db.Boolean(), default=True, nullable=False)
+app.config.from_object(app_config)
+register_extensions(app)
+register_blueprints(app)
 
-  def __init__(self, email):
-    self.email = email
+Migrate(app, db)
 
-@app.route("/")
-def hello_world():
-  return jsonify(hello="world")
+if not DEBUG:
+    Minify(app=app, html=True, js=False, cssless=False)
+else:
+    app.logger.info('DEBUG            = ' + str(DEBUG)             )
+    app.logger.info('Page Compression = ' + 'FALSE' if DEBUG else 'TRUE' )
+    app.logger.info('DBMS             = ' + app_config.SQLALCHEMY_DATABASE_URI)
+    app.logger.info('ASSETS_ROOT      = ' + app_config.ASSETS_ROOT )

@@ -166,6 +166,11 @@ $ docker-compose exec web python manage.py create_db
 $ docker-compose down -v
 ```
 
+- If error `Error response from daemon: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: "/home/cms/web/entrypoint.sh": permission denied: unknown`
+  - Navigate to `services/web/entrypoint.sh`
+  - Change from `CRLF` to `LF`
+  - In linux: `chmod +x entrypoint.sh`
+
 ## Install Docker
 1. Install [Docker Desktop](https://www.docker.com/)
 2. *(Optional)* Install a WSL2 Distro

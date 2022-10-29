@@ -1,5 +1,18 @@
 # Flask Application
 
+## Dependencies
+- Flask
+- Flask-SQLAlchemy
+- psycopg2-binary
+- gunicorn
+- Flask-Login
+- Flask-Migrate
+- Flask-Wtf
+- email_validator
+- Flask-Restx
+- Flask-Minify
+- python-dotenv
+
 ## Environment variables
 - Development
   - Environment Variables
