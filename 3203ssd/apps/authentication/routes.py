@@ -161,11 +161,16 @@ def createRecord():
 def viewAppt():
     data = Appointment.query.all()
     if request.method == "POST":
-        inputID = request.form["inputID"]
-        entry = Appointment.query.get_or_404(int(inputID))
-        db.session.delete(entry)
-        db.session.commit()
-        print("Entry deleted")
+        if "deleteApptBtn" in request.form:
+            inputID = request.form["inputID"]
+            entry = Appointment.query.get_or_404(int(inputID))
+            db.session.delete(entry)
+            db.session.commit()
+            print("Entry deleted")
+
+        elif "updateApptBtn" in request.form:
+            print("Entry updated")
+
         return redirect("/viewAppointment.html")
 
     return render_template('home/viewAppointment.html', segment="viewAppointment", data=data)
@@ -179,11 +184,16 @@ def changepassword():
 def viewRecord():
     data = Record.query.all()
     if request.method == "POST":
-        inputID = request.form["inputID"]
-        entry = Record.query.get_or_404(int(inputID))
-        db.session.delete(entry)
-        db.session.commit()
-        print("Entry deleted")
+        if "deleteApptBtn" in request.form:
+            inputID = request.form["inputID"]
+            entry = Record.query.get_or_404(int(inputID))
+            db.session.delete(entry)
+            db.session.commit()
+            print("Entry deleted")
+            
+        elif "updateApptBtn" in request.form:
+            print("Entry updated")
+
         return redirect("/viewRecord.html")
 
     return render_template('home/viewRecord.html', segment="viewRecord", data=data)

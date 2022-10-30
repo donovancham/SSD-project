@@ -32,18 +32,24 @@
                                             <td>{{rec.patientName}}</td>
                                             <td>{{rec.patientNRIC}}</td>
                                             <td>{{rec.description}}</td>
-                                            <td>
-                                                <form role="form" method="post" action="">
-                                                    <input type="text" value={{ rec.recordID }} id="inputID" name="inputID" hidden>
-                                                    <button id="deleteApptBtn" type="submit">Delete</button>
-                                                </form>
-                                            </td>
                                         </tr>
                                     {% endif %}
                                 {% endfor %}
                             {% endif %}
 
-                            {% if current_user.userrole == "Doctor" or current_user.userrole == "Nurse" %}
+                            {% if current_user.userrole == "Nurse" %}
+                                {% for rec in data %}
+                                    <tr>
+                                        <td>{{rec.dateCreated}}</td>
+                                        <td>{{rec.createdBy}}</td>
+                                        <td>{{rec.patientName}}</td>
+                                        <td>{{rec.patientNRIC}}</td>
+                                        <td>{{rec.description}}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if current_user.userrole == "Doctor" %}
                                 {% for rec in data %}
                                     <tr>
                                         <td>{{rec.dateCreated}}</td>
@@ -54,7 +60,13 @@
                                         <td>
                                             <form role="form" method="post" action="">
                                                 <input type="text" value={{ rec.recordID }} id="inputID" name="inputID" hidden>
-                                                <button id="deleteApptBtn" type="submit">Delete</button>
+                                                <button id="updateApptBtn" name="updateApptBtn" type="submit">Update</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form role="form" method="post" action="">
+                                                <input type="text" value={{ rec.recordID }} id="inputID" name="inputID" hidden>
+                                                <button id="deleteApptBtn" name="deleteApptBtn" type="submit">Delete</button>
                                             </form>
                                         </td>
                                     </tr>
