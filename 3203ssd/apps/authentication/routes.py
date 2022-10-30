@@ -169,7 +169,10 @@ def viewAppt():
             print("Entry deleted")
 
         elif "updateApptBtn" in request.form:
-            print("Entry updated")
+            inputID = request.form["inputID"]
+            form = BookApptForm()
+            data = Appointment.query.get(int(inputID))
+            return render_template('home/updateAppointment.html', segment="updateAppointment", data=data, form=form)
 
         return redirect("/viewAppointment.html")
 
@@ -192,11 +195,66 @@ def viewRecord():
             print("Entry deleted")
             
         elif "updateApptBtn" in request.form:
-            print("Entry updated")
+            inputID = request.form["inputID"]
+            form = CreateRecordForm()
+            data = Record.query.get(int(inputID))
+            return render_template('home/updateRecord.html', segment="updateRecord", data=data, form=form)
 
         return redirect("/viewRecord.html")
 
     return render_template('home/viewRecord.html', segment="viewRecord", data=data)
+
+@blueprint.route('/updateRecord.html', methods=['GET', 'POST'])
+def updateRecord():
+    form = CreateRecordForm()
+    data = Record.query.all()
+    if request.method == "POST":
+        inputID = request.form["inputID"]
+        defaultDate = request.form['defaultDate']
+        inputNRIC = request.form['inputNRIC']
+        inputDescription = request.form['inputDescription']
+        inputName = request.form['inputName']
+        inputCreatedBy = request.form['inputCreatedBy']
+
+        entry = Record.query.get(int(inputID))
+        entry.dateCreated = defaultDate
+        entry.createdBy = inputCreatedBy
+        entry.patientNRIC = inputNRIC
+        entry.description = inputDescription
+        entry.patientName = inputName
+
+        db.session.commit()
+        print("Entry updated")
+
+        return redirect("/viewRecord.html")
+
+    return render_template('home/updateRecord.html', segment="updateRecord", data=data, form=form)
+
+@blueprint.route('/updateAppointment.html', methods=['GET', 'POST'])
+def updateAppt():
+    form = BookApptForm()
+    data = Appointment.query.all()
+    if request.method == "POST":
+        inputID = request.form["inputID"]
+        inputDate = request.form['inputDate']
+        inputTime = request.form['inputTime']
+        inputDetail = request.form['inputDetail']
+        inputNRIC = request.form['inputNRIC']
+        inputName = request.form['inputName']
+
+        entry = Appointment.query.get(int(inputID))
+        entry.appointmentDate = inputDate
+        entry.appointmentTime = inputTime
+        entry.patientNRIC = inputNRIC
+        entry.appointmentDetail = inputDetail
+        entry.patientName = inputName
+
+        db.session.commit()
+        print("Entry updated")
+
+        return redirect("/viewAppointment.html")
+
+    return render_template('home/updateAppointment.html', segment="update", data=data, form=form)
 
 # Errors
 

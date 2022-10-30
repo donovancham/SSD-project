@@ -48,7 +48,7 @@
                                     {% endif %}
                                 {% endfor %}
                             {% endif %}
-                            {% if current_user.userrole == "Doctor" or current_user.userrole == "Nurse" %}
+                            {% if current_user.userrole == "Nurse" %}
                                 {% for appt in data %}
                                     <tr>
                                         <td>{{appt.appointmentDate}}</td>
@@ -68,6 +68,17 @@
                                                 <button id="deleteApptBtn" name="deleteApptBtn" type="submit">Delete</button>
                                             </form>
                                         </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                            {% if current_user.userrole == "Doctor" %}
+                                {% for appt in data %}
+                                    <tr>
+                                        <td>{{appt.appointmentDate}}</td>
+                                        <td>{{appt.appointmentTime}}</td>
+                                        <td>{{appt.patientName}}</td>
+                                        <td>{{appt.patientNRIC}}</td>
+                                        <td>{{appt.appointmentDetail}}</td>
                                     </tr>
                                 {% endfor %}
                             {% endif %}
