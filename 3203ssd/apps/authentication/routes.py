@@ -141,10 +141,10 @@ def createRecord():
             inputName = ""
             inputCreatedBy = request.form['inputCreatedBy']
 
-            checkUsers = Users.query.all()
+            checkUsers = Appointment.query.all()
             for eachUser in checkUsers:
-                if eachUser.nric == inputNRIC:
-                    inputName = eachUser.name
+                if eachUser.patientNRIC == inputNRIC:
+                    inputName = eachUser.patientName
 
             if (inputName == ""):
                 print("No such NRIC in User Database")
