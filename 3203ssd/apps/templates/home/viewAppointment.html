@@ -23,15 +23,30 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for appt in data %}
-                                <tr>
-                                    <td>{{appt.appointmentDate}}</td>
-                                    <td>{{appt.appointmentTime}}</td>
-                                    <td>{{appt.patientName}}</td>
-                                    <td>{{appt.patientNRIC}}</td>
-                                    <td>{{appt.appointmentDetail}}</td>
-                                </tr>
-                            {% endfor %}
+                            {% if current_user.userrole == "Patient" %}
+                                {% for appt in data %}
+                                    {% if current_user.nric == appt.patientNRIC %}
+                                    <tr>
+                                        <td>{{appt.appointmentDate}}</td>
+                                        <td>{{appt.appointmentTime}}</td>
+                                        <td>{{appt.patientName}}</td>
+                                        <td>{{appt.patientNRIC}}</td>
+                                        <td>{{appt.appointmentDetail}}</td>
+                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            {% if current_user.userrole == "Doctor" or current_user.userrole == "Nurse" %}
+                                {% for appt in data %}
+                                    <tr>
+                                        <td>{{appt.appointmentDate}}</td>
+                                        <td>{{appt.appointmentTime}}</td>
+                                        <td>{{appt.patientName}}</td>
+                                        <td>{{appt.patientNRIC}}</td>
+                                        <td>{{appt.appointmentDetail}}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
                         </tbody>
                     </table>
                 </div>
