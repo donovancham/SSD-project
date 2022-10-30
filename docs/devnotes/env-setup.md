@@ -1,6 +1,22 @@
 # Environment Setup
 This page details how to setup the environment step-by-step.
 
+- [Environment Setup](#environment-setup)
+- [Configure Signed Requests](#configure-signed-requests)
+  - [1. Install Git Bash](#1-install-git-bash-and-gpg4win)
+  - [2. Generate GPG Key Pair](#2-generate-gpg-key-pair)
+  - [3. Check if key exists](#3-check-if-key-exists)
+  - [4. Share public key (Note: `3AA5C34371567BD2` is what you see from the previous step at the first line)](#4-share-public-key-note-3aa5c34371567bd2-is-what-you-see-from-the-previous-step-at-the-first-line)
+  - [5. Export Public Key from Key ID](#5-export-public-key-from-key-id)
+  - [6. Configure GPG program](#6-configure-gpg-program)
+  - [7. (Optional) Disable TTY (if using CLI in IDE like VS Code)](#7-optional-disable-tty-if-using-cli-in-ide-like-vs-code)
+  - [8. Verify](#8-verify)
+- [Python Environment](#python-environment)
+  - [Prerequisites](#prerequisites)
+  - [Configure Python Environment](#configure-python-environment)
+  - [Install Docker](#install-docker)
+  - [Configuration](#configuration)
+
 # Configure Signed Requests
 Follow the [guide](https://medium.com/@petehouston/quick-guide-to-sign-your-git-commits-c11ce58c22e9). 
 All Commands (if not stated) are done in windows powershell.
