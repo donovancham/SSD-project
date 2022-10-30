@@ -32,6 +32,12 @@
                                             <td>{{rec.patientName}}</td>
                                             <td>{{rec.patientNRIC}}</td>
                                             <td>{{rec.description}}</td>
+                                            <td>
+                                                <form role="form" method="post" action="">
+                                                    <input type="text" value={{ rec.recordID }} id="inputID" name="inputID" hidden>
+                                                    <button id="deleteApptBtn" type="submit">Delete</button>
+                                                </form>
+                                            </td>
                                         </tr>
                                     {% endif %}
                                 {% endfor %}
@@ -45,6 +51,12 @@
                                         <td>{{rec.patientName}}</td>
                                         <td>{{rec.patientNRIC}}</td>
                                         <td>{{rec.description}}</td>
+                                        <td>
+                                            <form role="form" method="post" action="">
+                                                <input type="text" value={{ rec.recordID }} id="inputID" name="inputID" hidden>
+                                                <button id="deleteApptBtn" type="submit">Delete</button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                             {% endif %}

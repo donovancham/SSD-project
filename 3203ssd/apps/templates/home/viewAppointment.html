@@ -32,6 +32,12 @@
                                         <td>{{appt.patientName}}</td>
                                         <td>{{appt.patientNRIC}}</td>
                                         <td>{{appt.appointmentDetail}}</td>
+                                        <td>
+                                            <form role="form" method="post" action="">
+                                                <input type="text" value={{ appt.appointmentID }} id="inputID" name="inputID" hidden>
+                                                <button id="deleteApptBtn" type="submit">Delete</button>
+                                            </form>
+                                        </td>
                                     </tr>
                                     {% endif %}
                                 {% endfor %}
@@ -44,6 +50,12 @@
                                         <td>{{appt.patientName}}</td>
                                         <td>{{appt.patientNRIC}}</td>
                                         <td>{{appt.appointmentDetail}}</td>
+                                        <td>
+                                            <form role="form" method="post" action="">
+                                                <input type="text" value={{ appt.appointmentID }} id="inputID" name="inputID" hidden>
+                                                <button id="deleteApptBtn" type="submit">Delete</button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                             {% endif %}

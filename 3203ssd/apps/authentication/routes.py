@@ -157,9 +157,16 @@ def createRecord():
     return render_template('home/createRecord.html', segment="createRecord", form=form)
 
 
-@blueprint.route('/viewAppointment.html')
+@blueprint.route('/viewAppointment.html', methods=['GET', 'POST'])
 def viewAppt():
     data = Appointment.query.all()
+    if request.method == "POST":
+        inputID = request.form["inputID"]
+        entry = Appointment.query.get_or_404(int(inputID))
+        db.session.delete(entry)
+        db.session.commit()
+        print("Entry deleted")
+        return redirect("/viewAppointment.html")
 
     return render_template('home/viewAppointment.html', segment="viewAppointment", data=data)
 
@@ -168,9 +175,16 @@ def changepassword():
 
     return render_template('home/changepassword.html')
 
-@blueprint.route('/viewRecord.html')
+@blueprint.route('/viewRecord.html', methods=['GET', 'POST'])
 def viewRecord():
     data = Record.query.all()
+    if request.method == "POST":
+        inputID = request.form["inputID"]
+        entry = Record.query.get_or_404(int(inputID))
+        db.session.delete(entry)
+        db.session.commit()
+        print("Entry deleted")
+        return redirect("/viewRecord.html")
 
     return render_template('home/viewRecord.html', segment="viewRecord", data=data)
 
