@@ -22,6 +22,10 @@ $ pip install -r requirements.txt
 **App Dev**
 ```
 $ gunicorn --bind 0.0.0.0:32984 manage:app
+
+OR
+
+$ python manage.py run
 ```
 
 **Development**
