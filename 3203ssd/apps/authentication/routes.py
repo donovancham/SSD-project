@@ -4,7 +4,8 @@ from flask import render_template, redirect, request, url_for, flash
 from flask_login import (
     current_user,
     login_user,
-    logout_user
+    logout_user,
+    login_required
 )
 
 from apps import db, login_manager
@@ -109,6 +110,7 @@ def logout():
 
 
 @blueprint.route('/bookAppointment.html', methods=['GET', 'POST'])
+@login_required
 def bookAppt():
     form = BookApptForm()
     if request.method == "POST":
@@ -129,35 +131,42 @@ def bookAppt():
     return render_template('home/bookAppointment.html', segment="bookAppointment", form=form)
 
 @blueprint.route('/createRecord.html', methods=['GET', 'POST'])
+@login_required
 def createRecord():
-    form = CreateRecordForm()
-    if request.method == "POST":
-        #if form.validate_on_submit():
-            defaultDate = request.form['defaultDate']
-            inputNRIC = request.form['inputNRIC']
-            inputDescription = request.form['inputDescription']
+    if current_user.userrole == "Doctor":
+        form = CreateRecordForm()
+        msg = ""
+        if request.method == "POST":
+            #if form.validate_on_submit():
+                defaultDate = request.form['defaultDate']
+                inputNRIC = request.form['inputNRIC']
+                inputDescription = request.form['inputDescription']
 
-            # inputName = request.form['inputName']
-            inputName = ""
-            inputCreatedBy = request.form['inputCreatedBy']
+                # inputName = request.form['inputName']
+                inputName = ""
+                inputCreatedBy = request.form['inputCreatedBy']
 
-            checkUsers = Appointment.query.all()
-            for eachUser in checkUsers:
-                if eachUser.patientNRIC == inputNRIC:
-                    inputName = eachUser.patientName
+                checkUsers = Appointment.query.all()
+                for eachUser in checkUsers:
+                    if eachUser.patientNRIC == inputNRIC:
+                        inputName = eachUser.patientName
 
-            if (inputName == ""):
-                print("No such NRIC in User Database")
-            else:
-                newRecord = Record(dateCreated = defaultDate, createdBy = inputCreatedBy, patientName = inputName, patientNRIC = inputNRIC, description = inputDescription)
-                db.session.add(newRecord)
-                db.session.commit()
-                return redirect('/viewRecord.html')
+                if (inputName == ""):
+                    print("No such NRIC in User Database")
+                    msg = "Incorrect NRIC"
+                else:
+                    newRecord = Record(dateCreated = defaultDate, createdBy = inputCreatedBy, patientName = inputName, patientNRIC = inputNRIC, description = inputDescription)
+                    db.session.add(newRecord)
+                    db.session.commit()
+                    return redirect('/viewRecord.html')
 
-    return render_template('home/createRecord.html', segment="createRecord", form=form)
+        return render_template('home/createRecord.html', segment="createRecord", form=form, msg=msg)
+    else:
+        return redirect("/page-500.html")
 
 
 @blueprint.route('/viewAppointment.html', methods=['GET', 'POST'])
+@login_required
 def viewAppt():
     data = Appointment.query.all()
     if request.method == "POST":
@@ -179,11 +188,13 @@ def viewAppt():
     return render_template('home/viewAppointment.html', segment="viewAppointment", data=data)
 
 @blueprint.route('/changepassword.html')
+@login_required
 def changepassword():
 
     return render_template('home/changepassword.html')
 
 @blueprint.route('/viewRecord.html', methods=['GET', 'POST'])
+@login_required
 def viewRecord():
     data = Record.query.all()
     if request.method == "POST":
@@ -205,6 +216,7 @@ def viewRecord():
     return render_template('home/viewRecord.html', segment="viewRecord", data=data)
 
 @blueprint.route('/updateRecord.html', methods=['GET', 'POST'])
+@login_required
 def updateRecord():
     form = CreateRecordForm()
     data = Record.query.all()
@@ -231,6 +243,7 @@ def updateRecord():
     return render_template('home/updateRecord.html', segment="updateRecord", data=data, form=form)
 
 @blueprint.route('/updateAppointment.html', methods=['GET', 'POST'])
+@login_required
 def updateAppt():
     form = BookApptForm()
     data = Appointment.query.all()
