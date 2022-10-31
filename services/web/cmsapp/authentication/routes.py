@@ -133,8 +133,8 @@ def bookAppt():
 @blueprint.route('/createRecord.html', methods=['GET', 'POST'])
 @login_required
 def createRecord():
+    form = CreateRecordForm()
     if current_user.userrole == "Doctor":
-        form = CreateRecordForm()
         msg = ""
         if request.method == "POST":
             #if form.validate_on_submit():
@@ -169,6 +169,7 @@ def createRecord():
 @login_required
 def viewAppt():
     data = Appointment.query.all()
+    form = BookApptForm()
     if request.method == "POST":
         if "deleteApptBtn" in request.form:
             inputID = request.form["inputID"]
@@ -179,13 +180,12 @@ def viewAppt():
 
         elif "updateApptBtn" in request.form:
             inputID = request.form["inputID"]
-            form = BookApptForm()
             data = Appointment.query.get(int(inputID))
             return render_template('home/updateAppointment.html', segment="updateAppointment", data=data, form=form)
 
         return redirect("/viewAppointment.html")
 
-    return render_template('home/viewAppointment.html', segment="viewAppointment", data=data)
+    return render_template('home/viewAppointment.html', segment="viewAppointment", data=data, form=form)
 
 @blueprint.route('/changepassword.html')
 @login_required
@@ -196,6 +196,7 @@ def changepassword():
 @blueprint.route('/viewRecord.html', methods=['GET', 'POST'])
 @login_required
 def viewRecord():
+    form = CreateRecordForm()
     data = Record.query.all()
     if request.method == "POST":
         if "deleteApptBtn" in request.form:
@@ -207,13 +208,12 @@ def viewRecord():
             
         elif "updateApptBtn" in request.form:
             inputID = request.form["inputID"]
-            form = CreateRecordForm()
             data = Record.query.get(int(inputID))
             return render_template('home/updateRecord.html', segment="updateRecord", data=data, form=form)
 
         return redirect("/viewRecord.html")
 
-    return render_template('home/viewRecord.html', segment="viewRecord", data=data)
+    return render_template('home/viewRecord.html', segment="viewRecord", data=data, form=form)
 
 @blueprint.route('/updateRecord.html', methods=['GET', 'POST'])
 @login_required
