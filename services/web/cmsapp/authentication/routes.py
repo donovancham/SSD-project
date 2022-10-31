@@ -12,7 +12,7 @@ from cmsapp import db, login_manager
 from cmsapp.authentication import blueprint
 from cmsapp.authentication.forms import LoginForm, CreateAccountForm, BookApptForm, CreateRecordForm
 from cmsapp.authentication.models import Appointment, Users, Record
-from cmsapp import csrf
+
 from cmsapp.authentication.util import verify_pass
 
 import sys
@@ -289,7 +289,3 @@ def not_found_error(error):
 @blueprint.errorhandler(500)
 def internal_error(error):
     return render_template('home/page-500.html'), 500
-
-@csrf.csrf_error_handler
-def csrf_error(reason):
-    return render_template('home/page-403.html'), 403
