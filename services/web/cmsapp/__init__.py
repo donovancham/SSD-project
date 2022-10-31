@@ -20,6 +20,17 @@ def register_blueprints(app: Flask):
         app.register_blueprint(module.blueprint)
 
 
+def configure_database(app):
+    
+    @app.before_first_request
+    def initialize_database():
+        db.create_all()
+
+    @app.teardown_request
+    def shutdown_session(exception=None):
+        db.session.remove()
+        
+
 # Configure the database
 # db: SQLAlchemy = SQLAlchemy(app)
 db: SQLAlchemy = SQLAlchemy()
@@ -33,7 +44,8 @@ app = Flask(__name__)
 load_dotenv(find_dotenv(".env.dev"))
 
 # Init flask app
-DEBUG = (os.getenv('CMS_DEBUG', 'False') == 'True')
+# To activate production mode, change CMS_DEBUG to 0
+DEBUG = (os.getenv('CMS_DEBUG', '0') == '1')
 get_config_mode = 'Debug' if DEBUG else 'Production'
 
 # Load the configuration using the default values
@@ -45,10 +57,16 @@ register_blueprints(app)
 
 Migrate(app, db)
 
+# Environment Checks
 if not DEBUG:
+    # Compress app size to run faster
     Minify(app=app, html=True, js=False, cssless=False)
 else:
+    # Print debugger messages
     app.logger.info('DEBUG            = ' + str(DEBUG)             )
     app.logger.info('Page Compression = ' + 'FALSE' if DEBUG else 'TRUE' )
     app.logger.info('DBMS             = ' + app_config.SQLALCHEMY_DATABASE_URI)
     app.logger.info('ASSETS_ROOT      = ' + app_config.ASSETS_ROOT )
+    
+    # Configure db
+    configure_database(app)
