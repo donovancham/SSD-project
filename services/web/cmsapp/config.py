@@ -36,12 +36,10 @@ class ProductionConfig(Config):
 
     MAIL_SERVER = os.getenv('MAIL_SERVER')
     MAIL_PORT = os.getenv('MAIL_PORT')
-#    MAIL_USE_TLS = os.getenv('MAIL_USE_TLS')
-#    MAIL_USE_SSL = os.getenv('MAIL_USE_SSL')
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
-    MAIL_USERNAME = 'ssd3203email@gmail.com'
-    MAIL_PASSWORD = 'doxkzldrqjtrkgjl'
+    MAIL_USERNAME = os.getenv('APP_MAIL_USERNAME')
+    MAIL_PASSWORD = os.getenv('APP_MAIL_PASSWORD')
 
 class DebugConfig(Config):
     DEBUG = True
