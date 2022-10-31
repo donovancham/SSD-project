@@ -52,5 +52,4 @@ class CreateRecordForm(FlaskForm):
     defaultDate = StringField('defaultDate', id='defaultDate', validators=[DataRequired()])
     inputNRIC = StringField('inputNRIC', id='inputNRIC', validators=[DataRequired()])
     inputDescription = StringField('inputDescription', id='inputDescription', validators=[DataRequired()])
-    inputName = StringField('inputName', id='inputName', validators=[DataRequired()])
     inputCreatedBy = StringField('inputCreatedBy', id='inputCreatedBy', validators=[DataRequired()])

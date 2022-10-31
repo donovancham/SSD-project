@@ -132,6 +132,7 @@ $ pip --version
 
 **Linux**
 ```console
+$ cd services/web
 $ python3 -m venv venv
 $ source venv/bin/activate
 $ pip install -r requirements.txt
@@ -139,6 +140,7 @@ $ pip install -r requirements.txt
 
 **Windows**
 ```console
+$ cd services\web
 $ py -3.9 -m venv venv
 $ venv\Scripts\activate
 $ pip install -r requirements.txt
@@ -146,21 +148,20 @@ $ pip install -r requirements.txt
 
 4. Environment Variables Setup
 
+> Check Discord for the environment files and add them to project root
+
 **Windows**
 ```console
 CMD
-$ set FLASK_APP=run.py
-$ set FLASK_ENV=development
+$ set FLASK_APP="cmsapp/__init__.py"
 
 Powershell
 $ $env:FLASK_APP = "cmsapp/__init__.py"
-$ $env:FLASK_DEBUG = 1
 ```
 
 **Linux**
 ```console
 $ export FLASK_APP=cmsapp/__init__.py
-$ export FLASK_DEBUG=1
 ```
 
 5. Start the app with:
@@ -172,10 +173,7 @@ $ export FLASK_DEBUG=1
 $ docker-compose up -d --build
 ```
 
-**DB Commands**
-```console
-$ docker-compose exec web python manage.py create_db
-```
+> Refer to [DB commands](workflow.md#db-commands)
 
 **Teardown**
 ```console
@@ -194,5 +192,3 @@ $ docker-compose down -v
 
 ## Configuration
 Follows this guide on [Dockerizing Flask with Postgres, Gunicorn, and Nginx](https://testdriven.io/blog/dockerizing-flask-with-postgres-gunicorn-and-nginx)
-
-Skip `manage.py` step

@@ -13,7 +13,7 @@ $ pip freeze > requirements.txt
 4. Upload the environment files to discord
 5. Do a `git status` to see what has changed and document them in the changelog in `README.md`
 
-## Checking db configured
+## DB commands
 ```
 $ docker-compose exec db psql --username=hello_flask --dbname=hello_flask_dev
 
