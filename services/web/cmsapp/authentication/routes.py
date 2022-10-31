@@ -4,7 +4,8 @@ from flask import render_template, redirect, request, url_for
 from flask_login import (
     current_user,
     login_user,
-    logout_user
+    logout_user,
+    login_required
 )
 
 from cmsapp import db, login_manager
@@ -109,6 +110,7 @@ def logout():
 
 
 @blueprint.route('/bookAppointment.html', methods=['GET', 'POST'])
+@login_required
 def bookAppt():
     form = BookApptForm()
     if request.method == "POST":
@@ -129,41 +131,143 @@ def bookAppt():
     return render_template('home/bookAppointment.html', segment="bookAppointment", form=form)
 
 @blueprint.route('/createRecord.html', methods=['GET', 'POST'])
+@login_required
 def createRecord():
-    form = CreateRecordForm()
-    if request.method == "POST":
-        #if form.validate_on_submit():
-            defaultDate = request.form['defaultDate']
-            inputNRIC = request.form['inputNRIC']
-            inputDescription = request.form['inputDescription']
+    if current_user.userrole == "Doctor":
+        form = CreateRecordForm()
+        msg = ""
+        if request.method == "POST":
+            #if form.validate_on_submit():
+                defaultDate = request.form['defaultDate']
+                inputNRIC = request.form['inputNRIC']
+                inputDescription = request.form['inputDescription']
 
-            inputName = request.form['inputName']
-            inputCreatedBy = request.form['inputCreatedBy']
+                # inputName = request.form['inputName']
+                inputName = ""
+                inputCreatedBy = request.form['inputCreatedBy']
 
-            newRecord = Record(dateCreated = defaultDate, createdBy = inputCreatedBy, patientName = inputName, patientNRIC = inputNRIC, description = inputDescription)
-            db.session.add(newRecord)
-            db.session.commit()
-            return redirect('/viewRecord.html')
+                checkUsers = Appointment.query.all()
+                for eachUser in checkUsers:
+                    if eachUser.patientNRIC == inputNRIC:
+                        inputName = eachUser.patientName
 
-    return render_template('home/createRecord.html', segment="createRecord", form=form)
+                if (inputName == ""):
+                    print("No such NRIC in User Database")
+                    msg = "Incorrect NRIC"
+                else:
+                    newRecord = Record(dateCreated = defaultDate, createdBy = inputCreatedBy, patientName = inputName, patientNRIC = inputNRIC, description = inputDescription)
+                    db.session.add(newRecord)
+                    db.session.commit()
+                    return redirect('/viewRecord.html')
+
+        return render_template('home/createRecord.html', segment="createRecord", form=form, msg=msg)
+    else:
+        return redirect("/page-500.html")
 
 
-@blueprint.route('/viewAppointment.html')
+@blueprint.route('/viewAppointment.html', methods=['GET', 'POST'])
+@login_required
 def viewAppt():
     data = Appointment.query.all()
+    if request.method == "POST":
+        if "deleteApptBtn" in request.form:
+            inputID = request.form["inputID"]
+            entry = Appointment.query.get_or_404(int(inputID))
+            db.session.delete(entry)
+            db.session.commit()
+            print("Entry deleted")
+
+        elif "updateApptBtn" in request.form:
+            inputID = request.form["inputID"]
+            form = BookApptForm()
+            data = Appointment.query.get(int(inputID))
+            return render_template('home/updateAppointment.html', segment="updateAppointment", data=data, form=form)
+
+        return redirect("/viewAppointment.html")
 
     return render_template('home/viewAppointment.html', segment="viewAppointment", data=data)
 
 @blueprint.route('/changepassword.html')
+@login_required
 def changepassword():
 
     return render_template('home/changepassword.html')
 
-@blueprint.route('/viewRecord.html')
+@blueprint.route('/viewRecord.html', methods=['GET', 'POST'])
+@login_required
 def viewRecord():
     data = Record.query.all()
+    if request.method == "POST":
+        if "deleteApptBtn" in request.form:
+            inputID = request.form["inputID"]
+            entry = Record.query.get_or_404(int(inputID))
+            db.session.delete(entry)
+            db.session.commit()
+            print("Entry deleted")
+            
+        elif "updateApptBtn" in request.form:
+            inputID = request.form["inputID"]
+            form = CreateRecordForm()
+            data = Record.query.get(int(inputID))
+            return render_template('home/updateRecord.html', segment="updateRecord", data=data, form=form)
+
+        return redirect("/viewRecord.html")
 
     return render_template('home/viewRecord.html', segment="viewRecord", data=data)
+
+@blueprint.route('/updateRecord.html', methods=['GET', 'POST'])
+@login_required
+def updateRecord():
+    form = CreateRecordForm()
+    data = Record.query.all()
+    if request.method == "POST":
+        inputID = request.form["inputID"]
+        defaultDate = request.form['defaultDate']
+        inputNRIC = request.form['inputNRIC']
+        inputDescription = request.form['inputDescription']
+        inputName = request.form['inputName']
+        inputCreatedBy = request.form['inputCreatedBy']
+
+        entry = Record.query.get(int(inputID))
+        entry.dateCreated = defaultDate
+        entry.createdBy = inputCreatedBy
+        entry.patientNRIC = inputNRIC
+        entry.description = inputDescription
+        entry.patientName = inputName
+
+        db.session.commit()
+        print("Entry updated")
+
+        return redirect("/viewRecord.html")
+
+    return render_template('home/updateRecord.html', segment="updateRecord", data=data, form=form)
+
+@blueprint.route('/updateAppointment.html', methods=['GET', 'POST'])
+@login_required
+def updateAppt():
+    form = BookApptForm()
+    data = Appointment.query.all()
+    if request.method == "POST":
+        inputID = request.form["inputID"]
+        inputDate = request.form['inputDate']
+        inputTime = request.form['inputTime']
+        inputDetail = request.form['inputDetail']
+        inputNRIC = request.form['inputNRIC']
+        inputName = request.form['inputName']
+
+        entry = Appointment.query.get(int(inputID))
+        entry.appointmentDate = inputDate
+        entry.appointmentTime = inputTime
+        entry.patientNRIC = inputNRIC
+        entry.appointmentDetail = inputDetail
+        entry.patientName = inputName
+
+        db.session.commit()
+        print("Entry updated")
+
+        return redirect("/viewAppointment.html")
+
+    return render_template('home/updateAppointment.html', segment="update", data=data, form=form)
 
 # Errors
 

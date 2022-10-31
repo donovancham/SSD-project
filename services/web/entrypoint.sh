@@ -12,7 +12,7 @@ then
     echo "PostgreSQL started"
 fi
 
-if [ "$FLASK_DEBUG" = "1" ]
+if [ "$CMS_DEBUG" = "1" ]
 then
   echo "Deleting existing tables..."
   python manage.py delete_db

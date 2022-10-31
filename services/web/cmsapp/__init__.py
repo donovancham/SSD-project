@@ -33,7 +33,7 @@ app = Flask(__name__)
 load_dotenv(find_dotenv(".env.dev"))
 
 # Init flask app
-DEBUG = (os.getenv('DEBUG', 'False') == 'True')
+DEBUG = (os.getenv('CMS_DEBUG', 'False') == 'True')
 get_config_mode = 'Debug' if DEBUG else 'Production'
 
 # Load the configuration using the default values
