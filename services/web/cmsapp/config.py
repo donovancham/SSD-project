@@ -34,6 +34,14 @@ class ProductionConfig(Config):
         os.getenv('DB_NAME')
     )
 
+    MAIL_SERVER = os.getenv('MAIL_SERVER')
+    MAIL_PORT = os.getenv('MAIL_PORT')
+#    MAIL_USE_TLS = os.getenv('MAIL_USE_TLS')
+#    MAIL_USE_SSL = os.getenv('MAIL_USE_SSL')
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+    MAIL_USERNAME = 'ssd3203email@gmail.com'
+    MAIL_PASSWORD = 'doxkzldrqjtrkgjl'
 
 class DebugConfig(Config):
     DEBUG = True

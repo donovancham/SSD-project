@@ -14,7 +14,13 @@ from cmsapp.authentication.models import Appointment, Users, Record
 
 from cmsapp.authentication.util import verify_pass
 
+# For 2FA
+from cmsapp.authentication.cmstoken import generate_confirmation_token, confirm_token
+from flask_mail import Message
+from cmsapp.authentication.cmsemail import send_email
+
 import sys
+import datetime
 
 
 @blueprint.route('/')
@@ -89,9 +95,22 @@ def register():
         user = Users(**request.form)
         db.session.add(user)
         db.session.commit()
-        
+
+	# Token Generation for Registration Confirmation
+        token = generate_confirmation_token(email)
+
+	# Confirmation URL
+        confirm_url = url_for("authentication_blueprint.confirm_email", token=token, _external=True)
+        print(confirm_url)
+        html = render_template("accounts/activation.html", confirm_url=confirm_url)
+        subject = "Lai Confirm Email"
+
+        send_email(email, subject, html)
+
+
         # Delete user from session
-        logout_user()        
+        logout_user()
+
 
         return render_template('accounts/register.html',
                                msg='Account created successfully.',
@@ -100,6 +119,27 @@ def register():
 
     else:
         return render_template('accounts/register.html', form=create_account_form)
+
+
+# for 2FA confirmation
+@blueprint.route('/confirm/<token>', methods=['GET'])
+def confirm_email(token):
+	try:
+		email = confirm_token(token)
+	except:
+		print("The confirmation link is invalid or has expired")
+
+	user = User.query.filter_by(email=email)
+	if user.confirmed:
+		print("Account is already confirmed")
+
+	else:
+		user.confirmed = True
+		user.confirmed_on = datetime.datetime.now()
+		db.session.add(user)
+		db.session.commit()
+		print("You have confirmed your account. Thanks!")
+	return redirect(url_for('home_blueprint.index'))
 
 
 @blueprint.route('/logout')
