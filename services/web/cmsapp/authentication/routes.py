@@ -9,7 +9,7 @@ from flask_login import (
 
 from cmsapp import db, login_manager
 from cmsapp.authentication import blueprint
-from cmsapp.authentication.forms import LoginForm, CreateAccountForm, BookApptForm, CreateRecordForm, OTPForm
+from cmsapp.authentication.forms import LoginForm, CreateAccountForm, BookApptForm, CreateRecordForm, OTPForm, PWResetForm, PWResetFuncForm
 from cmsapp.authentication.models import Appointment, Users, Record
 
 from cmsapp.authentication.util import verify_pass
@@ -19,6 +19,7 @@ from cmsapp.authentication.cmstoken import generate_confirmation_token, confirm_
 from flask_mail import Message
 from cmsapp.authentication.cmsemail import send_email
 import pyotp
+from cmsapp.authentication.util import hash_pass
 
 
 import sys
@@ -58,7 +59,6 @@ def login():
                 db.session.add(user)
                 db.session.commit()
 
-
        	        html = render_template("accounts/2fa.html", a_otp=OTP_Pin)
                 subject = "Login OTP"
                 send_email(email, subject, html)
@@ -95,8 +95,6 @@ def login_2FA():
             return redirect(url_for('authentication_blueprint.route_default'))
 
     return render_template('accounts/otp_auth.html', form=otp_form)
-
-
 
 
 @blueprint.route('/register', methods=['GET', 'POST'])
@@ -204,6 +202,69 @@ def logout():
     return redirect(url_for('authentication_blueprint.login'))
 
 
+@blueprint.route('/password_reset', methods=['GET','POST'])
+def password_reset():
+    reset_form = PWResetForm()
+
+    if request.method == "POST":
+        email = request.values.get('email')
+        user = Users.query.filter_by(email=email).first()
+
+	# Token Generation for Registration Confirmation
+        token = generate_confirmation_token(email)
+
+	# Confirmation URL
+        confirm_url = url_for("authentication_blueprint.password_reset_func", token=token, _external=True)
+        html = render_template("accounts/pw_reset.html", confirm_url=confirm_url)
+        subject = "Password Reset 2FA"
+
+        send_email(email, subject, html)
+        return redirect(url_for('authentication_blueprint.pw_reset_sent'))
+
+    return render_template('accounts/password_reset_prompt.html',form=reset_form)
+
+
+@blueprint.route('/password_reset_func/<token>',methods=['GET','POST'])
+def password_reset_func(token):
+        pass_reset_func = PWResetFuncForm()
+        email = confirm_token(token)
+
+        if not email:
+                return redirect(url_for('authentication_blueprint.pw_reset_invalid'))
+
+        else:
+                user = Users.query.filter_by(email=email).first_or_404()
+
+                if "password" in request.form:
+                    new_pass = request.form.get("newpw")
+                    confirm_pass = request.form.get("confirmpw")
+
+                    if new_pass == confirm_pass:
+                        user = Users.query.filter_by(email=email).first()
+                        user.password = hash_pass(confirm_pass)
+                        db.session.add(user)
+                        db.session.commit()
+                        return redirect(url_for('authentication_blueprint.password_resetted'))
+
+                return render_template('accounts/password_reset_func.html', form=pass_reset_func)
+
+
+@blueprint.route('/pw_reset_sent')
+def pw_reset_sent():
+    return render_template('accounts/pw_reset_sent.html')
+
+
+@blueprint.route('/pw_reset_invalid')
+def pw_reset_invalid():
+    return render_template('accounts/pw_reset_invalid.html')
+
+
+@blueprint.route('/password_reset_successful')
+def password_resetted():
+    return render_template('accounts/password_reset_successful.html')
+
+
+
 @blueprint.route('/bookAppointment.html', methods=['GET', 'POST'])
 def bookAppt():
     form = BookApptForm()
@@ -268,9 +329,9 @@ def unauthorized_handler():
     return render_template('home/page-403.html'), 403
 
 
-@blueprint.errorhandler(400)
-def access_forbidden(error):
-    return render_template('home/page-400.html'), 400
+#@blueprint.errorhandler(400)
+#def input_forbidden(error):
+#    return render_template('home/page-400.html'), 400
 
 
 @blueprint.errorhandler(403)

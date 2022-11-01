@@ -58,3 +58,12 @@ class CreateRecordForm(FlaskForm):
 
 class OTPForm(FlaskForm):
     otp = StringField('otp', id='otp', validators=[DataRequired()])
+
+class PWResetForm(FlaskForm):
+    email = StringField('email',id='email',validators=[DataRequired(), Email()])
+
+
+class PWResetFuncForm(FlaskForm):
+    newpw = PasswordField('newpw', id='newpw', validators=[DataRequired()])
+    confirmpw = PasswordField('confirmpw', id='confirmpw', validators=[DataRequired()])
+
