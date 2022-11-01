@@ -104,7 +104,7 @@ def register():
         confirm_url = url_for("authentication_blueprint.confirm_email", token=token, _external=True)
         print(confirm_url)
         html = render_template("accounts/activation.html", confirm_url=confirm_url)
-        subject = "Lai Confirm Email"
+        subject = "Email Verification"
 
         send_email(email, subject, html)
 

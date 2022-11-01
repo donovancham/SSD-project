@@ -41,6 +41,8 @@ class ProductionConfig(Config):
     MAIL_USERNAME = os.getenv('APP_MAIL_USERNAME')
     MAIL_PASSWORD = os.getenv('APP_MAIL_PASSWORD')
 
+    SERVER_NAME = os.getenv('SERVER_NAME')
+
 class DebugConfig(Config):
     DEBUG = True
 
