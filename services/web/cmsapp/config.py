@@ -41,7 +41,7 @@ class ProductionConfig(Config):
     MAIL_USERNAME = os.getenv('APP_MAIL_USERNAME')
     MAIL_PASSWORD = os.getenv('APP_MAIL_PASSWORD')
 
-    SERVER_NAME = os.getenv('SERVER_NAME')
+    #SERVER_NAME = os.getenv('SERVER_NAME')
 
 class DebugConfig(Config):
     DEBUG = True
@@ -51,6 +51,14 @@ class DebugConfig(Config):
     # This will create a file in `cmsapp` FOLDER
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    MAIL_SERVER = os.getenv('MAIL_SERVER')
+    MAIL_PORT = os.getenv('MAIL_PORT')
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+    MAIL_USERNAME = os.getenv('APP_MAIL_USERNAME')
+    MAIL_PASSWORD = os.getenv('APP_MAIL_PASSWORD')
+
 
 
 # Load all possible configurations
