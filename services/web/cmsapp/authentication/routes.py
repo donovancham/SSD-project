@@ -13,8 +13,7 @@ from cmsapp.authentication import blueprint
 from cmsapp.authentication.forms import LoginForm, CreateAccountForm, BookApptForm, CreateRecordForm
 from cmsapp.authentication.models import Appointment, Users, Record
 from cmsapp import csrf
-from cmsapp.authentication.util import verify_pass
-from zxcvbn import zxcvbn
+from cmsapp.authentication.util import verify_pass, password_complexity_checker
 
 import sys
 
@@ -66,10 +65,8 @@ def register():
         password= request.form['password']
 
         # Check password with zxcvbn
-        complexity = zxcvbn(password)
-        if complexity["score"] < 3:
-            msg = ','.join(complexity["feedback"]["suggestions"])
-            msg = "Password is not complex enough: " + msg
+        complexity, msg = password_complexity_checker(password)
+        if complexity == False:
             return render_template('accounts/register.html',
                                    msg=msg,
                                    success=False,
