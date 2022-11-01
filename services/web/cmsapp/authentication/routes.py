@@ -14,6 +14,7 @@ from cmsapp.authentication.forms import LoginForm, CreateAccountForm, BookApptFo
 from cmsapp.authentication.models import Appointment, Users, Record
 from cmsapp import csrf
 from cmsapp.authentication.util import verify_pass
+from zxcvbn import zxcvbn
 
 import sys
 
@@ -62,7 +63,18 @@ def register():
         username = request.form['username']
         email = request.form['email']
         nric= request.form['nric']
+        password= request.form['password']
 
+        # Check password with zxcvbn
+        complexity = zxcvbn(password)
+        if complexity["score"] < 3:
+            msg = ','.join(complexity["feedback"]["suggestions"])
+            msg = "Password is not complex enough: " + msg
+            return render_template('accounts/register.html',
+                                   msg=msg,
+                                   success=False,
+                                   form=create_account_form)
+        
         # Check usename exists
         user = Users.query.filter_by(username=username).first()
         if user:
