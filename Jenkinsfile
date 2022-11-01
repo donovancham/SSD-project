@@ -1,5 +1,5 @@
 pipeline {
-    agent any 
+    agent { label 'do3203' } 
     environment {
         // Declare all environment vars here
 
