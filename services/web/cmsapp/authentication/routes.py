@@ -45,10 +45,11 @@ def login():
 
         # Check the password
         if user and verify_pass(password, user.password):
-
-            login_user(user)
-            return redirect(url_for('authentication_blueprint.route_default'))
-
+            if user.confirmed:
+                login_user(user)
+                return redirect(url_for('authentication_blueprint.route_default'))
+            else:
+                return redirect(url_for('authentication_blueprint.account_not_verified'))
         # Something (user or pass) is not ok
         return render_template('accounts/login.html',
                                msg='Wrong user or password',
@@ -151,11 +152,13 @@ def confirmation_success():
 def confirmation_confirmed():
     return render_template('accounts/account_confirmation_confirmed.html')
 
-
 @blueprint.route('/confirmation_invalid')
 def confirmation_invalid():
     return render_template('accounts/account_confirmation_invalid.html')
 
+@blueprint.route('/not_verified')
+def account_not_verified():
+    return render_template('accounts/not_verified.html')
 
 @blueprint.route('/logout')
 def logout():
