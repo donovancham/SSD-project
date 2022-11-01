@@ -5,7 +5,6 @@ services:
     container_name: cmsapp-web-certbot
     build: ./services/certbot
     command: certonly --webroot --webroot-path /var/www/certbot/ --dry-run -d jumpifzer0.me --email test@test.com
-
     image: certbot/certbot:latest
     depends_on:
       - nginx
