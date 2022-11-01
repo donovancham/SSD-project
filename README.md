@@ -94,3 +94,13 @@ $ docker-compose up -d --build
   - Added `Jenkinsfile` to mark branch
   - Updated `entrypoint.sh` to use `CMS_DEBUG` environment variable
     - Set such that debug will automatically create a new table
+- v1.2
+  - Updated `Jenkinsfile`
+    - Added basic building and deployment of applcation
+    - Added environments
+    - Added production deploy script
+  - Added `docker-compose.prod.yml`
+    - Production configuration to load env vars from deploy env
+- v1.3
+  - Updated `Jenkinsfile`
+    - Deployment working
