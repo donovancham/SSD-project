@@ -69,8 +69,8 @@ All major and minor objectives for the project's achievement can be added here.
   - [ ] Implement Linkages between the different models
   - [ ] Encryption?
 - [ ] SFR
-  - [ ] Form security
-    - [ ] Input validation (server-side minimum, client side good to have)
+  - [x] Form security
+    - [x] Input validation (server-side minimum, client side good to have)
   - [ ] Authentication
     - [ ] Login
     - [ ] Register
