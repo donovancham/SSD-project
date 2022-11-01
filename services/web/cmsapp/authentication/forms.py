@@ -54,3 +54,5 @@ class CreateRecordForm(FlaskForm):
     inputDescription = StringField('inputDescription', id='inputDescription', validators=[DataRequired()])
     inputName = StringField('inputName', id='inputName', validators=[DataRequired()])
     inputCreatedBy = StringField('inputCreatedBy', id='inputCreatedBy', validators=[DataRequired()])
+
+

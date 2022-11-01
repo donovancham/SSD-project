@@ -102,7 +102,6 @@ def register():
 
 	# Confirmation URL
         confirm_url = url_for("authentication_blueprint.confirm_email", token=token, _external=True)
-        print(confirm_url)
         html = render_template("accounts/activation.html", confirm_url=confirm_url)
         subject = "Email Verification"
 
@@ -128,27 +127,34 @@ def confirm_email(token):
 
         url_buffer = ""
 
-        try:
-                email = confirm_token(token)
-        except:
-                print("The confirmation link is invalid or has expired")
-
-        user = Users.query.filter_by(email=email).first_or_404()
-        if user.confirmed:
-                print("Account is already confirmed")
-
+        email = confirm_token(token)
+        if not email:
+                url_buffer = "authentication_blueprint.confirmation_invalid"
         else:
-                user.confirmed = True
-                user.confirmed_on = datetime.datetime.now()
-                db.session.add(user)
-                db.session.commit()
-                url_buffer = "authentication_blueprint.confirmation_success"
+                user = Users.query.filter_by(email=email).first_or_404()
+                if user.confirmed:
+                        url_buffer = "authentication_blueprint.confirmation_confirmed"
+                else:
+                        user.confirmed = True
+                        user.confirmed_on = datetime.datetime.now()
+                        db.session.add(user)
+                        db.session.commit()
+                        url_buffer = "authentication_blueprint.confirmation_success"
         return redirect(url_for(url_buffer))
 
 
 @blueprint.route('/confirmation_success')
 def confirmation_success():
     return render_template('accounts/account_confirmation_success.html')
+
+@blueprint.route('/confirmation_confirmed')
+def confirmation_confirmed():
+    return render_template('accounts/account_confirmation_confirmed.html')
+
+
+@blueprint.route('/confirmation_invalid')
+def confirmation_invalid():
+    return render_template('accounts/account_confirmation_invalid.html')
 
 
 @blueprint.route('/logout')
