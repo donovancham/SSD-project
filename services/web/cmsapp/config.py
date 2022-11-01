@@ -34,6 +34,14 @@ class ProductionConfig(Config):
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    MAIL_SERVER = os.getenv('MAIL_SERVER')
+    MAIL_PORT = os.getenv('MAIL_PORT')
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+    MAIL_USERNAME = os.getenv('APP_MAIL_USERNAME')
+    MAIL_PASSWORD = os.getenv('APP_MAIL_PASSWORD')
+
+    SERVER_NAME = os.getenv('SERVER_NAME')
 
 class DebugConfig(Config):
     DEBUG = True

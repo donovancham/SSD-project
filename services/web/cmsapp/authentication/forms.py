@@ -52,4 +52,18 @@ class CreateRecordForm(FlaskForm):
     defaultDate = StringField('defaultDate', id='defaultDate', validators=[DataRequired()])
     inputNRIC = StringField('inputNRIC', id='inputNRIC', validators=[DataRequired()])
     inputDescription = StringField('inputDescription', id='inputDescription', validators=[DataRequired()])
+    inputName = StringField('inputName', id='inputName', validators=[DataRequired()])
     inputCreatedBy = StringField('inputCreatedBy', id='inputCreatedBy', validators=[DataRequired()])
+
+
+class OTPForm(FlaskForm):
+    otp = StringField('otp', id='otp', validators=[DataRequired()])
+
+class PWResetForm(FlaskForm):
+    email = StringField('email',id='email',validators=[DataRequired(), Email()])
+
+
+class PWResetFuncForm(FlaskForm):
+    newpw = PasswordField('newpw', id='newpw', validators=[DataRequired()])
+    confirmpw = PasswordField('confirmpw', id='confirmpw', validators=[DataRequired()])
+
