@@ -9,7 +9,7 @@ from flask_login import (
 
 from cmsapp import db, login_manager
 from cmsapp.authentication import blueprint
-from cmsapp.authentication.forms import LoginForm, CreateAccountForm, BookApptForm, CreateRecordForm
+from cmsapp.authentication.forms import LoginForm, CreateAccountForm, BookApptForm, CreateRecordForm, OTPForm
 from cmsapp.authentication.models import Appointment, Users, Record
 
 from cmsapp.authentication.util import verify_pass
@@ -18,6 +18,7 @@ from cmsapp.authentication.util import verify_pass
 from cmsapp.authentication.cmstoken import generate_confirmation_token, confirm_token
 from flask_mail import Message
 from cmsapp.authentication.cmsemail import send_email
+import pyotp
 
 
 import sys
@@ -46,8 +47,23 @@ def login():
         # Check the password
         if user and verify_pass(password, user.password):
             if user.confirmed:
-                login_user(user)
-                return redirect(url_for('authentication_blueprint.route_default'))
+
+                email = user.email
+
+                secret = pyotp.random_base32()
+                totp = pyotp.TOTP(secret)
+                OTP_Pin = totp.now()
+
+                user.otp = OTP_Pin
+                db.session.add(user)
+                db.session.commit()
+
+
+       	        html = render_template("accounts/2fa.html", a_otp=OTP_Pin)
+                subject = "Login OTP"
+                send_email(email, subject, html)
+
+                return redirect(url_for('authentication_blueprint.login_2FA',username=username))
             else:
                 return redirect(url_for('authentication_blueprint.account_not_verified'))
         # Something (user or pass) is not ok
@@ -59,6 +75,29 @@ def login():
         return render_template('accounts/login.html',
                                form=login_form)
     return redirect(url_for('home_blueprint.index'))
+
+
+@blueprint.route('/login_2fa',methods=['GET','POST'])
+def login_2FA():
+
+    otp_form = OTPForm(request.form)
+
+    if "auth_otp" in request.form:
+        username = request.args['username']
+        user = Users.query.filter_by(username=username).first()
+
+        if int(request.form.get("otp")) == user.otp:
+            login_user(user)
+
+            # Reset OTP in db
+            user.otp = None
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for('authentication_blueprint.route_default'))
+
+    return render_template('accounts/otp_auth.html', form=otp_form)
+
+
 
 
 @blueprint.route('/register', methods=['GET', 'POST'])

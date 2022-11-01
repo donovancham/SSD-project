@@ -21,6 +21,7 @@ class Users(db.Model, UserMixin):
     # For 2FA
     confirmed = db.Column(db.Boolean, nullable=False, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
+    otp = db.Column(db.Integer)
 
 
     def __init__(self, **kwargs):

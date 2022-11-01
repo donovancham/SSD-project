@@ -56,3 +56,5 @@ class CreateRecordForm(FlaskForm):
     inputCreatedBy = StringField('inputCreatedBy', id='inputCreatedBy', validators=[DataRequired()])
 
 
+class OTPForm(FlaskForm):
+    otp = StringField('otp', id='otp', validators=[DataRequired()])
