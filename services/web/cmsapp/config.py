@@ -1,21 +1,20 @@
 import os
+from dotenv import load_dotenv, find_dotenv
+
+# Load environment variables from `.env`
+load_dotenv(find_dotenv(".env.dev"))
 
 class Config(object):
 
-    basedir = os.path.abspath(os.path.dirname(__file__))
-
     # Set up the App SECRET_KEY
-    # SECRET_KEY = config('SECRET_KEY'  , default='S#perS3crEt_007')
-    SECRET_KEY = os.getenv('SECRET_KEY', 'S#perS3crEt_007')
+    SECRET_KEY = os.getenv('SECRET_KEY')
+    print(SECRET_KEY)
 
-    # This will create a file in <app> FOLDER
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
-    SQLALCHEMY_TRACK_MODIFICATIONS = False 
+    # Set up main static assets folder
+    ASSETS_ROOT = os.getenv('ASSETS_ROOT')
+    print(ASSETS_ROOT)  
+    
 
-    # Assets Management
-    ASSETS_ROOT = os.getenv('ASSETS_ROOT', '/static/assets')    
-    
-    
 class ProductionConfig(Config):
     DEBUG = False
 
@@ -33,6 +32,7 @@ class ProductionConfig(Config):
         os.getenv('DB_PORT'),
         os.getenv('DB_NAME')
     )
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     MAIL_SERVER = os.getenv('MAIL_SERVER')
     MAIL_PORT = os.getenv('MAIL_PORT')
@@ -45,6 +45,12 @@ class ProductionConfig(Config):
 
 class DebugConfig(Config):
     DEBUG = True
+    
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    
+    # This will create a file in `cmsapp` FOLDER
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'db.sqlite3')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 # Load all possible configurations

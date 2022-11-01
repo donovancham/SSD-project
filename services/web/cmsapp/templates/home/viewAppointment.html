@@ -23,15 +23,69 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for appt in data %}
-                                <tr>
-                                    <td>{{appt.appointmentDate}}</td>
-                                    <td>{{appt.appointmentTime}}</td>
-                                    <td>{{appt.patientName}}</td>
-                                    <td>{{appt.patientNRIC}}</td>
-                                    <td>{{appt.appointmentDetail}}</td>
-                                </tr>
-                            {% endfor %}
+                            {% if current_user.userrole == "Patient" %}
+                                {% for appt in data %}
+                                    {% if current_user.nric == appt.patientNRIC %}
+                                    <tr>
+                                        <td>{{appt.appointmentDate}}</td>
+                                        <td>{{appt.appointmentTime}}</td>
+                                        <td>{{appt.patientName}}</td>
+                                        <td>{{appt.patientNRIC}}</td>
+                                        <td>{{appt.appointmentDetail}}</td>
+                                        <td>
+                                            <form role="form" method="post" action="">
+                                                {{ form.csrf_token }}
+                                                <input type="text" value={{ appt.appointmentID }} id="inputID" name="inputID" hidden>
+                                                <button id="updateApptBtn" name="updateApptBtn" type="submit">Update</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form role="form" method="post" action="">
+                                                {{ form.csrf_token }}
+                                                <input type="text" value={{ appt.appointmentID }} id="inputID" name="inputID" hidden>
+                                                <button id="deleteApptBtn" name="deleteApptBtn" type="submit">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            {% if current_user.userrole == "Nurse" %}
+                                {% for appt in data %}
+                                    <tr>
+                                        <td>{{appt.appointmentDate}}</td>
+                                        <td>{{appt.appointmentTime}}</td>
+                                        <td>{{appt.patientName}}</td>
+                                        <td>{{appt.patientNRIC}}</td>
+                                        <td>{{appt.appointmentDetail}}</td>
+                                        <td>
+                                            <form role="form" method="post" action="">
+                                                {{ form.csrf_token }}
+                                                <input type="text" value={{ appt.appointmentID }} id="inputID" name="inputID" hidden>
+                                                <button id="updateApptBtn" name="updateApptBtn" type="submit">Update</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form role="form" method="post" action="">
+                                                {{ form.csrf_token }}
+                                                <input type="text" value={{ appt.appointmentID }} id="inputID" name="inputID" hidden>
+                                                <button id="deleteApptBtn" name="deleteApptBtn" type="submit">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                            {% if current_user.userrole == "Doctor" %}
+                                {% for appt in data %}
+                                    <tr>
+                                        <td>{{appt.appointmentDate}}</td>
+                                        <td>{{appt.appointmentTime}}</td>
+                                        <td>{{appt.patientName}}</td>
+                                        <td>{{appt.patientNRIC}}</td>
+                                        <td>{{appt.appointmentDetail}}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
                         </tbody>
                     </table>
                 </div>

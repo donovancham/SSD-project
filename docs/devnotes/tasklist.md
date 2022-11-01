@@ -11,36 +11,31 @@ All major and minor objectives for the project's achievement can be added here.
 - [ ] Add Mermaid Diagrams where applicable
 - [x] Finish Git GPG setup guide
 - [x] Update all command lines to `console` for markdown codeblock format
-- [ ] Document folder structure to `architecture.md` once planned
-- [ ] Document Secret setup for azure vault
+- [x] Document folder structure to `architecture.md` once planned
+
 
 ## Environment Setup
 - [ ] Web App
-  - [ ] Python Flask
+  - [x] Python Flask
     - [x] Basic Folder Structure
-    - [ ] Quickstart Documentation
+    - [x] Quickstart Documentation
     - [ ] Update environment variables to use secrets
-  - [ ] Postgresql
+  - [x] Postgresql
     - [x] Basic setup
     - [ ] Update environment variables to use secrets
-  - [ ] Gunicorn
-    - [ ] Basic setup
+  - [x] Gunicorn
+    - [x] Basic setup
     - [ ] Secure setup
-  - [ ] Nginx
-    - [ ] Basic setup
+  - [x] Nginx
+    - [x] Basic setup
     - [ ] Security
     - [ ] Optimze `Dockerfile`
-  - [ ] Docker
-    - [ ] Docker Secrets
-    - [ ] Docker Swarm
-    - [ ] [Dockerfile setup](https://testdriven.io/blog/docker-best-practices/)
+  - [x] Docker
 - [x] Jenkins
   - [x] Configure Jenkins Server
 - [ ] Environment Security
   - [x] Configure Branch security
-  - [ ] Remote Vault (Azure Key Vault)
-    - [ ] Setup Remote vault for secure credential/key storage
-    - [ ] Link remote vault to CI/CD pipeline
+  - [ ] Jenkins CI/CD pipeline secret management
 
 ## Jenkins
 - [ ] Configure OWASP Plugin
@@ -58,10 +53,57 @@ All major and minor objectives for the project's achievement can be added here.
 - [ ] Configure HTTPS
 - [ ] Firewall Configurations
 
-## Web App Dev
-
-### Features Checklist
-- [ ] (Copy and fill up from the Deliverable 1 documentation)
+## Web App
+- [ ] Pages
+  - [x] Login Page
+  - [x] Register
+  - [ ] Home dashboard
+  - [ ] Patient Records
+    - [x] Read Records page
+    - [ ] Create/Edit/Delete Records page
+  - [ ] Appointments
+    - [x] Read Appointments
+    - [ ] Create/Edit/Delete Appointments
+  - [ ] Clean up templates and other routes
+- [ ] DB models
+  - [ ] Implement Linkages between the different models
+  - [ ] Encryption?
+- [ ] SFR
+  - [x] Form security
+    - [x] Input validation (server-side minimum, client side good to have)
+  - [ ] Authentication
+    - [ ] Login
+    - [ ] Register
+      - [ ] Password complexity
+      - [ ] 
+    - [ ] 2FA
+    - [ ] Prevent password brute forcing
+  - [ ] RBAC
+    - [ ] Each user should have unique tag in session to identify web traffic
+    - [ ] Error pages should be shown when user has no authority to access pages
+    - [ ] Patient Records
+      - [ ] Doctor
+        - [ ] Create Record
+        - [ ] Edit Record
+        - [ ] View Record
+      - [ ] Patient
+        - [ ] Read own record (Cannot read other records)
+        - [ ] 
+      - [ ] Nurse
+        - [ ] View Record
+    - [ ] Appointments
+        - [ ] Doctor
+          - [ ] Create Record
+          - [ ] Edit Record
+        - [ ] Patient
+          - [ ] Create own appointment (Cannot create for other patients)
+        - [ ] Nurse
+          - [ ] Create new appointment
+- [ ] FSR
+  - [ ] Message Integrity (idk how u want to implement this)
+  - [ ] Backups (This one also idk how)
+  - [ ] Logging
+  - [ ] Error management (As little info leaked about server as possible when errors prompted)
 
 ### Database
 - [ ] Learn SQLAlchemy
@@ -72,13 +114,38 @@ All major and minor objectives for the project's achievement can be added here.
   - [ ] Records
 - [ ] 
 
+## Configuration
+- [ ] CMS app (flask, gunicorn)
+  - [ ] Logging
+- [ ] Nginx Proxy
+  - [ ] HTTPS configuration
+  - [ ] Disable directory traversal
+  - [ ] Logging
+- [ ] Jenkins Pipeline
+  - [ ] Secure Secrets configuration
 
+## Testing
+- [ ] Static Tests
+  - [ ] Test login functions
+  - [ ] Test Register functions
+  - [ ] 
+- [ ] Dynamic Tests
+  - [ ] Injections
+  - [ ] XSS
+  - [ ] CSRF
+  - [ ] XSRF
+  - [ ] Session Hijacking
+  - [ ] LFI
+  - [ ] Directory Traversal
+  - [ ] Password Bruteforce
+  - [ ] Credential Stuffing
+  - [ ] Session Fixation
+  - [ ] Injection
+  - [ ] Source Code Review (Double check the comments)
 
 ## General
 - [ ] Code Documentation
 - [ ] Testing Documentation
-
-
 
 ## Security
 

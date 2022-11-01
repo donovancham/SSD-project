@@ -3,7 +3,7 @@ This page details how to setup the environment step-by-step.
 
 - [Environment Setup](#environment-setup)
 - [Configure Signed Requests](#configure-signed-requests)
-  - [1. Install Git Bash and [GPG4Win](https://www.gpg4win.org/)](#1-install-git-bash-and-gpg4win)
+  - [1. Install Git Bash](#1-install-git-bash-and-gpg4win)
   - [2. Generate GPG Key Pair](#2-generate-gpg-key-pair)
   - [3. Check if key exists](#3-check-if-key-exists)
   - [4. Share public key (Note: `3AA5C34371567BD2` is what you see from the previous step at the first line)](#4-share-public-key-note-3aa5c34371567bd2-is-what-you-see-from-the-previous-step-at-the-first-line)

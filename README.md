@@ -22,6 +22,10 @@ $ pip install -r requirements.txt
 **App Dev**
 ```
 $ gunicorn --bind 0.0.0.0:32984 manage:app
+
+OR
+
+$ python manage.py run
 ```
 
 **Development**
@@ -80,3 +84,13 @@ $ docker-compose up -d --build
   - Added documentation for `devnotes/workflow`
     - Added things to note before committing changes
     - Added documentation for how to check the db changes
+- v1.1
+  - Removed old project work dir `3203ssd`
+  - Ported over changes as of commit `7b83cb048221c0870434fb18010f0c6acc71b61b`
+    - Added session checking (deny access when not logged in)
+    - Added access controls for data access
+    - Added appointment booking for nurse
+    - Added update functionality for appointment and record creation
+  - Added `Jenkinsfile` to mark branch
+  - Updated `entrypoint.sh` to use `CMS_DEBUG` environment variable
+    - Set such that debug will automatically create a new table
