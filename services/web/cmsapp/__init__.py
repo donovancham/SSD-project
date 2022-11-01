@@ -7,14 +7,11 @@ from flask_minify  import Minify
 from importlib import import_module
 from dotenv import load_dotenv, find_dotenv
 from cmsapp.config import config_dict
-from flask_wtf.csrf import CSRFProtect
 
 
 def register_extensions(app: Flask):
     db.init_app(app)
     login_manager.init_app(app)
-    csrf.init_app(app)
-    
 
 
 def register_blueprints(app: Flask):
@@ -50,9 +47,6 @@ load_dotenv(find_dotenv(".env.dev"))
 # To activate production mode, change CMS_DEBUG to 0
 DEBUG = (os.getenv('CMS_DEBUG', '0') == '1')
 get_config_mode = 'Debug' if DEBUG else 'Production'
-
-# Enable CSRFProtect
-csrf = CSRFProtect(app)
 
 # Load the configuration using the default values
 app_config = config_dict[get_config_mode.capitalize()]
