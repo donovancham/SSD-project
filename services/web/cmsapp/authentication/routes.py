@@ -79,7 +79,6 @@ def login():
 
 @blueprint.route('/login_2fa',methods=['GET','POST'])
 def login_2FA():
-
     otp_form = OTPForm(request.form)
 
     if "auth_otp" in request.form:
@@ -267,6 +266,11 @@ def viewRecord():
 @login_manager.unauthorized_handler
 def unauthorized_handler():
     return render_template('home/page-403.html'), 403
+
+
+@blueprint.errorhandler(400)
+def access_forbidden(error):
+    return render_template('home/page-400.html'), 400
 
 
 @blueprint.errorhandler(403)
