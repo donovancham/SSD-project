@@ -20,6 +20,7 @@
                         <div class="card-body">
                           <p class="card-text"> A OTP has been sent to your registered email. </p>
                             <form role="form" method="post" action="">
+                                {{ form.hidden_tag() }}
                                 <div class="form-group">
                                     <label class="small mb-1" for="otp">OTP</label>
                                     {{ form.otp(placeholder="OTP Pin", class="form-control") }}
