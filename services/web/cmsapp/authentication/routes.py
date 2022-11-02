@@ -63,7 +63,7 @@ def login():
                 user.otp = OTP_Pin
                 db.session.add(user)
                 db.session.commit()
-
+                
        	        html = render_template("accounts/2fa.html", a_otp=OTP_Pin)
                 subject = "Login OTP"
                 send_email(email, subject, html)
@@ -264,6 +264,11 @@ def password_reset_func(token):
                         confirm_pass = request.form.get("confirmpw")
 
                         if new_pass == confirm_pass:
+                            # Check password with zxcvbn
+                            complexity, msg = password_complexity_checker(new_pass)
+                            if complexity == False:
+                                return render_template('accounts/password_reset_func.html', form=pass_reset_func, msg=msg)
+
                             user.password = hash_pass(confirm_pass)
                             user.reset_request = False
                             db.session.add(user)
