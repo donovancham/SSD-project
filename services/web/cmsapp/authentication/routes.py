@@ -21,6 +21,7 @@ from flask_mail import Message
 from cmsapp.authentication.cmsemail import send_email
 import pyotp
 from cmsapp.authentication.util import hash_pass
+from flask import flash
 
 
 import sys
@@ -48,10 +49,13 @@ def login():
 
         # Check the password
         if user and verify_pass(password, user.password):
+
+            # Checks to see if the user's Email is verified
             if user.confirmed:
 
                 email = user.email
 
+                # Creates a new OTP based on a random secret
                 secret = pyotp.random_base32()
                 totp = pyotp.TOTP(secret)
                 OTP_Pin = totp.now()
@@ -82,17 +86,18 @@ def login():
 def login_2FA():
     otp_form = OTPForm(request.form)
 
-    if "auth_otp" in request.form:
+    #if "auth_otp" in request.form:
+    if request.method == "POST":
         username = request.args['username']
         user = Users.query.filter_by(username=username).first()
 
         if int(request.form.get("otp")) == user.otp:
-            login_user(user)
-
             # Reset OTP in db
+            flash("OTP is correct")
             user.otp = None
             db.session.add(user)
             db.session.commit()
+            login_user(user)
             return redirect(url_for('authentication_blueprint.route_default'))
 
     return render_template('accounts/otp_auth.html', form=otp_form)
@@ -209,7 +214,11 @@ def password_reset():
 
     if request.method == "POST":
         email = request.values.get('email')
+
         user = Users.query.filter_by(email=email).first()
+
+        if user == None:
+            return render_template('accounts/password_reset_prompt.html',form=reset_form)
 
 	# Token Generation for Registration Confirmation
         token = generate_confirmation_token(email)
@@ -455,4 +464,3 @@ def internal_error(error):
 @blueprint.errorhandler(CSRFError)
 def csrf_error(reason):
     return render_template('home/page-403.html'), 403
-
