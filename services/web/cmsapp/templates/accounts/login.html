@@ -47,7 +47,12 @@
                                 <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
                                     <button type="submit" name="login" class="btn btn-primary">Login</button>
                                     <div class="small">
-                                        <a href="{{ url_for('authentication_blueprint.register') }}">Register</a></div>
+                                        <a href="{{ url_for('authentication_blueprint.register') }}">Register</a>
+				    </div>
+					<div class="small">
+                                        <a href="{{ url_for('authentication_blueprint.password_reset') }}">Forgot Password?</a>
+					</div>
+
                                 </div>
                             </form>
                         </div>

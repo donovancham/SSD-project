@@ -76,7 +76,10 @@ All major and minor objectives for the project's achievement can be added here.
     - [ ] Register
       - [ ] Password complexity
       - [ ] 
-    - [ ] 2FA
+    - [x] 2FA
+     - [x] Email Verification
+     - [x] Login OTP
+     - [x] Password Reset 2FA
     - [ ] Prevent password brute forcing
   - [ ] RBAC
     - [ ] Each user should have unique tag in session to identify web traffic
@@ -181,7 +184,7 @@ All major and minor objectives for the project's achievement can be added here.
 ### Others
 - [ ] CSRF Token (Coding)
 - [ ] Credential Management (Environment Variable / Private Key Storage)
-- [ ] 2FA Authentication (External Implementation)
+- [x] 2FA Authentication (External Implementation)
 - [ ] Error Handling (Custom Error Pages)
 - [ ] WAF (modsecurity[?])
 - [ ] Network Level Firewall (iptables / ufw)
