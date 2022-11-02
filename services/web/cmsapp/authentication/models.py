@@ -53,6 +53,13 @@ class User(db.Model, UserMixin):
     nric=db.Column(db.String(64), unique=True)
     name=db.Column(db.String(64))
 
+    # For 2FA
+    confirmed = db.Column(db.Boolean, nullable=False, default=False)
+    confirmed_on = db.Column(db.DateTime, nullable=True)
+    otp = db.Column(db.Integer)
+    reset_request = db.Column(db.Boolean, nullable=False, default=False)
+
+
     def __init__(self, **kwargs):
         for property, value in kwargs.items():
             # depending on whether value is an iterable or not, we must

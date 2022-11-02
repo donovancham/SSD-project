@@ -3,7 +3,7 @@
 import os
 import hashlib
 import binascii
-
+from zxcvbn import zxcvbn
 
 
 
@@ -29,3 +29,15 @@ def verify_pass(provided_password, stored_password):
                                   100000)
     pwdhash = binascii.hexlify(pwdhash).decode('ascii')
     return pwdhash == stored_password
+
+def password_complexity_checker(password):
+    """check complexity of password using zxcvbn"""
+
+
+    complexity = zxcvbn(password)
+    if complexity["score"] < 3:
+            msg = ','.join(complexity["feedback"]["suggestions"])
+            msg = "Password is not complex enough: " + msg
+            return False,msg
+    else:
+        return True, "Password OK"

@@ -4,9 +4,9 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, DateField, TimeField, IntegerField, SelectField, SubmitField
 from wtforms.validators import DataRequired, Length, Email
 
+
+
 # login and registration
-
-
 class LoginForm(FlaskForm):
     username = StringField('Username',
                          id='username_login',
@@ -25,7 +25,7 @@ class CreateAccountForm(FlaskForm):
                         validators=[DataRequired(), Email()])
     password = PasswordField('Password', 
                              id='pwd_create',
-                             validators=[DataRequired(), Length(min=6, max=40)])
+                             validators=[DataRequired(), Length(min=8, max=64)])
     userrole = SelectField("userrole", validators=[DataRequired()],
                                             choices =['Doctor', 'Patient', 'Nurse'])   
     nric = StringField('nric', 
@@ -52,4 +52,18 @@ class CreateRecordForm(FlaskForm):
     defaultDate = StringField('defaultDate', id='defaultDate', validators=[DataRequired()])
     inputNRIC = StringField('inputNRIC', id='inputNRIC', validators=[DataRequired()])
     inputDescription = StringField('inputDescription', id='inputDescription', validators=[DataRequired()])
+    inputName = StringField('inputName', id='inputName', validators=[DataRequired()])
     inputCreatedBy = StringField('inputCreatedBy', id='inputCreatedBy', validators=[DataRequired()])
+
+
+class OTPForm(FlaskForm):
+    otp = StringField('otp', id='otp', validators=[DataRequired()])
+
+class PWResetForm(FlaskForm):
+    email = StringField('email',id='email',validators=[DataRequired(), Email()])
+
+
+class PWResetFuncForm(FlaskForm):
+    newpw = PasswordField('newpw', id='newpw', validators=[DataRequired()])
+    confirmpw = PasswordField('confirmpw', id='confirmpw', validators=[DataRequired()])
+

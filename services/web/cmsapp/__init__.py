@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_minify  import Minify
+from flask_mail import Mail
 from importlib import import_module
 from dotenv import load_dotenv, find_dotenv
 from cmsapp.config import config_dict
@@ -43,6 +44,9 @@ db: SQLAlchemy = SQLAlchemy()
 # Configure login manager
 login_manager: LoginManager = LoginManager()
 
+# For 2FA
+mail: Mail() = Mail()
+
 # Enable RBAC
 authorize = Authorize()
 
@@ -68,7 +72,12 @@ register_blueprints(app)
 
 Migrate(app, db)
 
+# Initialize mail with app for 2FA
+mail.init_app(app)
+
+
 # Environment Checks
+
 if not DEBUG:
     # Compress app size to run faster
     Minify(app=app, html=True, js=False, cssless=False)
@@ -78,6 +87,6 @@ else:
     app.logger.info('Page Compression = ' + 'FALSE' if DEBUG else 'TRUE' )
     app.logger.info('DBMS             = ' + app_config.SQLALCHEMY_DATABASE_URI)
     app.logger.info('ASSETS_ROOT      = ' + app_config.ASSETS_ROOT )
-    
+
     # Configure db
     configure_database(app)
