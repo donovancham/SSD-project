@@ -1,21 +1,21 @@
 # -*- encoding: utf-8 -*-
 from flask_wtf.csrf import CSRFError
-from flask import render_template, redirect, request, url_for
+from flask import render_template, redirect, request, url_for, current_app
 from flask_login import (
     current_user,
     login_user,
     logout_user,
-    login_required
+    login_required,
+    login_manager
 )
 
-from cmsapp import db, login_manager
+from cmsapp import db, login_manager, authorize
 from cmsapp.authentication import blueprint
 from cmsapp.authentication.forms import LoginForm, CreateAccountForm, BookApptForm, CreateRecordForm
-from cmsapp.authentication.models import Appointment, Users, Record
-from cmsapp import csrf
+from cmsapp.authentication.models import Appointment, User, Record, Role, Group
 from cmsapp.authentication.util import verify_pass
-
 import sys
+
 
 
 @blueprint.route('/')
@@ -35,7 +35,7 @@ def login():
         password = request.form['password']
 
         # Locate user
-        user = Users.query.filter_by(username=username).first()
+        user = User.query.filter_by(username=username).first()
 
         # Check the password
         if user and verify_pass(password, user.password):
@@ -59,12 +59,16 @@ def register():
     create_account_form = CreateAccountForm(request.form)
     if 'register' in request.form:
 
-        username = request.form['username']
-        email = request.form['email']
+        username= request.form['username']
+        email= request.form['email']
         nric= request.form['nric']
+        password= request.form['password']
+        userroles= request.form['userrole']
+        #groups= request.form['groups']
+        name= request.form['name']
 
         # Check usename exists
-        user = Users.query.filter_by(username=username).first()
+        user = User.query.filter_by(username=username).first()
         if user:
             return render_template('accounts/register.html',
                                    msg='Username already registered',
@@ -72,23 +76,80 @@ def register():
                                    form=create_account_form)
 
         # Check email exists
-        user = Users.query.filter_by(email=email).first()
+        user = User.query.filter_by(email=email).first()
         if user:
             return render_template('accounts/register.html',
                                    msg='Email already registered',
                                    success=False,
                                    form=create_account_form)
         # Check nric exists
-        user = Users.query.filter_by(nric=nric).first()
+        user = User.query.filter_by(nric=nric).first()
         if user:
             return render_template('accounts/register.html',
                                    msg='Nric already registered',
                                    success=False,
                                    form=create_account_form)
-
+            
         # else we can create the user
-        user = Users(**request.form)
+        user = User(**request.form)
+        #user = User(username=username, password=password, email=email, nric=nric, name=name, roles=roles, groups=groups)
         db.session.add(user)
+        #db.session.commit()
+
+         # Check user group and role and configure role in db\
+        user = User.query.filter_by(username=username).first()
+        
+        if userroles == 'Patient':
+            roles = ['Patient']
+            q = Role.query.filter_by(name=roles[0]).first()
+            if q:
+                roles.append(q)
+            else:
+                roles.append(Role(name="Patient"))
+            db.session.add(roles[-1])
+            user.roles.append(roles[-1])
+            db.session.flush()
+        if userroles == 'Doctor':
+            roles = ['Doctor']
+            q = Role.query.filter_by(name=roles[0]).first()
+            if q:
+                roles.append(q)
+            else:
+                roles.append(Role(name="Doctor"))
+            db.session.add(roles[-1])
+            user.roles.append(roles[-1])
+            db.session.flush()
+        if userroles == 'Nurse':
+            roles = ['Nurse']
+            q = Role.query.filter_by(name=roles[0]).first()
+            if q:
+                roles.append(q)
+            else:
+                roles.append(Role(name="Nurse"))
+            db.session.add(roles[-1])
+            user.roles.append(roles[-1])
+            db.session.flush()
+        # configure  groups
+        if userroles == 'Patient':
+            groups = ['PatientGroup']
+            q = Group.query.filter_by(name=groups[0]).first()
+            if q:
+                groups.append(q)
+            else:
+                groups.append(Group(name="PatientGroup"))
+            db.session.add(groups[-1])
+            user.groups.append(groups[-1])
+            db.session.flush()
+        if userroles == 'Doctor' or userroles == 'Nurse':
+            groups = ['StaffGroup']
+            q = Group.query.filter_by(name=groups[0]).first()
+            if q:
+                groups.append(q)
+            else:
+                groups.append(Group(name="StaffGroup"))
+            db.session.add(groups[-1])
+            user.groups.append(groups[-1])
+            db.session.flush()
         db.session.commit()
         
         # Delete user from session
@@ -113,8 +174,8 @@ def logout():
 @login_required
 def bookAppt():
     form = BookApptForm()
+
     if request.method == "POST":
-        #if form.validate_on_submit():
             inputDate = request.form['inputDate']
             inputTime = request.form['inputTime']
             inputDetail = request.form['inputDetail']
@@ -134,6 +195,10 @@ def bookAppt():
 @login_required
 def createRecord():
     form = CreateRecordForm()
+    # RBAC check if user is a Doctor
+    if not authorize.has_role("Doctor"):
+        return redirect("/page-403.html")
+
     if current_user.userrole == "Doctor":
         msg = ""
         if request.method == "POST":
@@ -172,6 +237,9 @@ def viewAppt():
     form = BookApptForm()
     if request.method == "POST":
         if "deleteApptBtn" in request.form:
+            # RBAC check if user is a Patient or Nurse
+            if not authorize.has_role("Patient") and not authorize.has_role("Nurse"):
+                return redirect("/page-403.html")
             inputID = request.form["inputID"]
             entry = Appointment.query.get_or_404(int(inputID))
             db.session.delete(entry)
@@ -179,6 +247,9 @@ def viewAppt():
             print("Entry deleted")
 
         elif "updateApptBtn" in request.form:
+            # RBAC check if user is a Patient or Nurse
+            if not authorize.has_role("Nurse") and not authorize.has_role("Patient"):
+                return redirect("/page-403.html")
             inputID = request.form["inputID"]
             data = Appointment.query.get(int(inputID))
             return render_template('home/updateAppointment.html', segment="updateAppointment", data=data, form=form)
@@ -199,6 +270,9 @@ def viewRecord():
     form = CreateRecordForm()
     data = Record.query.all()
     if request.method == "POST":
+        # RBAC check if user is a Doctor
+        if not authorize.has_role("Doctor"):
+            return redirect("/page-403.html")
         if "deleteApptBtn" in request.form:
             inputID = request.form["inputID"]
             entry = Record.query.get_or_404(int(inputID))
@@ -212,12 +286,15 @@ def viewRecord():
             return render_template('home/updateRecord.html', segment="updateRecord", data=data, form=form)
 
         return redirect("/viewRecord.html")
-
     return render_template('home/viewRecord.html', segment="viewRecord", data=data, form=form)
 
 @blueprint.route('/updateRecord.html', methods=['GET', 'POST'])
 @login_required
 def updateRecord():
+    # RBAC check if user is a Doctor
+    if not authorize.has_role("Doctor"):
+        return redirect("/page-403.html")    
+    
     form = CreateRecordForm()
     data = Record.query.all()
     if request.method == "POST":
@@ -245,6 +322,9 @@ def updateRecord():
 @blueprint.route('/updateAppointment.html', methods=['GET', 'POST'])
 @login_required
 def updateAppt():
+    # RBAC check if user is a Nurse of Patient
+    if not authorize.has_role("Patient") and not authorize.has_role("Nurse"):
+        return redirect("/page-403.html") 
     form = BookApptForm()
     data = Appointment.query.all()
     if request.method == "POST":
