@@ -21,7 +21,7 @@ from flask_mail import Message
 from cmsapp.authentication.cmsemail import send_email
 import pyotp
 from cmsapp.authentication.util import hash_pass
-from flask import flash
+
 
 
 import sys
@@ -93,7 +93,6 @@ def login_2FA():
 
         if int(request.form.get("otp")) == user.otp:
             # Reset OTP in db
-            flash("OTP is correct")
             user.otp = None
             db.session.add(user)
             db.session.commit()
@@ -171,18 +170,22 @@ def confirm_email(token):
         url_buffer = ""
 
         email = confirm_token(token)
+
         if not email:
                 url_buffer = "authentication_blueprint.confirmation_invalid"
         else:
                 user = Users.query.filter_by(email=email).first_or_404()
+
                 if user.confirmed:
                         url_buffer = "authentication_blueprint.confirmation_confirmed"
                 else:
                         user.confirmed = True
                         user.confirmed_on = datetime.datetime.now()
+                        url_buffer = "authentication_blueprint.confirmation_success"
+
                         db.session.add(user)
                         db.session.commit()
-                        url_buffer = "authentication_blueprint.confirmation_success"
+
         return redirect(url_for(url_buffer))
 
 
@@ -217,19 +220,21 @@ def password_reset():
 
         user = Users.query.filter_by(email=email).first()
 
-        if user == None:
-            return render_template('accounts/password_reset_prompt.html',form=reset_form)
+        if user != None:
+            user.reset_request = True
+            db.session.add(user)
+            db.session.commit()
 
-	# Token Generation for Registration Confirmation
-        token = generate_confirmation_token(email)
+            # Token Generation for Registration Confirmation
+            token = generate_confirmation_token(email)
 
-	# Confirmation URL
-        confirm_url = url_for("authentication_blueprint.password_reset_func", token=token, _external=True)
-        html = render_template("accounts/pw_reset.html", confirm_url=confirm_url)
-        subject = "Password Reset 2FA"
+    	    # Confirmation URL
+            confirm_url = url_for("authentication_blueprint.password_reset_func", token=token, _external=True)
+            html = render_template("accounts/pw_reset.html", confirm_url=confirm_url)
+            subject = "Password Reset 2FA"
 
-        send_email(email, subject, html)
-        return redirect(url_for('authentication_blueprint.pw_reset_sent'))
+            send_email(email, subject, html)
+            return redirect(url_for('authentication_blueprint.pw_reset_sent'))
 
     return render_template('accounts/password_reset_prompt.html',form=reset_form)
 
@@ -244,17 +249,21 @@ def password_reset_func(token):
 
         else:
                 user = Users.query.filter_by(email=email).first_or_404()
+                if user.reset_request:
+                    if "password" in request.form:
+                        new_pass = request.form.get("newpw")
+                        confirm_pass = request.form.get("confirmpw")
 
-                if "password" in request.form:
-                    new_pass = request.form.get("newpw")
-                    confirm_pass = request.form.get("confirmpw")
+                        if new_pass == confirm_pass:
+                            user.password = hash_pass(confirm_pass)
+                            user.reset_request = False
+                            db.session.add(user)
+                            db.session.commit()
+                            return redirect(url_for('authentication_blueprint.password_resetted'))
 
-                    if new_pass == confirm_pass:
-                        user = Users.query.filter_by(email=email).first()
-                        user.password = hash_pass(confirm_pass)
-                        db.session.add(user)
-                        db.session.commit()
-                        return redirect(url_for('authentication_blueprint.password_resetted'))
+                else:
+                    return redirect(url_for('authentication_blueprint.pw_reset_invalid'))
+
 
                 return render_template('accounts/password_reset_func.html', form=pass_reset_func)
 

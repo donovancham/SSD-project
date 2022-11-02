@@ -22,6 +22,7 @@ class Users(db.Model, UserMixin):
     confirmed = db.Column(db.Boolean, nullable=False, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
     otp = db.Column(db.Integer)
+    reset_request = db.Column(db.Boolean, nullable=False, default=False)
 
 
     def __init__(self, **kwargs):
