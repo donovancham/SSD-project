@@ -8,13 +8,15 @@ from importlib import import_module
 from dotenv import load_dotenv, find_dotenv
 from cmsapp.config import config_dict
 from flask_wtf.csrf import CSRFProtect
-
+from flask_authorize import Authorize
 
 def register_extensions(app: Flask):
     db.init_app(app)
     login_manager.init_app(app)
     csrf.init_app(app)
-    
+    # Enable RBAC
+    authorize.init_app(app)
+
 
 
 def register_blueprints(app: Flask):
@@ -40,6 +42,9 @@ db: SQLAlchemy = SQLAlchemy()
 
 # Configure login manager
 login_manager: LoginManager = LoginManager()
+
+# Enable RBAC
+authorize = Authorize()
 
 # Initialize project with name
 app = Flask(__name__)
