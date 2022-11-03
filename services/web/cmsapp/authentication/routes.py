@@ -86,7 +86,7 @@ def login_2FA():
     #if "auth_otp" in request.form:
     if request.method == "POST":
         username = request.args['username']
-        user = Users.query.filter_by(username=username).first()
+        user = User.query.filter_by(username=username).first()
 
         if int(request.form.get("otp")) == user.otp:
             # Reset OTP in db
@@ -241,7 +241,7 @@ def confirm_email(token):
         if not email:
                 url_buffer = "authentication_blueprint.confirmation_invalid"
         else:
-                user = Users.query.filter_by(email=email).first_or_404()
+                user = User.query.filter_by(email=email).first_or_404()
 
                 if user.confirmed:
                         url_buffer = "authentication_blueprint.confirmation_confirmed"
@@ -285,7 +285,7 @@ def password_reset():
     if request.method == "POST":
         email = request.values.get('email')
 
-        user = Users.query.filter_by(email=email).first()
+        user = User.query.filter_by(email=email).first()
 
         if user != None:
             user.reset_request = True
@@ -315,7 +315,7 @@ def password_reset_func(token):
                 return redirect(url_for('authentication_blueprint.pw_reset_invalid'))
 
         else:
-                user = Users.query.filter_by(email=email).first_or_404()
+                user = User.query.filter_by(email=email).first_or_404()
                 if user.reset_request:
                     if "password" in request.form:
                         new_pass = request.form.get("newpw")
