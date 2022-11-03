@@ -7,26 +7,30 @@ else if (BRANCH_NAME == 'main') {
 }
 
 pipeline {
-    agent { label agentLabel } 
+    agent { 
+        label agentLabel
+    } 
 
     options {
         buildDiscarder logRotator( 
             daysToKeepStr: '5', 
             numToKeepStr: '5'
         )
+        disableConcurrentBuilds()
     }
 
     stages {
         stage('Setup') { 
             steps {
-                checkout scm
                 withCredentials([file(credentialsId: '1f8b1838-5199-43e3-87f9-61585d127c98', variable: 'secret_file')]) {
                     // Convert to environment variables
-                    sh('export $(cat $secret_file | xargs)')
+                    set +x
+                    sh('export $(cat $secret_file | xargs) >/dev/null')
+                    // Clone source code
+                    checkout scm
+                    // Run docker
+                    sh('docker-compose -f docker-compose.prod.yml up -d --build')
                 }
-                // Run docker
-                sh('docker-compose -f docker-compose.prod.yml up -d --build')
-                
             }
         }
         // stage('Test') { 

@@ -19,13 +19,13 @@ All major and minor objectives for the project's achievement can be added here.
   - [x] Python Flask
     - [x] Basic Folder Structure
     - [x] Quickstart Documentation
-    - [ ] Update environment variables to use secrets
+    - [x] Update environment variables to use secrets
   - [x] Postgresql
     - [x] Basic setup
-    - [ ] Update environment variables to use secrets
+    - [x] Update environment variables to use secrets
   - [x] Gunicorn
     - [x] Basic setup
-    - [ ] Secure setup
+    - [x] Secure setup
   - [x] Nginx
     - [x] Basic setup
     - [ ] Security
@@ -65,9 +65,9 @@ All major and minor objectives for the project's achievement can be added here.
     - [x] Read Appointments
     - [ ] Create/Edit/Delete Appointments
   - [ ] Clean up templates and other routes
-- [ ] DB models
-  - [ ] Implement Linkages between the different models
-  - [ ] Encryption?
+- [x] DB models
+  - [x] Implement Linkages between the different models
+  - [x] Encryption?
 - [ ] SFR
   - [ ] Form security
     - [ ] Input validation (server-side minimum, client side good to have)
