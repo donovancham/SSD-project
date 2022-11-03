@@ -109,7 +109,6 @@ def register():
         nric= request.form['nric']
         password= request.form['password']
         userroles= "Patient"
-        #groups= request.form['groups']
         name= request.form['name']
         password= request.form['password']
 
@@ -146,7 +145,7 @@ def register():
             
         # else we can create the user
         #user = User(**request.form)
-        user = User(username=username, userrole=userroles, password=password, email=email, nric=nric, name=name)
+        user = User(username=username, password=password, email=email, nric=nric, name=name)
         db.session.add(user)
         #db.session.commit()
 
@@ -163,26 +162,7 @@ def register():
             db.session.add(roles[-1])
             user.roles.append(roles[-1])
             db.session.flush()
-        if userroles == 'Doctor':
-            roles = ['Doctor']
-            q = Role.query.filter_by(name=roles[0]).first()
-            if q:
-                roles.append(q)
-            else:
-                roles.append(Role(name="Doctor"))
-            db.session.add(roles[-1])
-            user.roles.append(roles[-1])
-            db.session.flush()
-        if userroles == 'Nurse':
-            roles = ['Nurse']
-            q = Role.query.filter_by(name=roles[0]).first()
-            if q:
-                roles.append(q)
-            else:
-                roles.append(Role(name="Nurse"))
-            db.session.add(roles[-1])
-            user.roles.append(roles[-1])
-            db.session.flush()
+        
         # configure  groups
         if userroles == 'Patient':
             groups = ['PatientGroup']
@@ -194,16 +174,7 @@ def register():
             db.session.add(groups[-1])
             user.groups.append(groups[-1])
             db.session.flush()
-        if userroles == 'Doctor' or userroles == 'Nurse':
-            groups = ['StaffGroup']
-            q = Group.query.filter_by(name=groups[0]).first()
-            if q:
-                groups.append(q)
-            else:
-                groups.append(Group(name="StaffGroup"))
-            db.session.add(groups[-1])
-            user.groups.append(groups[-1])
-            db.session.flush()
+        
         db.session.commit()
 
 	# Token Generation for Registration Confirmation

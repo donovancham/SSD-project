@@ -47,7 +47,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(64), nullable=False, unique=True, index=True)
     email = db.Column(db.String(64), unique=True)
     password = db.Column(db.LargeBinary)
-    userrole=db.Column(db.String(64))
+    # userrole=db.Column(db.String(64))
     roles=db.relationship('Role', secondary=UserRole)
     groups = db.relationship('Group', secondary=UserGroup)
     nric=db.Column(db.String(64), unique=True)
