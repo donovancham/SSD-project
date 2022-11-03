@@ -8,17 +8,7 @@ else if (BRANCH_NAME == 'main') {
 
 pipeline {
     agent { 
-        node {
-            label agentLabel
-            // Clone source code
-            checkout scm
-            ws {
-                withCredentials([file(credentialsId: '1f8b1838-5199-43e3-87f9-61585d127c98', variable: 'secret_file')]) {
-                    // Convert to environment variables
-                    sh 'export $(cat $secret_file | xargs) >/dev/null'
-                }
-            }
-        }
+        label agentLabel
     } 
 
     options {
@@ -32,6 +22,12 @@ pipeline {
     stages {
         stage('Setup') { 
             steps {
+                // Clone source code
+                checkout scm
+                withCredentials([file(credentialsId: '1f8b1838-5199-43e3-87f9-61585d127c98', variable: 'secret_file')]) {
+                    // Convert to environment variables
+                    sh 'export $(cat $secret_file | xargs) >/dev/null'
+                }
                 sh 'ls -la'
                 // dir() {
 
