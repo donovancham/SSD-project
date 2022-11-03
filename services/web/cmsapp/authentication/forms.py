@@ -26,8 +26,6 @@ class CreateAccountForm(FlaskForm):
     password = PasswordField('Password', 
                              id='pwd_create',
                              validators=[DataRequired(), Length(min=8, max=64)])
-    userrole = SelectField("userrole", validators=[DataRequired()],
-                                            choices =['Doctor', 'Patient', 'Nurse'])   
     nric = StringField('nric', 
                            id='nric_create', 
                            validators=[DataRequired(), Length(min=4, max=4)])   
