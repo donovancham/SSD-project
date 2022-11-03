@@ -29,6 +29,17 @@ pipeline {
                 
             }
         }
+        post {
+            success {
+                echo "Build completed successfully!"
+            }
+            failure {
+                echo "Teardown initiated..."
+                // Teardown docker
+                sh('docker-compose -f docker-compose.prod.yml down -v')
+                echo "Build Failed."
+            }
+        }
         // stage('Test') { 
         //     steps {
         //         // 
@@ -39,16 +50,6 @@ pipeline {
         //         // 
         //     }
         // }
-        post {
-            success {
-                echo "Run completed successfully!"
-            }
-            failure {
-                echo "Teardown initiated..."
-                // Teardown docker
-                sh('docker-compose -f docker-compose.prod.yml down -v')
-                echo "Build Failed."
-            }
-        }
+        
     }
 }
