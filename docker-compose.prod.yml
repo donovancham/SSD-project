@@ -1,0 +1,65 @@
+version: '3.8'
+
+services:
+  nginx:
+    container_name: cmsapp-proxy
+    build: ./services/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - web
+    networks:
+      - frontend
+  web:
+    container_name: cmsapp-web
+    build: ./services/web
+    command: gunicorn --bind 0.0.0.0:32984 manage:app
+    expose:
+      - 32984
+    environment:
+      # CMS
+      - FLASK_APP=${FLASK_APP:?err}
+      - FLASK_DEBUG=${FLASK_DEBUG:?err}
+      - CMS_DEBUG=${CMS_DEBUG:?err}
+      - SECRET_KEY=${SECRET_KEY:?err}
+      - ASSETS_ROOT=${ASSETS_ROOT:?err}
+      # DB
+      - DB_ENGINE=${DB_ENGINE:?err}
+      - DB_USERNAME=${DB_USERNAME:?err}
+      - DB_PASS=${DB_PASS:?err}
+      - DB_HOST=${DB_HOST:?err}
+      - DB_PORT=${DB_PORT:?err}
+      - DB_NAME=${DB_NAME:?err}
+      # MX
+      - TOKEN_SECRET_KEY=${TOKEN_SECRET_KEY:?err}
+      - GENERATE_TOKEN_SALT=${GENERATE_TOKEN_SALT:?err}
+      - APP_MAIL_USERNAME=${APP_MAIL_USERNAME:?err}
+      - APP_MAIL_PASSWORD=${APP_MAIL_PASSWORD:?err}
+      - MAIL_SERVER=${MAIL_SERVER:?err}
+      - MAIL_PORT=${MAIL_PORT:?err}
+      - MAIL_USE_TLS=${MAIL_USE_TLS:?err}
+      - MAIL_USE_SSL=${MAIL_USE_SSL:?err}
+    depends_on:
+      - db
+    networks:
+      - frontend
+      - backend
+  db:
+    container_name: cmsapp-db
+    image: postgres:13-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${DB_USERNAME:?err}
+      - POSTGRES_PASSWORD=${DB_PASS:?err}
+      - POSTGRES_DB=${DB_NAME:?err}
+    networks:
+      - backend
+
+networks:
+  frontend:
+  backend:
+
+volumes:
+  postgres_data:
