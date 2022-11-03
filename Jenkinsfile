@@ -28,10 +28,6 @@ pipeline {
                     // Convert to environment variables
                     sh 'export $(cat $secret_file | xargs) >/dev/null'
                 }
-                sh 'ls -la'
-                // dir() {
-
-                // }
                 // Run docker
                 sh('docker-compose -f docker-compose.prod.yml up -d --build')
             }
