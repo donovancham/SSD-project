@@ -15,10 +15,12 @@ def register_extensions(app: Flask):
     db.init_app(app)
     login_manager.init_app(app)
     csrf.init_app(app)
-    # Enable RBAC
+
+    # Initialize mail with app for 2FA
+    mail.init_app(app)
+
+  # Enable RBAC
     authorize.init_app(app)
-
-
 
 def register_blueprints(app: Flask):
     for module_name in ('authentication', 'home'):
@@ -71,9 +73,6 @@ register_extensions(app)
 register_blueprints(app)
 
 Migrate(app, db)
-
-# Initialize mail with app for 2FA
-mail.init_app(app)
 
 
 # Environment Checks
