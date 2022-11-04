@@ -1,0 +1,92 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Tables {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <main>
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">All Patients' Records</h1>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <table id="datatablesSimple">
+                        <thead>
+                            <tr>
+                                <th>Date Created</th>
+                                <th>Created By</th>
+                                <th>Patient's Name</th>
+                                <th>Patient's NRIC</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if current_user.userrole == "Patient" %}
+                                {% for rec in data %}
+                                    {% if current_user.nric == rec.patientNRIC %}
+                                        <tr>
+                                            <td>{{rec.dateCreated}}</td>
+                                            <td>{{rec.createdBy}}</td>
+                                            <td>{{rec.patientName}}</td>
+                                            <td>{{rec.patientNRIC}}</td>
+                                            <td>{{rec.description}}</td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if current_user.userrole == "Nurse" %}
+                                {% for rec in data %}
+                                    <tr>
+                                        <td>{{rec.dateCreated}}</td>
+                                        <td>{{rec.createdBy}}</td>
+                                        <td>{{rec.patientName}}</td>
+                                        <td>{{rec.patientNRIC}}</td>
+                                        <td>{{rec.description}}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if current_user.userrole == "Doctor" %}
+                                {% for rec in data %}
+                                    <tr>
+                                        <td>{{rec.dateCreated}}</td>
+                                        <td>{{rec.createdBy}}</td>
+                                        <td>{{rec.patientName}}</td>
+                                        <td>{{rec.patientNRIC}}</td>
+                                        <td>{{rec.description}}</td>
+                                        <td>
+                                            <form role="form" method="post" action="">
+                                                {{ form.csrf_token }}
+                                                <input type="text" value={{ rec.recordID }} id="inputID" name="inputID" hidden>
+                                                <button id="updateApptBtn" name="updateApptBtn" type="submit">Update</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form role="form" method="post" action="">
+                                                {{ form.csrf_token }}
+                                                <input type="text" value={{ rec.recordID }} id="inputID" name="inputID" hidden>
+                                                <button id="deleteApptBtn" name="deleteApptBtn" type="submit">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+    <script src="/static/assets/js/datatables-simple-demo.js"></script>
+
+{% endblock javascripts %}

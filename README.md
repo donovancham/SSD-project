@@ -5,12 +5,37 @@
 - [Docker Desktop](https://www.docker.com/) ([WSL2](https://docs.docker.com/desktop/windows/wsl/) is optional but recommended)
 
 ## Quickstart
+**Windows**
 ```console
-Dev Quickstart
-$ flask run --host=0.0.0.0 --port=5000
+$ cd services\web
+$ .\env\Scripts\activate
+$ pip install -r requirements.txt
+```
 
-Production Testing
-$ docker-compose up --build
+**Linux**
+```console
+$ cd services/web
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+```
+
+**App Dev**
+```
+$ gunicorn --bind 0.0.0.0:32984 manage:app
+
+OR
+
+$ python manage.py run
+```
+
+**Development**
+```console
+$ docker-compose up -d --build
+```
+
+**Production**
+```console
+$ docker-compose -f docker-compose.prod.yml up -d --build
 ```
 
 ## Docs
@@ -21,6 +46,7 @@ $ docker-compose up --build
 - [Task-list](docs/devnotes/tasklist.md)
 - [Testing](docs/devnotes/testing.md)
 - [Architecture](docs/architecture.md)
+- [App Structure Documentation](https://docs.appseed.us/boilerplate-code/flask#codebase-structure)
 
 ## Changelog
 - v0.0
@@ -46,4 +72,50 @@ $ docker-compose up --build
     - `docs/devnotes/init.md`
     - `README.md`
     - `docs/devnotes/env-setup.md`
-
+- v1.0
+  - Added basic configuration setup of web stack
+    - Copied existing development to `services/web`
+    - Migrated existing development processes
+      - For these files, `import apps` change to import `cmsapp` (double check pylance for syntax highlighting)
+        - `authentication/models.py`
+        - `authentication/routes.py`
+        - `home/routes.py`
+      - Updated as of commit `d7ef544e5c5d9bf8c16b79ecf6779446ed6fb3b0`
+    - Using `manage.py` for database updates
+      - Run `python manage.py create_db` to create db
+      - Run `python manage.py delete_db` to delete db
+  - Added documentation for `env-setup`
+  - Added documentation of flask app
+  - Added documentation for `devnotes/workflow`
+    - Added things to note before committing changes
+    - Added documentation for how to check the db changes
+- v1.1
+  - Removed old project work dir `3203ssd`
+  - Ported over changes as of commit `7b83cb048221c0870434fb18010f0c6acc71b61b`
+    - Added session checking (deny access when not logged in)
+    - Added access controls for data access
+    - Added appointment booking for nurse
+    - Added update functionality for appointment and record creation
+  - Added `Jenkinsfile` to mark branch
+  - Updated `entrypoint.sh` to use `CMS_DEBUG` environment variable
+    - Set such that debug will automatically create a new table
+- v1.2
+  - Updated `Jenkinsfile`
+    - Added basic building and deployment of applcation
+    - Added environments
+    - Added production deploy script
+  - Added `docker-compose.prod.yml`
+    - Production configuration to load env vars from deploy env
+- v1.3
+  - Updated `Jenkinsfile`
+    - Deployment working
+- v1.3-1
+  - Merged latest changes
+  - Updated `entrypoint.sh`
+    - Fixed the endless waiting error
+  - Updated `docker-compose.prod.yml`
+    - Removed comments
+    - Updated env file names
+  - Jenkins deployment test passed
+  - To be merged and deployed
+  - Added production testing command to `README.md`

@@ -50,9 +50,16 @@ You can create a pull request in Github to merge your branch to main branch (Ple
 ## Stashing
 Use this feature when you realise you are working on the wrong branch
 
-1. `git stash` to store changes
-2. (Optional) `git checkout <branch>` to switch to other branch
-3. `git stash pop` to restore changes
+```console
+Assuming you are on main branch
+
+$ git stash
+$ git checkout dev
+$ git fetch
+$ git pull
+$ git checkout -b dev-<feature name>
+$ git stash pop
+```
 
 ## Switch Branches
 

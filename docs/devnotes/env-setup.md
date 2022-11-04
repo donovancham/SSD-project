@@ -1,12 +1,28 @@
 # Environment Setup
 This page details how to setup the environment step-by-step.
 
-## Configure Signed Requests
+- [Environment Setup](#environment-setup)
+- [Configure Signed Requests](#configure-signed-requests)
+  - [1. Install Git Bash](#1-install-git-bash-and-gpg4win)
+  - [2. Generate GPG Key Pair](#2-generate-gpg-key-pair)
+  - [3. Check if key exists](#3-check-if-key-exists)
+  - [4. Share public key (Note: `3AA5C34371567BD2` is what you see from the previous step at the first line)](#4-share-public-key-note-3aa5c34371567bd2-is-what-you-see-from-the-previous-step-at-the-first-line)
+  - [5. Export Public Key from Key ID](#5-export-public-key-from-key-id)
+  - [6. Configure GPG program](#6-configure-gpg-program)
+  - [7. (Optional) Disable TTY (if using CLI in IDE like VS Code)](#7-optional-disable-tty-if-using-cli-in-ide-like-vs-code)
+  - [8. Verify](#8-verify)
+- [Python Environment](#python-environment)
+  - [Prerequisites](#prerequisites)
+  - [Configure Python Environment](#configure-python-environment)
+  - [Install Docker](#install-docker)
+  - [Configuration](#configuration)
+
+# Configure Signed Requests
 Follow the [guide](https://medium.com/@petehouston/quick-guide-to-sign-your-git-commits-c11ce58c22e9). 
 All Commands (if not stated) are done in windows powershell.
 
-### 1. Install [Git Bash](https://git-scm.com/download/win) and [GPG4Win](https://www.gpg4win.org/)
-### 2. Generate GPG Key Pair
+## 1. Install [Git Bash](https://git-scm.com/download/win) and [GPG4Win](https://www.gpg4win.org/)
+## 2. Generate GPG Key Pair
 
 ```console
 # gpg --default-new-key-algo rsa4096 --gen-key
@@ -27,7 +43,7 @@ To set Email and name
 # git config --global user.email <email>
 ```
 
-### 3. Check if key exists
+## 3. Check if key exists
 
 ```console
 # gpg --list-secret-keys --keyid-format LONG
@@ -39,13 +55,13 @@ uid                        Hubot
 ssb 4096R/42B317FD4BA89E7A 2016-03-10
 ```
 
-### 4. Share public key (Note: `3AA5C34371567BD2` is what you see from the previous step at the first line)
+## 4. Share public key (Note: `3AA5C34371567BD2` is what you see from the previous step at the first line)
 
 ```console
 # gpg --send-keys 3AA5C34371567BD2
 ```
 
-### 5. Export Public Key from Key ID
+## 5. Export Public Key from Key ID
 
 ```console
 # gpg --armor --export 3AA5C34371567BD2
@@ -58,7 +74,7 @@ KEY_CONTENT....
 - Click green button to add new GPG Key
 - Copy Paste the public key from the command above
 
-### 6. Configure GPG program
+## 6. Configure GPG program
 
 **Windows (Git bash)**
 ```console
@@ -77,25 +93,29 @@ $ which gpg
 $ git config --global gpg.program "/usr/local/bin/gpg"
 ```
 
-### 7. (Optional) Disable TTY (if using CLI in IDE like VS Code)
+## 7. (Optional) Disable TTY (if using CLI in IDE like VS Code)
 
 ```console
 $ echo 'no-tty' >> ~/.gnupg/gpg.conf
 ```
 
-### Verify
+## 8. Verify
 Try committing to git and you should see the `Verified` badge at the side of the commit.
 
 ![Verified Example](../images/verify_button.png)
 
+
+
+# Python Environment
+
 ## Prerequisites
 Ensure the following software are installed before continuing.
-- `Python 3.10.7`
+- `Python 3.8+`
 - `pip`
 - `venv`
 
 ## Configure Python Environment
-1. Install `Python 3.10.7` in the environment of choice
+1. Install `Python 3.8+` in the environment of choice
 
 ```console
 # Verify Python Install
@@ -112,33 +132,63 @@ $ pip --version
 
 **Linux**
 ```console
+$ cd services/web
 $ python3 -m venv venv
-$ . venv/bin/activate
+$ source venv/bin/activate
 $ pip install -r requirements.txt
 ```
 
 **Windows**
 ```console
+$ cd services\web
 $ py -3.9 -m venv venv
 $ venv\Scripts\activate
 $ pip install -r requirements.txt
 ```
+
+4. Environment Variables Setup
+
+> Check Discord for the environment files and add them to project root
+
+**Windows**
+```console
+CMD
+$ set FLASK_APP="cmsapp/__init__.py"
+
+Powershell
+$ $env:FLASK_APP = "cmsapp/__init__.py"
+```
+
+**Linux**
+```console
+$ export FLASK_APP=cmsapp/__init__.py
+```
+
+5. Start the app with:
+- Build containers with names
+- Run this in project root
+
+**Development**
+```console
+$ docker-compose up -d --build
+```
+
+> Refer to [DB commands](workflow.md#db-commands)
+
+**Teardown**
+```console
+$ docker-compose down -v
+```
+
+- If error `Error response from daemon: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: exec: "/home/cms/web/entrypoint.sh": permission denied: unknown`
+  - Navigate to `services/web/entrypoint.sh`
+  - Change from `CRLF` to `LF`
+  - In linux: `chmod +x entrypoint.sh`
 
 ## Install Docker
 1. Install [Docker Desktop](https://www.docker.com/)
 2. *(Optional)* Install a WSL2 Distro
 3. *(Optional)* Configure WSL2 Distro with [Docker Desktop support](https://docs.docker.com/desktop/windows/wsl/)
 
-## Running Docker Environment
-```console
-$ docker-compose up --build
-```
-
-## Barebones Flask Dev Environment (Not Tested)
-```console
-Ensure venv is activated
-$ . venv/bin/activate
-
-Run the barebones server
-$ flask run --host=0.0.0.0 --port=5000
-```
+## Configuration
+Follows this guide on [Dockerizing Flask with Postgres, Gunicorn, and Nginx](https://testdriven.io/blog/dockerizing-flask-with-postgres-gunicorn-and-nginx)

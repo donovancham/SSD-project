@@ -1,5 +1,9 @@
 # Self-ignores
 private/
+*.Zone.Identifier
+.env*
+.secrets
+*.env
 
 # Flask .gitignore
 .DS_Store
@@ -37,7 +41,6 @@ __pycache__/
 *.log
 
 # venv
-env
 venv
 
 # other

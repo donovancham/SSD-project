@@ -1,11 +1,48 @@
 # Workflow
 This documents how the team workflow is like.
 
-## Updating Dependency Requirements
-Run the following code if you installed any additional dependencies
+## DO THIS BEFORE COMMITS
+1. Update dependency requirements
+```console
+$ cd services/web
+$ pip freeze > requirements.txt
+```
 
-```sh
-pip freeze > requirements.txt
+2. Run static tests
+3. Check changes did not break existing features
+4. Upload the environment files to discord
+5. Do a `git status` to see what has changed and document them in the changelog in `README.md`
+
+## DB commands
+```
+$ docker-compose exec db psql --username=hello_flask --dbname=hello_flask_dev
+
+psql (13.8)
+Type "help" for help.
+
+hello_flask_dev=# \l
+                                        List of databases
+      Name       |    Owner    | Encoding |  Collate   |   Ctype    |      Access privileges
+-----------------+-------------+----------+------------+------------+-----------------------------
+ hello_flask_dev | hello_flask | UTF8     | en_US.utf8 | en_US.utf8 |
+ postgres        | hello_flask | UTF8     | en_US.utf8 | en_US.utf8 |
+ template0       | hello_flask | UTF8     | en_US.utf8 | en_US.utf8 | =c/hello_flask             +
+                 |             |          |            |            | hello_flask=CTc/hello_flask
+ template1       | hello_flask | UTF8     | en_US.utf8 | en_US.utf8 | =c/hello_flask             +
+                 |             |          |            |            | hello_flask=CTc/hello_flask
+(4 rows)
+
+hello_flask_dev=# \c hello_flask_dev
+You are now connected to database "hello_flask_dev" as user "hello_flask".
+
+hello_flask_dev=# \dt
+          List of relations
+ Schema | Name  | Type  |    Owner
+--------+-------+-------+-------------
+ public | users | table | hello_flask
+(1 row)
+
+hello_flask_dev=# \q
 ```
 
 ## Roles
