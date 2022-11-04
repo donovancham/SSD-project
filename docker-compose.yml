@@ -8,6 +8,8 @@ services:
     image: certbot/certbot:latest
     depends_on:
       - web
+    networks:
+      - frontend
     volumes:
       - ./certbot/www/:/var/www/certbot/:rw
       - ./certbot/conf/:/etc/letsencrypt/:rw
