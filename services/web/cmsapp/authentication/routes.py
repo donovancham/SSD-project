@@ -59,7 +59,7 @@ def login():
                 totp = pyotp.TOTP(secret)
                 OTP_Pin = totp.now()
 
-                user.otp = OTP_Pin
+                user.otp = secret
                 db.session.add(user)
                 db.session.commit()
                 
@@ -91,7 +91,10 @@ def login_2FA():
         username = request.args['username']
         user = User.query.filter_by(username=username).first()
 
-        if int(request.form.get("otp")) == user.otp:
+        input_otp = request.form.get("otp")
+
+        if pyotp.TOTP(user.otp).verify(input_otp):
+#        if int(request.form.get("otp")) == user.otp:
             # Reset OTP in db
             user.otp = None
             db.session.add(user)
