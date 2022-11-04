@@ -56,7 +56,7 @@ def login():
 
                 # Creates a new OTP based on a random secret
                 secret = pyotp.random_base32()
-                totp = pyotp.TOTP(secret)
+                totp = pyotp.TOTP(secret, interval=320)
                 OTP_Pin = totp.now()
 
                 user.otp = secret
