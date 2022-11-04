@@ -10,6 +10,7 @@ from dotenv import load_dotenv, find_dotenv
 from cmsapp.config import config_dict
 from flask_wtf.csrf import CSRFProtect
 from flask_authorize import Authorize
+from flask_talisman import Talisman
 
 def register_extensions(app: Flask):
     db.init_app(app)
@@ -19,7 +20,7 @@ def register_extensions(app: Flask):
     # Initialize mail with app for 2FA
     mail.init_app(app)
 
-  # Enable RBAC
+    # Enable RBAC
     authorize.init_app(app)
 
 def register_blueprints(app: Flask):
@@ -64,6 +65,18 @@ get_config_mode = 'Debug' if DEBUG else 'Production'
 
 # Enable CSRFProtect
 csrf = CSRFProtect(app)
+
+# Enable flask-talisman
+csp = {
+    'default-src': '\'self\'',
+    'script-src': '\'self\'',
+}
+talisman = Talisman(
+    app,
+    content_security_policy=csp,
+    content_security_policy_nonce_in=['script-src']
+)
+
 
 # Load the configuration using the default values
 app_config = config_dict[get_config_mode.capitalize()]
