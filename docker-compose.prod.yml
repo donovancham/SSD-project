@@ -33,7 +33,7 @@ services:
     expose:
       - 32984
     env_file:
-      - ./.env.dev
+      - ./.web.prod.env
     depends_on:
       - db
     networks:
@@ -45,7 +45,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./.env.db.dev
+      - ./.db.prod.env
     networks:
       - backend
 
