@@ -4,10 +4,10 @@ services:
   certbot:
     container_name: cmsapp-web-certbot
     build: ./services/certbot
-    command: certonly -d jumpifzer0.me --email jumpifzer0@protonmail.com --agree-tos --standalone
+    command: certonly --webroot --webroot-path /var/www/certbot/ -d jumpifzer0.me --email jumpifzer0@protonmail.com --agree-tos
     image: certbot/certbot:latest
     depends_on:
-      - web
+      - nginx
     networks:
       - frontend
     volumes:
@@ -20,7 +20,7 @@ services:
       - "80:80"
       - "443:443"
     depends_on:
-      - certbot
+      - web
     networks:
       - frontend
     volumes:
