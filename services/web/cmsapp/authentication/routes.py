@@ -112,7 +112,7 @@ def register():
         email= request.form['email']
         nric= request.form['nric']
         password= request.form['password']
-        userroles= request.form['userrole']
+        userroles= "Patient"
         #groups= request.form['groups']
         name= request.form['name']
         password= request.form['password']
@@ -149,8 +149,8 @@ def register():
                                    form=create_account_form)
             
         # else we can create the user
-        user = User(**request.form)
-        #user = User(username=username, password=password, email=email, nric=nric, name=name, roles=roles, groups=groups)
+        #user = User(**request.form)
+        user = User(username=username, userrole=userroles, password=password, email=email, nric=nric, name=name)
         db.session.add(user)
         #db.session.commit()
 
@@ -167,26 +167,7 @@ def register():
             db.session.add(roles[-1])
             user.roles.append(roles[-1])
             db.session.flush()
-        if userroles == 'Doctor':
-            roles = ['Doctor']
-            q = Role.query.filter_by(name=roles[0]).first()
-            if q:
-                roles.append(q)
-            else:
-                roles.append(Role(name="Doctor"))
-            db.session.add(roles[-1])
-            user.roles.append(roles[-1])
-            db.session.flush()
-        if userroles == 'Nurse':
-            roles = ['Nurse']
-            q = Role.query.filter_by(name=roles[0]).first()
-            if q:
-                roles.append(q)
-            else:
-                roles.append(Role(name="Nurse"))
-            db.session.add(roles[-1])
-            user.roles.append(roles[-1])
-            db.session.flush()
+        
         # configure  groups
         if userroles == 'Patient':
             groups = ['PatientGroup']
@@ -198,16 +179,7 @@ def register():
             db.session.add(groups[-1])
             user.groups.append(groups[-1])
             db.session.flush()
-        if userroles == 'Doctor' or userroles == 'Nurse':
-            groups = ['StaffGroup']
-            q = Group.query.filter_by(name=groups[0]).first()
-            if q:
-                groups.append(q)
-            else:
-                groups.append(Group(name="StaffGroup"))
-            db.session.add(groups[-1])
-            user.groups.append(groups[-1])
-            db.session.flush()
+        
         db.session.commit()
 
 	# Token Generation for Registration Confirmation
@@ -375,23 +347,26 @@ def password_resetted():
 @talisman()
 @login_required
 def bookAppt():
-    form = BookApptForm()
+    if current_user.userrole == "Doctor":
+        return redirect("/page-500.html")
+    else:
+        form = BookApptForm()
 
-    if request.method == "POST":
-            inputDate = request.form['inputDate']
-            inputTime = request.form['inputTime']
-            inputDetail = request.form['inputDetail']
+        if request.method == "POST":
+                inputDate = request.form['inputDate']
+                inputTime = request.form['inputTime']
+                inputDetail = request.form['inputDetail']
 
-            inputNRIC = request.form['inputNRIC']
-            inputName = request.form['inputName']
+                inputNRIC = request.form['inputNRIC']
+                inputName = request.form['inputName']
 
-            newAppt = Appointment(appointmentDate = inputDate, appointmentTime = inputTime, patientName = inputName, patientNRIC = inputNRIC, appointmentDetail = inputDetail)
-            db.session.add(newAppt)
-            db.session.commit()
+                newAppt = Appointment(appointmentDate = inputDate, appointmentTime = inputTime, patientName = inputName, patientNRIC = inputNRIC, appointmentDetail = inputDetail)
+                db.session.add(newAppt)
+                db.session.commit()
 
-            return redirect('/viewAppointment.html')
+                return redirect('/viewAppointment.html')
 
-    return render_template('home/bookAppointment.html', segment="bookAppointment", form=form)
+        return render_template('home/bookAppointment.html', segment="bookAppointment", form=form)
 
 @blueprint.route('/createRecord.html', methods=['GET', 'POST'])
 @talisman()
@@ -461,13 +436,6 @@ def viewAppt():
         return redirect("/viewAppointment.html")
 
     return render_template('home/viewAppointment.html', segment="viewAppointment", data=data, form=form)
-
-@blueprint.route('/changepassword.html')
-@talisman()
-@login_required
-def changepassword():
-
-    return render_template('home/changepassword.html')
 
 @blueprint.route('/viewRecord.html', methods=['GET', 'POST'])
 @talisman()
