@@ -10,6 +10,13 @@ then
     done
 
     echo "PostgreSQL started"
+
+    echo "Deleting existing tables..."
+    python manage.py delete_db
+    echo "Creating the database tables..."
+    python manage.py create_db
+    echo "Tables created"
+
 fi
 
 if [ "$CMS_DEBUG" = "1" ]

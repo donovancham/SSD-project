@@ -59,12 +59,14 @@
                                         <td>{{rec.description}}</td>
                                         <td>
                                             <form role="form" method="post" action="">
+                                                {{ form.csrf_token }}
                                                 <input type="text" value={{ rec.recordID }} id="inputID" name="inputID" hidden>
                                                 <button id="updateApptBtn" name="updateApptBtn" type="submit">Update</button>
                                             </form>
                                         </td>
                                         <td>
                                             <form role="form" method="post" action="">
+                                                {{ form.csrf_token }}
                                                 <input type="text" value={{ rec.recordID }} id="inputID" name="inputID" hidden>
                                                 <button id="deleteApptBtn" name="deleteApptBtn" type="submit">Delete</button>
                                             </form>

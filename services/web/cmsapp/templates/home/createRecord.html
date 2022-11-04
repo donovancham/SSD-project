@@ -20,6 +20,7 @@
                         </span>
                         <div class="card-body">
                             <form role="form" method="post" action="">
+                                {{ form.csrf_token }}
                                 <div class="form-floating mb-3">
                                     {{ form.defaultDate(class="form-control", readonly="readonly") }}
                                     <label for="defaultDate">Date Created (YYYY-MM-DD)</label>

@@ -15,6 +15,7 @@
                         <div class="card-header"><h3 class="text-center font-weight-light my-4">Update Record</h3></div>
                         <div class="card-body">
                             <form role="form" method="post" action="/updateRecord.html">
+                                {{ form.csrf_token }}
                                 <div class="form-floating mb-3">
                                     <input type="hidden" id="inputID" name="inputID" value={{ data.recordID }}>
                                     <input type="hidden" id="inputName" name="inputName" value={{ data.patientName }}>
