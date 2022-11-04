@@ -32,11 +32,11 @@ pipeline {
         stage('Deploy') { 
             steps {
                 configFileProvider([configFile(fileId: '2f325b2f-2be0-4899-8829-4195a0afd001', targetLocation: '.db.prod.env'), configFile(fileId: '31b62b81-efb0-40c8-9915-c1235bd292b5', targetLocation: '.web.prod.env')]) {}
-                // Run docker
-                sh 'docker compose -f docker-compose.prod.yml up -d --build'
                 // Open ports
                 sh 'sudo ufw allow http'
                 sh 'sudo ufw allow https'
+                // Run docker
+                sh 'docker compose -f docker-compose.prod.yml up -d --build'
             }
         }
         stage('Finish Testing') {
