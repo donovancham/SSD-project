@@ -28,9 +28,9 @@ pipeline {
         APP_MAIL_USERNAME   = credentials('3db30906-2f58-4c6c-b08b-ae45b97a643a')
         APP_MAIL_PASSWORD   = credentials('1fcca20a-cafd-4679-ac4a-2859be287545')
         MAIL_SERVER         = 'smtp.googlemail.com'
-        MAIL_PORT           = 465
-        MAIL_USE_TLS        = False
-        MAIL_USE_SSL        = True
+        MAIL_PORT           = '465'
+        MAIL_USE_TLS        = 'False'
+        MAIL_USE_SSL        = 'True'
     }
 
     stages {
