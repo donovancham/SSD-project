@@ -1,14 +1,6 @@
-def agentLabel
-if (BRANCH_NAME == 'dev-production-env') {
-    agentLabel = 'staging'
-}
-else if (BRANCH_NAME == 'main') {
-    agentLabel = 'do3203'
-}
-
 pipeline {
     agent { 
-        label agentLabel
+        label 'do3203'
     } 
 
     options {
@@ -28,8 +20,6 @@ pipeline {
                     // Convert to environment variables
                     sh 'export $(cat $secret_file | xargs) >/dev/null'
                 }
-                // Run docker
-                sh('docker-compose -f docker-compose.prod.yml up -d --build')
             }
         }
         stage('Finish Testing') {
@@ -40,7 +30,7 @@ pipeline {
                 input message: 'Finished using the web site? (Click "Proceed" to continue)' 
                 echo "Teardown initiated..."
                 // Teardown docker
-                sh('docker-compose -f docker-compose.prod.yml down -v')
+                sh('docker compose -f docker-compose.prod.yml down -v')
             }
         }
         // stage('Test') { 
@@ -48,11 +38,12 @@ pipeline {
         //         // 
         //     }
         // }
-        // stage('Deploy') { 
-        //     steps {
-        //         // 
-        //     }
-        // }
+        stage('Deploy') { 
+            steps {
+                // Run docker
+                sh('docker compose -f docker-compose.prod.yml up -d --build')
+            }
+        }
         
     }
     post {
@@ -62,7 +53,7 @@ pipeline {
         failure {
             echo "Teardown initiated..."
             // Teardown docker
-            sh('docker-compose -f docker-compose.prod.yml down -v')
+            sh('docker compose -f docker-compose.prod.yml down -v')
             echo "Build Failed."
         }
     }
