@@ -19,27 +19,27 @@ services:
       - 32984
     environment:
       # CMS
-      - FLASK_APP
-      - FLASK_DEBUG
-      - CMS_DEBUG
-      - SECRET_KEY
-      - ASSETS_ROOT
+      - FLASK_APP=${FLASK_APP}
+      - FLASK_DEBUG=${FLASK_DEBUG}
+      - CMS_DEBUG=${CMS_DEBUG}
+      - SECRET_KEY=${SECRET_KEY}
+      - ASSETS_ROOT=${ASSETS_ROOT}
       # DB
-      - DB_ENGINE
-      - DB_USERNAME
-      - DB_PASS
-      - DB_HOST
-      - DB_PORT
-      - DB_NAME
+      - DB_ENGINE=${DB_ENGINE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
       # MX
-      - TOKEN_SECRET_KEY
-      - GENERATE_TOKEN_SALT
-      - APP_MAIL_USERNAME
-      - APP_MAIL_PASSWORD
-      - MAIL_SERVER
-      - MAIL_PORT
-      - MAIL_USE_TLS
-      - MAIL_USE_SSL
+      - TOKEN_SECRET_KEY=${TOKEN_SECRET_KEY}
+      - GENERATE_TOKEN_SALT=${GENERATE_TOKEN_SALT}
+      - APP_MAIL_USERNAME=${APP_MAIL_USERNAME}
+      - APP_MAIL_PASSWORD=${APP_MAIL_PASSWORD}
+      - MAIL_SERVER=${MAIL_SERVER}
+      - MAIL_PORT=${MAIL_PORT}
+      - MAIL_USE_TLS=${MAIL_USE_TLS}
+      - MAIL_USE_SSL=${MAIL_USE_SSL}
     depends_on:
       - db
     networks:
@@ -51,9 +51,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_DB
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     networks:
       - backend
 
