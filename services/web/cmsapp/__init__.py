@@ -68,13 +68,19 @@ csrf = CSRFProtect(app)
 
 # Enable flask-talisman
 csp = {
-    'default-src': '\'self\'',
-    'script-src': '\'self\'',
+    'default-src':  [
+        '\'self\'',
+        '\'unsafe-inline\'',
+        'stackpath.bootstrapcdn.com',
+        'code.jquery.com',
+        'cdn.jsdelivr.net',
+        'cdnjs.cloudflare.com',
+
+    ]
 }
 talisman = Talisman(
     app,
     content_security_policy=csp,
-    content_security_policy_nonce_in=['script-src']
 )
 
 
