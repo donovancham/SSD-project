@@ -6,7 +6,6 @@ services:
     build: ./services/certbot
     command: certonly --webroot --webroot-path /var/www/certbot/ -d jumpifzer0.me --email jumpifzer0@protonmail.com --agree-tos
     image: certbot/certbot:latest
-    container_name: SSDnginx
     depends_on:
       - nginx
     networks:
