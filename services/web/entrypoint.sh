@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Verifies that Postgres is up and healthy before init DB
-if [ "$DATABASE" = "postgres" ]
+if [ "$DB_ENGINE" = "postgresql" ]
 then
     echo "Waiting for postgres..."
 
@@ -16,16 +16,15 @@ then
     echo "Creating the database tables..."
     python manage.py create_db
     echo "Tables created"
-
 fi
 
-if [ "$CMS_DEBUG" = "1" ]
-then
-  echo "Deleting existing tables..."
-  python manage.py delete_db
-  echo "Creating the database tables..."
-  python manage.py create_db
-  echo "Tables created"
-fi
+# if [ "$CMS_DEBUG" = "1" ]
+# then
+#     echo "Deleting existing tables..."
+#     python manage.py delete_db
+#     echo "Creating the database tables..."
+#     python manage.py create_db
+#     echo "Tables created"
+# fi
 
 exec "$@"
