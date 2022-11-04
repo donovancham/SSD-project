@@ -46,6 +46,7 @@ db: SQLAlchemy = SQLAlchemy()
 
 # Configure login manager
 login_manager: LoginManager = LoginManager()
+login_manager.session_protection = "strong"
 
 # For 2FA
 mail: Mail() = Mail()
@@ -90,6 +91,12 @@ app_config = config_dict[get_config_mode.capitalize()]
 app.config.from_object(app_config)
 register_extensions(app)
 register_blueprints(app)
+
+# Configure flask-login cookie settings
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='Lax',
+)
 
 Migrate(app, db)
 
