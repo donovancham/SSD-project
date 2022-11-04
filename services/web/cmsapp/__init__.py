@@ -10,6 +10,7 @@ from dotenv import load_dotenv, find_dotenv
 from cmsapp.config import config_dict
 from flask_wtf.csrf import CSRFProtect
 from flask_authorize import Authorize
+from flask_talisman import Talisman
 
 def register_extensions(app: Flask):
     db.init_app(app)
@@ -19,7 +20,7 @@ def register_extensions(app: Flask):
     # Initialize mail with app for 2FA
     mail.init_app(app)
 
-  # Enable RBAC
+    # Enable RBAC
     authorize.init_app(app)
 
 def register_blueprints(app: Flask):
@@ -45,6 +46,7 @@ db: SQLAlchemy = SQLAlchemy()
 
 # Configure login manager
 login_manager: LoginManager = LoginManager()
+login_manager.session_protection = "strong"
 
 # For 2FA
 mail: Mail() = Mail()
@@ -65,12 +67,36 @@ get_config_mode = 'Debug' if DEBUG else 'Production'
 # Enable CSRFProtect
 csrf = CSRFProtect(app)
 
+# Enable flask-talisman
+csp = {
+    'default-src':  [
+        '\'self\'',
+        '\'unsafe-inline\'',
+        'stackpath.bootstrapcdn.com',
+        'code.jquery.com',
+        'cdn.jsdelivr.net',
+        'cdnjs.cloudflare.com',
+
+    ]
+}
+talisman = Talisman(
+    app,
+    content_security_policy=csp,
+)
+
+
 # Load the configuration using the default values
 app_config = config_dict[get_config_mode.capitalize()]
 
 app.config.from_object(app_config)
 register_extensions(app)
 register_blueprints(app)
+
+# Configure flask-login cookie settings
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='Lax',
+)
 
 Migrate(app, db)
 

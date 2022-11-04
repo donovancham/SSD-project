@@ -39,3 +39,4 @@ WTForms==3.0.1
 zxcvbn
 Flask-Mail==0.9.1
 pyotp==2.7.0
+flask-talisman==0.7.0
