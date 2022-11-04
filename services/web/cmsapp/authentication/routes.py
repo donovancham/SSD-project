@@ -62,7 +62,7 @@ def login():
                 user.otp = secret
                 db.session.add(user)
                 db.session.commit()
-                
+
        	        html = render_template("accounts/2fa.html", a_otp=OTP_Pin)
                 subject = "Login OTP"
                 send_email(email, subject, html)
@@ -93,9 +93,8 @@ def login_2FA():
 
         input_otp = request.form.get("otp")
 
-        if pyotp.TOTP(user.otp).verify(input_otp):
-#        if int(request.form.get("otp")) == user.otp:
-            # Reset OTP in db
+        if pyotp.TOTP(user.otp, interval=320).verify(input_otp):
+            # Reset OTP secret in db
             user.otp = None
             db.session.add(user)
             db.session.commit()
