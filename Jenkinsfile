@@ -31,11 +31,7 @@ pipeline {
         // }
         stage('Deploy') { 
             steps {
-                configFileProvider([configFile(fileId: '2f325b2f-2be0-4899-8829-4195a0afd001', targetLocation: '.db.prod.env'), configFile(fileId: '31b62b81-efb0-40c8-9915-c1235bd292b5', targetLocation: '.web.prod.env')]) {
-                    // // Copy files
-                    // sh 'sudo cp ./.db.prod.env ${basedir}/.db.prod.env'
-                    // sh 'sudo cp ./.web.prod.env ${basedir}/.web.prod.env'
-                }
+                configFileProvider([configFile(fileId: '2f325b2f-2be0-4899-8829-4195a0afd001', targetLocation: '.db.prod.env'), configFile(fileId: '31b62b81-efb0-40c8-9915-c1235bd292b5', targetLocation: '.web.prod.env')]) {}
                 // Run docker
                 sh 'docker compose -f docker-compose.prod.yml up -d --build'
                 // Open ports
@@ -45,11 +41,13 @@ pipeline {
         }
         stage('Finish Testing') {
             when {
-                branch 'dev-production-env'
+                not {
+                    branch 'main'
+                }
             }
             steps {
                 input message: 'Finished using the web site? (Click "Proceed" to continue)' 
-                echo "Teardown initiated..."
+                echo 'Teardown initiated...'
                 // Teardown docker
                 sh('docker compose -f docker-compose.prod.yml down -v')// Open ports
                 sh 'sudo ufw delete allow http'
@@ -64,7 +62,7 @@ pipeline {
             echo "Build completed successfully!"
         }
         failure {
-            echo "Teardown initiated..."
+            echo 'Teardown initiated...'
             // Teardown docker
             sh('docker compose -f docker-compose.prod.yml down -v')
             // Open ports
@@ -72,7 +70,7 @@ pipeline {
             sh 'sudo ufw delete allow https'
             // Clean after failure
             cleanWs()
-            echo "Build Failed."
+            echo 'Build Failed.'
         }
     }
 }
