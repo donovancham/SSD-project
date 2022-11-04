@@ -49,7 +49,10 @@ pipeline {
         stage('Deploy') { 
             steps {
                 // Run docker
-                sh('docker compose -f docker-compose.prod.yml up -d --build')
+                sh 'docker compose -f docker-compose.prod.yml up -d --build'
+                // Open ports
+                sh 'sudo ufw allow http'
+                sh 'sudo ufw allow https'
             }
         }
         stage('Finish Testing') {
@@ -60,7 +63,9 @@ pipeline {
                 input message: 'Finished using the web site? (Click "Proceed" to continue)' 
                 echo "Teardown initiated..."
                 // Teardown docker
-                sh('docker compose -f docker-compose.prod.yml down -v')
+                sh('docker compose -f docker-compose.prod.yml down -v')// Open ports
+                sh 'sudo ufw delete allow http'
+                sh 'sudo ufw delete allow https'
             }
         }
     }
@@ -72,6 +77,9 @@ pipeline {
             echo "Teardown initiated..."
             // Teardown docker
             sh('docker compose -f docker-compose.prod.yml down -v')
+            // Open ports
+            sh 'sudo ufw delete allow http'
+            sh 'sudo ufw delete allow https'
             echo "Build Failed."
         }
     }
