@@ -19,27 +19,27 @@ services:
       - 32984
     environment:
       # CMS
-      - FLASK_APP=$${FLASK_APP:?err}
-      - FLASK_DEBUG=$${FLASK_DEBUG:?err}
-      - CMS_DEBUG=$${CMS_DEBUG:?err}
-      - SECRET_KEY=$${SECRET_KEY:?err}
-      - ASSETS_ROOT=$${ASSETS_ROOT:?err}
+      - FLASK_APP
+      - FLASK_DEBUG
+      - CMS_DEBUG
+      - SECRET_KEY
+      - ASSETS_ROOT
       # DB
-      - DB_ENGINE=$${DB_ENGINE:?err}
-      - DB_USERNAME=$${DB_USERNAME:?err}
-      - DB_PASS=$${DB_PASS:?err}
-      - DB_HOST=$${DB_HOST:?err}
-      - DB_PORT=$${DB_PORT:?err}
-      - DB_NAME=$${DB_NAME:?err}
+      - DB_ENGINE
+      - DB_USERNAME
+      - DB_PASS
+      - DB_HOST
+      - DB_PORT
+      - DB_NAME
       # MX
-      - TOKEN_SECRET_KEY=$${TOKEN_SECRET_KEY:?err}
-      - GENERATE_TOKEN_SALT=$${GENERATE_TOKEN_SALT:?err}
-      - APP_MAIL_USERNAME=$${APP_MAIL_USERNAME:?err}
-      - APP_MAIL_PASSWORD=$${APP_MAIL_PASSWORD:?err}
-      - MAIL_SERVER=$${MAIL_SERVER:?err}
-      - MAIL_PORT=$${MAIL_PORT:?err}
-      - MAIL_USE_TLS=$${MAIL_USE_TLS:?err}
-      - MAIL_USE_SSL=$${MAIL_USE_SSL:?err}
+      - TOKEN_SECRET_KEY
+      - GENERATE_TOKEN_SALT
+      - APP_MAIL_USERNAME
+      - APP_MAIL_PASSWORD
+      - MAIL_SERVER
+      - MAIL_PORT
+      - MAIL_USE_TLS
+      - MAIL_USE_SSL
     depends_on:
       - db
     networks:
@@ -51,9 +51,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=$${DB_USERNAME:?err}
-      - POSTGRES_PASSWORD=$${DB_PASS:?err}
-      - POSTGRES_DB=$${DB_NAME:?err}
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
     networks:
       - backend
 

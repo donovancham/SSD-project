@@ -17,7 +17,7 @@ pipeline {
         CMS_DEBUG           = '0'
         SECRET_KEY          = credentials('42595a53-fa69-4969-9f3b-4c451c4029e9')
         ASSETS_ROOT         = credentials('da799f08-884d-4b4c-9de5-591ec54b13db')
-        DB_ENGINE           = credentials('f6839d67-125b-4fe5-9d50-bba1962b12da')
+        DB_ENGINE           = 'postgresql'
         DB_USERNAME         = credentials('dd4b6deb-a438-49a6-b74a-890b9088229d')
         DB_PASS             = credentials('145d582c-92de-469f-a6eb-50cc3c41018d')
         DB_HOST             = 'db'
@@ -31,6 +31,9 @@ pipeline {
         MAIL_PORT           = '465'
         MAIL_USE_TLS        = 'False'
         MAIL_USE_SSL        = 'True'
+        POSTGRES_USER       = credentials('dd4b6deb-a438-49a6-b74a-890b9088229d')
+        POSTGRES_PASSWORD   = credentials('145d582c-92de-469f-a6eb-50cc3c41018d')
+        POSTGRES_DB         = credentials('8a82ed55-83ba-4b3a-8c54-821286187d71')
     }
 
     stages {

@@ -101,3 +101,6 @@ $ docker-compose up -d --build
     - Added production deploy script
   - Added `docker-compose.prod.yml`
     - Production configuration to load env vars from deploy env
+- v1.3
+  - Updated `Jenkinsfile`
+    - Deployment working
