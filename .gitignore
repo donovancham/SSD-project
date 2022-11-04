@@ -3,6 +3,7 @@ private/
 *.Zone.Identifier
 .env*
 .secrets
+*.env
 
 # Flask .gitignore
 .DS_Store

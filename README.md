@@ -33,6 +33,11 @@ $ python manage.py run
 $ docker-compose up -d --build
 ```
 
+**Production**
+```console
+$ docker-compose -f docker-compose.prod.yml up -d --build
+```
+
 ## Docs
 - [Initializing Git Repo Setup](docs/devnotes/init.md)
 - [Environment Setup Guide](docs/devnotes/env-setup.md)
@@ -104,3 +109,13 @@ $ docker-compose up -d --build
 - v1.3
   - Updated `Jenkinsfile`
     - Deployment working
+- v1.3-1
+  - Merged latest changes
+  - Updated `entrypoint.sh`
+    - Fixed the endless waiting error
+  - Updated `docker-compose.prod.yml`
+    - Removed comments
+    - Updated env file names
+  - Jenkins deployment test passed
+  - To be merged and deployed
+  - Added production testing command to `README.md`
