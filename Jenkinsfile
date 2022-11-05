@@ -14,8 +14,8 @@ pipeline {
 
     options {
         buildDiscarder logRotator( 
-            daysToKeepStr: '5', 
-            numToKeepStr: '5'
+            daysToKeepStr: '10', 
+            numToKeepStr: '40'
         )
         disableConcurrentBuilds()
     }
@@ -47,6 +47,24 @@ pipeline {
             }
         }
 
+        stage ('OWASP Dependency-Check Vulnerabilities') {
+            steps {
+                // Invoke dependency check
+                dependencyCheck additionalArguments: ''' 
+                    -o "./" 
+                    -s "./services/web"
+                    -f "ALL" 
+                    --prettyPrint
+                    --enableExperimental
+                    --disablePyDist "false"
+                    --disablePyPkg "false"
+                    ''', odcInstallation: 'CMS'    // Installations are defined in the Jenkins Global Tool Configuration.
+
+                // Publish report
+                dependencyCheckPublisher failedNewCritical: 1, failedNewHigh: 2, failedNewLow: 10, failedNewMedium: 5, failedTotalCritical: 1, failedTotalHigh: 2, failedTotalLow: 10, failedTotalMedium: 5, pattern: 'dependency-check-report.html'
+            }
+        }
+
         stage('Code Analysis') {
             steps {
                 sh """
@@ -55,7 +73,7 @@ pipeline {
             }
         }
 
-        stage('Enable HTTP/S') {
+        stage('Deploy: Enable HTTP/S') {
             steps {
                 sh """
                 echo "Enabling HTTP/S"
@@ -66,7 +84,7 @@ pipeline {
             }
         }
 
-        stage('Deploy') { 
+        stage('Deploy: Starting Services') { 
             steps {
                 configFileProvider([configFile(fileId: '2f325b2f-2be0-4899-8829-4195a0afd001', targetLocation: '.db.prod.env'), configFile(fileId: '31b62b81-efb0-40c8-9915-c1235bd292b5', targetLocation: '.web.prod.env')]) {}
                 sh """
@@ -79,6 +97,19 @@ pipeline {
                 """
             }
         }
+        
+        stage('Cleanup Files') {
+            when {
+                branch 'main'
+            }
+            steps {
+                sh """
+                echo "Cleaning up files in live environment..."
+                """
+                sh 'rm ./.db.prod.env'
+                sh 'rm ./.web.prod.env'
+            }
+        }
 
         stage('Finish Testing') {
             when {
@@ -87,10 +118,13 @@ pipeline {
                 }
             }
             steps {
-                input message: 'Finished using the web site? (Click "Proceed" to continue)' 
+                timeout(time: 3, unit: 'HOURS') {
+                    input message: 'Finished using the web site? (Click "Proceed" to continue)' 
+                }
                 echo 'Teardown initiated...'
                 // Teardown docker
-                sh('docker compose -f docker-compose.prod.yml down -v')// Open ports
+                sh 'docker compose -f docker-compose.prod.yml down -v'
+                // Close ports
                 sh 'sudo ufw delete allow http'
                 sh 'sudo ufw delete allow https'
                 sh 'rm ./.db.prod.env'
@@ -105,8 +139,8 @@ pipeline {
         failure {
             echo 'Teardown initiated...'
             // Teardown docker
-            sh('docker compose -f docker-compose.prod.yml down -v')
-            // Open ports
+            sh 'docker compose -f docker-compose.prod.yml down -v'
+            // Close ports
             sh 'sudo ufw delete allow http'
             sh 'sudo ufw delete allow https'
             // Clean after failure

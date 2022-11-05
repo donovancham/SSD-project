@@ -29,7 +29,7 @@ All major and minor objectives for the project's achievement can be added here.
   - [x] Nginx
     - [x] Basic setup
     - [ ] Security
-    - [ ] Optimze `Dockerfile`
+    - [x] Optimze `Dockerfile`
   - [x] Docker
 - [x] Jenkins
   - [x] Configure Jenkins Server
@@ -38,20 +38,20 @@ All major and minor objectives for the project's achievement can be added here.
   - [ ] Jenkins CI/CD pipeline secret management
 
 ## Jenkins
-- [ ] Configure OWASP Plugin
-- [ ] Configure General plugins
+- [x] Configure OWASP Plugin
+- [x] Configure General plugins
 - [ ] Configure CI testing
-- [ ] Configure CD once production level is staged
-- [ ] Configure TLS/SSL for Apache
+- [x] Configure CD once production level is staged
+- [x] Configure TLS/SSL for Apache
 
 ## Production
-- [ ] Refine `docker-compose.yml` for production deployment
+- [x] Refine `docker-compose.yml` for production deployment
 - [ ] Configure Domain name
   - [ ] Configure subdomains
     - [ ] Jenkins
     - [ ] Nginx Proxy
 - [ ] Configure HTTPS
-- [ ] Firewall Configurations
+- [x] Firewall Configurations
 
 ## Web App
 - [ ] Pages
@@ -109,23 +109,20 @@ All major and minor objectives for the project's achievement can be added here.
   - [ ] Error management (As little info leaked about server as possible when errors prompted)
 
 ### Database
-- [ ] Learn SQLAlchemy
-- [ ] Create models
-  - [ ] Accounts
-  - [ ] Users
-  - [ ] Appointments
-  - [ ] Records
-- [ ] 
+- [x] Learn SQLAlchemy
+- [x] Create models
+  - [x] Users
+  - [x] Appointments
+  - [x] Records
 
 ## Configuration
-- [ ] CMS app (flask, gunicorn)
+- [x] CMS app (flask, gunicorn)
   - [ ] Logging
-- [ ] Nginx Proxy
-  - [ ] HTTPS configuration
-  - [ ] Disable directory traversal
+- [x] Nginx Proxy
+  - [x] HTTPS configuration
   - [ ] Logging
-- [ ] Jenkins Pipeline
-  - [ ] Secure Secrets configuration
+- [x] Jenkins Pipeline
+  - [x] Secure Secrets configuration
 
 ## Testing
 - [ ] Static Tests
@@ -148,27 +145,26 @@ All major and minor objectives for the project's achievement can be added here.
 
 ## General
 - [ ] Code Documentation
-- [ ] Testing Documentation
 
 ## Security
 
 ### Encryption / Cryptography
-- [ ] HTTPS (Implementation)
-- [ ] Password Complexity 
-  - [ ] Hash & Salted Passwords (Coding/Implementation)
-  - [ ] Password Policies (Coding/Database Implementation)
-- [ ] Proper Session ID (e.g. use hashes rather than 1,2,3)
+- [x] HTTPS (Implementation)
+- [x] Password Complexity 
+  - [x] Hash & Salted Passwords (Coding/Implementation)
+  - [x] Password Policies (Coding/Database Implementation)
+- [x] Proper Session ID (e.g. use hashes rather than 1,2,3)
   
 ### Bruteforce Related
-- [ ] Rate Limiting
-  - [ ] [Nginx HTTP rate limiting](http://nginx.org/en/docs/http/ngx_http_limit_req_module.html) (Implementation) 
+- [x] Rate Limiting
+  - [x] [Nginx HTTP rate limiting](http://nginx.org/en/docs/http/ngx_http_limit_req_module.html) (Implementation) 
   - [ ] Account Lockout (Database Implementation `[?]`)
   - [ ] Reverse Proxy (CloudFlare `[?]` / External Implementation)
 
 ### Logging:
-- [ ] Nginx Web Logs
-  - [ ] Error[?]
-  - [ ] Access[?]
+- [x] Nginx Web Logs
+  - [x] Error[?]
+  - [x] Access[?]
 
 ### Input Validation
 `<Map out input locations>`
@@ -177,15 +173,13 @@ All major and minor objectives for the project's achievement can be added here.
 - [ ] SQLi prepared statements
 
 ### HTTP Headers
-- [ ] Secure HTTP Headers `[?]`
-    - [ ] Content-Security-Policies
-- [ ] [Restrict HTTP Methods](https://techtutorialsx.com/2016/12/24/flask-controlling-http-methods-allowed/)
+- [x] Secure HTTP Headers `[?]`
+  - [x] Content-Security-Policies
 
 ### Others
-- [ ] CSRF Token (Coding)
-- [ ] Credential Management (Environment Variable / Private Key Storage)
+- [x] CSRF Token (Coding)
+- [x] Credential Management (Environment Variable / Private Key Storage)
 - [x] 2FA Authentication (External Implementation)
 - [ ] Error Handling (Custom Error Pages)
-- [ ] WAF (modsecurity[?])
-- [ ] Network Level Firewall (iptables / ufw)
-- [ ] Code Flow No overlaps (to be done, after product is done, check if any codes will leave loopholes)
+- [x] Network Level Firewall (iptables / ufw)
+- [ ] Code Flow (code review) No overlaps (to be done, after product is done, check if any codes will leave loopholes)

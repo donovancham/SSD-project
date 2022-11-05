@@ -38,15 +38,19 @@ $ docker-compose up -d --build
 $ docker-compose -f docker-compose.prod.yml up -d --build
 ```
 
+Check logs:
+```console
+$ docker compose -f docker-compose.prod.yml logs -f -t
+```
+
 ## Docs
 - [Initializing Git Repo Setup](docs/devnotes/init.md)
 - [Environment Setup Guide](docs/devnotes/env-setup.md)
 - [Git Guide](docs/devnotes/git-guide.md)
 - [Workflow](docs/devnotes/workflow.md)
 - [Task-list](docs/devnotes/tasklist.md)
-- [Testing](docs/devnotes/testing.md)
-- [Architecture](docs/architecture.md)
-- [App Structure Documentation](https://docs.appseed.us/boilerplate-code/flask#codebase-structure)
+
+## Application Architecture
 
 ## Changelog
 - v0.0
@@ -119,3 +123,9 @@ $ docker-compose -f docker-compose.prod.yml up -d --build
   - Jenkins deployment test passed
   - To be merged and deployed
   - Added production testing command to `README.md`
+- v1.4
+  - Added OWASP Dependency checker
+  - Re-configured slave agent
+    - Live-test (staging deploy before actual deploy)
+    - Live-deploy (main deploy)
+  - Removed some not updated documentations
