@@ -51,7 +51,7 @@ pipeline {
             steps {
                 // Invoke dependency check
                 dependencyCheck additionalArguments: ''' 
-                    -o "./" 
+                    -o "owasp-reports" 
                     -s "./services/web"
                     -f "ALL" 
                     --prettyPrint
@@ -61,7 +61,7 @@ pipeline {
                     ''', odcInstallation: 'CMS'    // Installations are defined in the Jenkins Global Tool Configuration.
 
                 // Publish report
-                dependencyCheckPublisher failedNewCritical: 1, failedNewHigh: 2, failedNewLow: 10, failedNewMedium: 5, failedTotalCritical: 1, failedTotalHigh: 2, failedTotalLow: 10, failedTotalMedium: 5, pattern: 'dependency-check-report.html'
+                dependencyCheckPublisher failedNewCritical: 1, failedNewHigh: 2, failedNewLow: 10, failedNewMedium: 5, failedTotalCritical: 1, failedTotalHigh: 2, failedTotalLow: 10, failedTotalMedium: 5, pattern: 'owasp-reports/dependency-check-report.html'
             }
         }
 
@@ -73,7 +73,7 @@ pipeline {
             }
         }
 
-        stage('Deploy: Enable HTTP/S') {
+        stage('Deploy: Open Ports') {
             steps {
                 sh """
                 echo "Enabling HTTP/S"
@@ -97,6 +97,14 @@ pipeline {
                 """
             }
         }
+
+        // stage('Deploy: HTTPS Config') {
+        //     steps {
+        //         sh '''
+        //         docker exec -it cmsapp-proxy sh -c "sed -i 's/^#//' /etc/nginx/conf.d/nginx.conf; nginx -s reload"
+        //         '''
+        //     }
+        // }
         
         stage('Cleanup Files') {
             when {
