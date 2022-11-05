@@ -49,6 +49,8 @@ pipeline {
 
         stage ('OWASP Dependency-Check Vulnerabilities') {
             steps {
+                // Create folder for reports
+                sh 'mkdir owasp-reports'
                 // Invoke dependency check
                 dependencyCheck additionalArguments: ''' 
                     -o "owasp-reports" 
