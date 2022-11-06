@@ -199,7 +199,7 @@ def register():
 
 
         return render_template('accounts/register.html',
-                               msg='Account created successfully. Click the link in your email to activate your account',
+                               msg='Account created successfully.\nClick the link in your email to activate your account',
                                success=True,
                                form=create_account_form)
 
