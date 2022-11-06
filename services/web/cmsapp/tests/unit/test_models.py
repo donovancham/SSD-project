@@ -33,7 +33,7 @@ def test_appointment_create(init_db):
     patientNRIC and appointmentDetail is correct
     """
     # Given
-    inputDate = datetime.date.today().strftime("%Y/%m/%d")
+    inputDate = datetime.date.today().strftime("%Y-%m-%d")
     inputTime = "08:00"
     inputDetail = "He's a little sick."
     inputNRIC = "123a"
