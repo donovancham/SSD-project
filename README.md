@@ -134,3 +134,8 @@ $ docker compose -f docker-compose.prod.yml logs -f -t
 - v1.4-1
   - Added Warning next gen plugin to `Jenkinsfile`
   - Added Sonarqube installation into `Jenkinsfile`
+- v1.4-2
+  - Fixed errors for Warning next gen
+  - Added property configuration for sonar-project
+  - Added generation of `sonar-report.json` for Warnings next gen
+  - Fixed bugs for Sonarqube scanning stage in pipeline

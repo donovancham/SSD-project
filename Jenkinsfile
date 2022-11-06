@@ -9,9 +9,6 @@ if (BRANCH_NAME == "main") {
     agentLabel = "staging"
 }
 
-// Defined for Sonarqube
-def scannerHome = tool 'SonarScanner'
-
 pipeline {
     agent { 
         label agentLabel
@@ -68,37 +65,49 @@ pipeline {
                     --enableExperimental 
                     --disablePyDist "false" 
                     --disablePyPkg "false" 
-                    --disableMSBuild 
-                    --disableNodeJS 
-                    --disablePnpmAudit 
-                    --disableNodeAudit 
+                    --disableMSBuild "true" 
+                    --disableNodeJS "true" 
+                    --disablePnpmAudit "true" 
+                    --disableNodeAudit "true" 
                     ''', odcInstallation: 'CMS'    // Installations are defined in the Jenkins Global Tool Configuration.
 
                 // Publish report
                 dependencyCheckPublisher failedNewCritical: 1, failedNewHigh: 2, failedNewLow: 10, failedNewMedium: 5, failedTotalCritical: 1, failedTotalHigh: 2, failedTotalLow: 10, failedTotalMedium: 5, pattern: 'owasp-reports/dependency-check-report.xml'
-
-                // Warnings next gen
-                recordIssues enabledForFailure: true, tools: owaspDependencyCheck()
+            }
+            post {
+                success {
+                    // Warnings next gen
+                    recordIssues(
+                        enabledForFailure: true, 
+                        tool: owaspDependencyCheck()
+                    )
+                }
             }
         }
 
-        stage('Code Analysis') {
-            steps {
-                sh """
-                echo "Running Code Analysis"
-                """
-            }
-            // recordIssues enabledForFailure: true, tools: [mavenConsole(), java(), javaDoc()]
-        }
-
+        // https://igorski.co/sonarqube-scans-using-jenkins-declarative-pipelines/
         stage('SonarQube analysis') {
+            environment {
+                // Defined for Sonarqube
+                scannerHome = tool 'SonarScanner4.7'
+            }
+            
             steps {
                 withSonarQubeEnv('Sonarqube') { 
-                    sh '${scannerHome}/bin/sonar-scanner'
+                    sh '''${scannerHome}/bin/sonar-scanner \
+                    -Dsonar.analysis.mode=preview \
+                    -Dsonar.report.export.path=sonar-report.json
+                    '''
                 }
-
-                // Warnings next gen
-                recordIssues enabledForFailure: true, tools: sonarQube()
+            }
+            post {
+                always {
+                    // Warnings next gen
+                    recordIssues(
+                        enabledForFailure: true, 
+                        tool: sonarQube()
+                    )
+                }
             }
         }
 
