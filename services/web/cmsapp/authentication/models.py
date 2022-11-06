@@ -56,7 +56,7 @@ class User(db.Model, UserMixin):
     # For 2FA
     confirmed = db.Column(db.Boolean, nullable=False, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
-    otp = db.Column(db.Integer)
+    otp = db.Column(db.String(64))
     reset_request = db.Column(db.Boolean, nullable=False, default=False)
 
 
