@@ -69,9 +69,6 @@ pipeline {
                 sh """
                 echo "Running Unit Tests"
                 """
-
-                configFileProvider([configFile(fileId: '31b62b81-efb0-40c8-9915-c1235bd292b5', targetLocation: '.web.prod.env')]) {}
-
                 // Executing tests
                 dir('services/web') {
                     withPythonEnv('/usr/bin/python3.10') {
