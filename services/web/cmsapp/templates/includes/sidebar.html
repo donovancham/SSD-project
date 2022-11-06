@@ -4,19 +4,19 @@
         <div class="nav">
             <div class="sb-sidenav-menu-heading">Core</div>
             <a class="nav-link {% if 'index' in segment %} active {% endif %}" href="index.html">
-                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                <div class="sb-nav-link-icon"><em class="fas fa-tachometer-alt"></em></div>
                 Dashboard
             </a>
 
             <div class="sb-sidenav-menu-heading">Appointments</div>
             {% if current_user.userrole == "Patient" or current_user.userrole == "Nurse" %}
                 <a class="nav-link {% if 'bookAppointment' in segment %} active {% endif %}" href="bookAppointment.html">
-                    <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                    <div class="sb-nav-link-icon"><em class="fas fa-columns"></em></div>
                     Book Appointment
                 </a>
             {% endif %}
             <a class="nav-link {% if 'viewAppointment' in segment %} active {% endif %}" href="viewAppointment.html">
-                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                <div class="sb-nav-link-icon"><em class="fas fa-table"></em></div>
                 View Appointments
             </a>
             
@@ -24,13 +24,13 @@
             <div class="sb-sidenav-menu-heading">Records</div>
             {% if current_user.userrole == "Doctor" %}
                 <a class="nav-link {% if 'createRecord' in segment %} active {% endif %}" href="createRecord.html">
-                    <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                    <div class="sb-nav-link-icon"><em class="fas fa-book-open"></em></div>
                     Create Record
                 </a>
             {% endif %}
 
             <a class="nav-link {% if 'viewRecord' in segment %} active {% endif %}" href="viewRecord.html">
-                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                <div class="sb-nav-link-icon"><em class="fas fa-table"></em></div>
                 View Record
             </a>
         </div>
