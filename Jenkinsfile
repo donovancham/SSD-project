@@ -43,32 +43,44 @@ pipeline {
         }
 
         stage(' Unit Testing') {
+            environment {
+                FLASK_APP='cmsapp/__init__.py'
+                FLASK_DEBUG='1'
+                CMS_DEBUG='1'
+                SECRET_KEY = credentials('42595a53-fa69-4969-9f3b-4c451c4029e9')
+                DB_USERNAME = credentials('dd4b6deb-a438-49a6-b74a-890b9088229d')
+                DB_PASS = credentials('145d582c-92de-469f-a6eb-50cc3c41018d')
+                DB_NAME = credentials('8a82ed55-83ba-4b3a-8c54-821286187d71')
+                DB_PORT = credentials('7d66c581-74c4-4b4d-8af7-9bb543120d49')
+                ASSETS_ROOT = credentials('da799f08-884d-4b4c-9de5-591ec54b13db')
+                DB_ENGINE = credentials('f6839d67-125b-4fe5-9d50-bba1962b12da')
+                DB_HOST = 'db'
+                TOKEN_SECRET_KEY = credentials('b1b1f16e-adfd-4250-a56a-777336fe11bd')
+                GENERATE_TOKEN_SALT = credentials('30992ac8-9e8a-4523-b7f3-98fa4fa5de46')
+                APP_MAIL_USERNAME = credentials('3db30906-2f58-4c6c-b08b-ae45b97a643a')
+                APP_MAIL_PASSWORD = credentials('1fcca20a-cafd-4679-ac4a-2859be287545')
+                MAIL_SERVER = 'smtp.googlemail.com'
+                MAIL_PORT = '465'
+                MAIL_USE_TLS = 'False'
+                MAIL_USE_SSL = 'True'
+            }
+
             steps {
                 sh """
                 echo "Running Unit Tests"
                 """
 
+                configFileProvider([configFile(fileId: '31b62b81-efb0-40c8-9915-c1235bd292b5', targetLocation: '.web.prod.env')]) {}
+
                 // Executing tests
                 dir('services/web') {
-                    sh '''
-                    python3 -m venv venv
-                    source venv/bin/activate
-                    pip3 install -r requirements.txt
-                    python3 -m pytest -v --junit-xml=reports/result.xml
-                    deactivate
-                    '''
-
-                    // Cleanup
-                    sh '''
-                    rm -rf venv
-                    '''
-                }
-                
-            }
-            post {
-                always {
-                    // Publish report
-                    junit 'services/web/reports/pytest.xml'
+                    withPythonEnv('/usr/bin/python3.10') {
+                        sh 'pip install --upgrade pip'
+                        sh 'pip3 install -r requirements.txt'
+                        sh 'python3 -m pytest -v --junit-xml=reports/pytest.xml'
+                        // Publish report
+                        junit 'reports/pytest.xml'
+                    }
                 }
             }
         }
