@@ -358,9 +358,9 @@ def bookAppt():
                 inputTime = request.form['inputTime']
                 inputDetail = request.form['inputDetail']
 
-                inputNRIC = request.form['inputNRIC']
-                inputName = request.form['inputName']
-                
+                inputNRIC = current_user.nric
+                inputName = current_user.name
+      
                 try:
                     inputDate = datetime.strptime(inputDate,'%Y-%m-%d').date()
                     inputTime = datetime.strptime(inputTime,'%H:%M').time()
@@ -517,13 +517,6 @@ def updateAppt():
         inputDetail = request.form['inputDetail']
         inputNRIC = request.form['inputNRIC']
         inputName = request.form['inputName']
-
-        entry = Appointment.query.get(int(inputID))
-        entry.appointmentDate = inputDate
-        entry.appointmentTime = inputTime
-        entry.patientNRIC = inputNRIC
-        entry.appointmentDetail = inputDetail
-        entry.patientName = inputName
 
         try:
             inputDate = datetime.strptime(inputDate,'%Y-%m-%d').date()
