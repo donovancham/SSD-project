@@ -64,4 +64,3 @@ class PWResetForm(FlaskForm):
 class PWResetFuncForm(FlaskForm):
     newpw = PasswordField('newpw', id='newpw', validators=[DataRequired()])
     confirmpw = PasswordField('confirmpw', id='confirmpw', validators=[DataRequired()])
-

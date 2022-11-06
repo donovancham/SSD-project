@@ -22,6 +22,22 @@ def register_extensions(app: Flask):
 
     # Enable RBAC
     authorize.init_app(app)
+    
+    # # Enable flask-talisman
+    # csp = {
+    #     'default-src':  [
+    #         '\'self\'',
+    #         '\'unsafe-inline\'',
+    #         'stackpath.bootstrapcdn.com',
+    #         'code.jquery.com',
+    #         'cdn.jsdelivr.net',
+    #         'cdnjs.cloudflare.com',
+    #     ]
+    # }
+    # talisman.init_app(
+    #     app,
+    #     content_security_policy=csp,
+    # )
 
 def register_blueprints(app: Flask):
     for module_name in ('authentication', 'home'):
@@ -30,7 +46,6 @@ def register_blueprints(app: Flask):
 
 
 def configure_database(app):
-    
     @app.before_first_request
     def initialize_database():
         db.create_all()
@@ -54,64 +69,54 @@ mail: Mail() = Mail()
 # Enable RBAC
 authorize = Authorize()
 
-# Initialize project with name
-app = Flask(__name__)
-# Load environment variables from `.env`
-load_dotenv(find_dotenv(".env.dev"))
-
-# Init flask app
-# To activate production mode, change CMS_DEBUG to 0
-DEBUG = (os.getenv('CMS_DEBUG', '0') == '1')
-get_config_mode = 'Debug' if DEBUG else 'Production'
-
 # Enable CSRFProtect
-csrf = CSRFProtect(app)
+csrf = CSRFProtect()
 
-# Enable flask-talisman
-csp = {
-    'default-src':  [
-        '\'self\'',
-        '\'unsafe-inline\'',
-        'stackpath.bootstrapcdn.com',
-        'code.jquery.com',
-        'cdn.jsdelivr.net',
-        'cdnjs.cloudflare.com',
+# Instantiate talisman object
+talisman = Talisman()
 
-    ]
-}
-talisman = Talisman(
-    app,
-    content_security_policy=csp,
-)
+def create_app():
+    # Initialize project with name
+    app = Flask(__name__)
+    # Load environment variables from `.env`
+    load_dotenv(find_dotenv(".env.dev"))
 
+    # Init flask app
+    # To activate production mode, change CMS_DEBUG to 0
+    DEBUG = (os.getenv('CMS_DEBUG', '0') == '1')
+    get_config_mode = 'Debug' if DEBUG else 'Production'
+    
+    # Load the configuration using the default values
+    app_config = config_dict[get_config_mode.capitalize()]
 
-# Load the configuration using the default values
-app_config = config_dict[get_config_mode.capitalize()]
+    app.config.from_object(app_config)
+    register_extensions(app)
+    register_blueprints(app)
 
-app.config.from_object(app_config)
-register_extensions(app)
-register_blueprints(app)
+    # Configure flask-login cookie settings
+    app.config.update(
+        SESSION_COOKIE_HTTPONLY=True,
+        SESSION_COOKIE_SAMESITE='Lax',
+    )
 
-# Configure flask-login cookie settings
-app.config.update(
-    SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SAMESITE='Lax',
-)
+    Migrate(app, db)
 
-Migrate(app, db)
+    # Environment Checks
 
+    if not DEBUG:
+        # Compress app size to run faster
+        Minify(app=app, html=True, js=False, cssless=False)
+    else:
+        # Print debugger messages
+        app.logger.info('DEBUG            = ' + str(DEBUG)             )
+        app.logger.info('Page Compression = ' + 'FALSE' if DEBUG else 'TRUE' )
+        app.logger.info('DBMS             = ' + app_config.SQLALCHEMY_DATABASE_URI)
+        app.logger.info('ASSETS_ROOT      = ' + app_config.ASSETS_ROOT )
 
-# Environment Checks
+        # Configure db
+        configure_database(app)
+    
+    return app
 
-if not DEBUG:
-    # Compress app size to run faster
-    Minify(app=app, html=True, js=False, cssless=False)
-else:
-    # Print debugger messages
-    app.logger.info('DEBUG            = ' + str(DEBUG)             )
-    app.logger.info('Page Compression = ' + 'FALSE' if DEBUG else 'TRUE' )
-    app.logger.info('DBMS             = ' + app_config.SQLALCHEMY_DATABASE_URI)
-    app.logger.info('ASSETS_ROOT      = ' + app_config.ASSETS_ROOT )
-
-    # Configure db
-    configure_database(app)
+# Define app instance
+app = create_app()

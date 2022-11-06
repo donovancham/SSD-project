@@ -9,7 +9,7 @@ from flask_login import (
     login_manager
 )
 
-from cmsapp import db, login_manager, authorize, talisman
+from cmsapp import db, login_manager, authorize#, talisman
 from cmsapp.authentication import blueprint
 from cmsapp.authentication.forms import LoginForm, CreateAccountForm, BookApptForm, CreateRecordForm, OTPForm, PWResetForm, PWResetFuncForm
 from cmsapp.authentication.models import Appointment, User, Record, Role, Group
@@ -27,7 +27,7 @@ import sys
 import datetime
 
 @blueprint.route('/')
-@talisman()
+#@talisman()
 def route_default():
     return redirect(url_for('authentication_blueprint.login'))
 
@@ -35,12 +35,12 @@ def route_default():
 # Login & Registration
 
 @blueprint.route('/login', methods=['GET', 'POST'])
-@talisman()
+#@talisman()
 def login():
     login_form = LoginForm(request.form)
     if 'login' in request.form:
         # read form data
-        username = request.form['username']
+        username = request.form['username'].upper()
         password = request.form['password']
 
         # Locate user
@@ -52,7 +52,7 @@ def login():
             # Checks to see if the user's Email is verified
             if user.confirmed:
 
-                email = user.email
+                email = user.email.upper()
 
                 # Creates a new OTP based on a random secret
                 secret = pyotp.random_base32()
@@ -62,8 +62,8 @@ def login():
                 user.otp = secret
                 db.session.add(user)
                 db.session.commit()
-
-       	        html = render_template("accounts/2fa.html", a_otp=OTP_Pin)
+                
+                html = render_template("accounts/2fa.html", a_otp=OTP_Pin)
                 subject = "Login OTP"
                 send_email(email, subject, html)
 
@@ -78,11 +78,11 @@ def login():
     if not current_user.is_authenticated:
         return render_template('accounts/login.html',
                                form=login_form)
-    return redirect(url_for('home_blueprint.index'))
+    return redirect(url_for('authentication_blueprint.viewAppt'))
 
 
 @blueprint.route('/login_2fa',methods=['GET','POST'])
-@talisman()
+#@talisman()
 def login_2FA():
     otp_form = OTPForm(request.form)
 
@@ -99,25 +99,24 @@ def login_2FA():
             db.session.add(user)
             db.session.commit()
             login_user(user)
-            return redirect(url_for('authentication_blueprint.route_default'))
+            return redirect(url_for('authentication_blueprint.viewAppt'))
 
     return render_template('accounts/otp_auth.html', form=otp_form)
 
 
 @blueprint.route('/register', methods=['GET', 'POST'])
-@talisman()
+#@talisman()
 def register():
     create_account_form = CreateAccountForm(request.form)
     if 'register' in request.form:
 
-        username= request.form['username']
-        email= request.form['email']
-        nric= request.form['nric']
+        username= request.form['username'].upper()
+        email= request.form['email'].upper()
+        nric= request.form['nric'].upper()
         password= request.form['password']
         userroles= "Patient"
         #groups= request.form['groups']
-        name= request.form['name']
-        password= request.form['password']
+        name= request.form['name'].upper()
 
         # Check password with zxcvbn
         complexity, msg = password_complexity_checker(password)
@@ -146,7 +145,7 @@ def register():
         user = User.query.filter_by(nric=nric).first()
         if user:
             return render_template('accounts/register.html',
-                                   msg='Nric already registered',
+                                   msg='NRIC already registered',
                                    success=False,
                                    form=create_account_form)
             
@@ -200,7 +199,7 @@ def register():
 
 
         return render_template('accounts/register.html',
-                               msg='Account created successfully.',
+                               msg='Account created successfully.\nClick the link in your email to activate your account',
                                success=True,
                                form=create_account_form)
 
@@ -210,7 +209,7 @@ def register():
 
 # for 2FA confirmation
 @blueprint.route('/confirm/<token>', methods=['GET'])
-@talisman()
+#@talisman()
 def confirm_email(token):
 
         url_buffer = ""
@@ -236,39 +235,39 @@ def confirm_email(token):
 
 
 @blueprint.route('/confirmation_success')
-@talisman()
+#@talisman()
 def confirmation_success():
     return render_template('accounts/account_confirmation_success.html')
 
 @blueprint.route('/confirmation_confirmed')
-@talisman()
+#@talisman()
 def confirmation_confirmed():
     return render_template('accounts/account_confirmation_confirmed.html')
 
 @blueprint.route('/confirmation_invalid')
-@talisman()
+#@talisman()
 def confirmation_invalid():
     return render_template('accounts/account_confirmation_invalid.html')
 
 @blueprint.route('/not_verified')
-@talisman()
+#@talisman()
 def account_not_verified():
     return render_template('accounts/not_verified.html')
 
 @blueprint.route('/logout')
-@talisman()
+#@talisman()
 def logout():
     logout_user()
     return redirect(url_for('authentication_blueprint.login'))
 
 
 @blueprint.route('/password_reset', methods=['GET','POST'])
-@talisman()
+#@talisman()
 def password_reset():
     reset_form = PWResetForm()
 
     if request.method == "POST":
-        email = request.values.get('email')
+        email = request.values.get('email').upper()
 
         user = User.query.filter_by(email=email).first()
 
@@ -292,7 +291,7 @@ def password_reset():
 
 
 @blueprint.route('/password_reset_func/<token>',methods=['GET','POST'])
-@talisman()
+#@talisman()
 def password_reset_func(token):
         pass_reset_func = PWResetFuncForm()
         email = confirm_token(token)
@@ -327,26 +326,26 @@ def password_reset_func(token):
 
 
 @blueprint.route('/pw_reset_sent')
-@talisman()
+#@talisman()
 def pw_reset_sent():
     return render_template('accounts/pw_reset_sent.html')
 
 
 @blueprint.route('/pw_reset_invalid')
-@talisman()
+#@talisman()
 def pw_reset_invalid():
     return render_template('accounts/pw_reset_invalid.html')
 
 
 @blueprint.route('/password_reset_successful')
-@talisman()
+#@talisman()
 def password_resetted():
     return render_template('accounts/password_reset_successful.html')
 
 
 
 @blueprint.route('/bookAppointment.html', methods=['GET', 'POST'])
-@talisman()
+#@talisman()
 @login_required
 def bookAppt():
     if current_user.userrole == "Doctor":
@@ -359,19 +358,25 @@ def bookAppt():
                 inputTime = request.form['inputTime']
                 inputDetail = request.form['inputDetail']
 
-                inputNRIC = request.form['inputNRIC']
-                inputName = request.form['inputName']
+                inputNRIC = current_user.nric
+                inputName = current_user.name
+      
+                try:
+                    inputDate = datetime.strptime(inputDate,'%Y-%m-%d').date()
+                    inputTime = datetime.strptime(inputTime,'%H:%M').time()
 
-                newAppt = Appointment(appointmentDate = inputDate, appointmentTime = inputTime, patientName = inputName, patientNRIC = inputNRIC, appointmentDetail = inputDetail)
-                db.session.add(newAppt)
-                db.session.commit()
+                    newAppt = Appointment(appointmentDate = inputDate, appointmentTime = inputTime, patientName = inputName, patientNRIC = inputNRIC, appointmentDetail = inputDetail)
+                    db.session.add(newAppt)
+                    db.session.commit()
 
-                return redirect('/viewAppointment.html')
+                    return redirect('/viewAppointment.html')
+                except:
+                    return render_template('home/bookAppointment.html', segment="bookAppointment", form=form)
 
         return render_template('home/bookAppointment.html', segment="bookAppointment", form=form)
 
 @blueprint.route('/createRecord.html', methods=['GET', 'POST'])
-@talisman()
+#@talisman()
 @login_required
 def createRecord():
     form = CreateRecordForm()
@@ -383,27 +388,27 @@ def createRecord():
         msg = ""
         if request.method == "POST":
             #if form.validate_on_submit():
-                defaultDate = request.form['defaultDate']
-                inputNRIC = request.form['inputNRIC']
-                inputDescription = request.form['inputDescription']
+            defaultDate = request.form['defaultDate']
+            inputNRIC = request.form['inputNRIC']
+            inputDescription = request.form['inputDescription']
 
-                # inputName = request.form['inputName']
-                inputName = ""
-                inputCreatedBy = request.form['inputCreatedBy']
+            # inputName = request.form['inputName']
+            inputName = ""
+            inputCreatedBy = request.form['inputCreatedBy']
 
-                checkUsers = Appointment.query.all()
-                for eachUser in checkUsers:
-                    if eachUser.patientNRIC == inputNRIC:
-                        inputName = eachUser.patientName
+            checkUsers = Appointment.query.all()
+            for eachUser in checkUsers:
+                if eachUser.patientNRIC == inputNRIC:
+                    inputName = eachUser.patientName
 
-                if (inputName == ""):
-                    print("No such NRIC in User Database")
-                    msg = "Incorrect NRIC"
-                else:
-                    newRecord = Record(dateCreated = defaultDate, createdBy = inputCreatedBy, patientName = inputName, patientNRIC = inputNRIC, description = inputDescription)
-                    db.session.add(newRecord)
-                    db.session.commit()
-                    return redirect('/viewRecord.html')
+            if (inputName == ""):
+                print("No such NRIC in User Database")
+                msg = "Incorrect NRIC"
+            else:
+                newRecord = Record(dateCreated = defaultDate, createdBy = inputCreatedBy, patientName = inputName, patientNRIC = inputNRIC, description = inputDescription)
+                db.session.add(newRecord)
+                db.session.commit()
+                return redirect('/viewRecord.html')
 
         return render_template('home/createRecord.html', segment="createRecord", form=form, msg=msg)
     else:
@@ -411,7 +416,7 @@ def createRecord():
 
 
 @blueprint.route('/viewAppointment.html', methods=['GET', 'POST'])
-@talisman()
+#@talisman()
 @login_required
 def viewAppt():
     data = Appointment.query.all()
@@ -440,7 +445,7 @@ def viewAppt():
     return render_template('home/viewAppointment.html', segment="viewAppointment", data=data, form=form)
 
 @blueprint.route('/viewRecord.html', methods=['GET', 'POST'])
-@talisman()
+#@talisman()
 @login_required
 def viewRecord():
     form = CreateRecordForm()
@@ -465,7 +470,7 @@ def viewRecord():
     return render_template('home/viewRecord.html', segment="viewRecord", data=data, form=form)
 
 @blueprint.route('/updateRecord.html', methods=['GET', 'POST'])
-@talisman()
+#@talisman()
 @login_required
 def updateRecord():
     # RBAC check if user is a Doctor
@@ -497,7 +502,7 @@ def updateRecord():
     return render_template('home/updateRecord.html', segment="updateRecord", data=data, form=form)
 
 @blueprint.route('/updateAppointment.html', methods=['GET', 'POST'])
-@talisman()
+#@talisman()
 @login_required
 def updateAppt():
     # RBAC check if user is a Nurse of Patient
@@ -513,17 +518,23 @@ def updateAppt():
         inputNRIC = request.form['inputNRIC']
         inputName = request.form['inputName']
 
-        entry = Appointment.query.get(int(inputID))
-        entry.appointmentDate = inputDate
-        entry.appointmentTime = inputTime
-        entry.patientNRIC = inputNRIC
-        entry.appointmentDetail = inputDetail
-        entry.patientName = inputName
+        try:
+            inputDate = datetime.strptime(inputDate,'%Y-%m-%d').date()
+            inputTime = datetime.strptime(inputTime,'%H:%M').time()
 
-        db.session.commit()
-        print("Entry updated")
+            entry = Appointment.query.get(int(inputID))
+            entry.appointmentDate = inputDate
+            entry.appointmentTime = inputTime
+            entry.patientNRIC = current_user.nric
+            entry.appointmentDetail = inputDetail
+            entry.patientName = current_user.name
 
-        return redirect("/viewAppointment.html")
+            db.session.commit()
+            print("Entry updated")
+
+            return redirect("/viewAppointment.html")
+        except:
+            return render_template('home/updateAppointment.html', segment="update", data=data, form=form)
 
     return render_template('home/updateAppointment.html', segment="update", data=data, form=form)
 

@@ -16,6 +16,13 @@ then
     echo "Creating the database tables..."
     python manage.py create_db
     echo "Tables created"
+
+    echo "Creating a Doctor"
+    python manage.py add_user nurse 1802961@sit.singaporetech.edu.sg
+
+    echo "Creating a Nurse"
+    python manage.py add_user doctor heng.jz98@gmail.com
+
 fi
 
 # if [ "$CMS_DEBUG" = "1" ]

@@ -35,7 +35,7 @@ def password_complexity_checker(password):
 
 
     complexity = zxcvbn(password)
-    if complexity["score"] < 3:
+    if complexity["score"] < 2:
             msg = ','.join(complexity["feedback"]["suggestions"])
             msg = "Password is not complex enough: " + msg
             return False,msg
