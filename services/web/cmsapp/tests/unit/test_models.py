@@ -34,10 +34,10 @@ def test_appointment_create(init_db):
     """
     # Given
 
-    nowDate = datetime.now.strftime("%Y-%m-%d")
-    nowtime = datetime.now.strftime("%H:%M")
-    inputDate = datetime.strptime(inputDate,'%Y-%m-%d').date()
-    inputTime = datetime.strptime(inputTime,'%H:%M').time()
+    nowDate = datetime.now().strftime("%Y-%m-%d")
+    nowtime = datetime.now().strftime("%H:%M")
+    inputDate = datetime.strptime(nowDate,'%Y-%m-%d').date()
+    inputTime = datetime.strptime(nowtime,'%H:%M').time()
 
     inputDetail = "He's a little sick."
     inputNRIC = "123a"
