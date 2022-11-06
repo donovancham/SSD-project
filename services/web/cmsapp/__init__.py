@@ -68,21 +68,21 @@ get_config_mode = 'Debug' if DEBUG else 'Production'
 csrf = CSRFProtect(app)
 
 # Enable flask-talisman
-csp = {
-    'default-src':  [
-        '\'self\'',
-        '\'unsafe-inline\'',
-        'stackpath.bootstrapcdn.com',
-        'code.jquery.com',
-        'cdn.jsdelivr.net',
-        'cdnjs.cloudflare.com',
+# csp = {
+#     'default-src':  [
+#         '\'self\'',
+#         '\'unsafe-inline\'',
+#         'stackpath.bootstrapcdn.com',
+#         'code.jquery.com',
+#         'cdn.jsdelivr.net',
+#         'cdnjs.cloudflare.com',
 
-    ]
-}
-talisman = Talisman(
-    app,
-    content_security_policy=csp,
-)
+#     ]
+# }
+# talisman = Talisman(
+#     app,
+#     content_security_policy=csp,
+# )
 
 
 # Load the configuration using the default values
