@@ -2,11 +2,6 @@
 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
     <div class="sb-sidenav-menu">
         <div class="nav">
-            <div class="sb-sidenav-menu-heading">Core</div>
-            <a class="nav-link {% if 'index' in segment %} active {% endif %}" href="index.html">
-                <div class="sb-nav-link-icon"><em class="fas fa-tachometer-alt"></em></div>
-                Dashboard
-            </a>
 
             <div class="sb-sidenav-menu-heading">Appointments</div>
             {% if current_user.userrole == "Patient" or current_user.userrole == "Nurse" %}
