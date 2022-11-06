@@ -360,7 +360,7 @@ def bookAppt():
 
                 inputNRIC = request.form['inputNRIC']
                 inputName = request.form['inputName']
-
+                
                 try:
                     inputDate = datetime.strptime(inputDate,'%Y-%m-%d').date()
                     inputTime = datetime.strptime(inputTime,'%H:%M').time()
@@ -370,7 +370,7 @@ def bookAppt():
                     db.session.commit()
 
                     return redirect('/viewAppointment.html')
-               except:
+                except:
                     return render_template('home/bookAppointment.html', segment="bookAppointment", form=form)
 
         return render_template('home/bookAppointment.html', segment="bookAppointment", form=form)
