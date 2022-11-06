@@ -62,8 +62,8 @@ def login():
                 user.otp = secret
                 db.session.add(user)
                 db.session.commit()
-
-       	        html = render_template("accounts/2fa.html", a_otp=OTP_Pin)
+                
+                html = render_template("accounts/2fa.html", a_otp=OTP_Pin)
                 subject = "Login OTP"
                 send_email(email, subject, html)
 
@@ -117,7 +117,6 @@ def register():
         userroles= "Patient"
         #groups= request.form['groups']
         name= request.form['name']
-        password= request.form['password']
 
         # Check password with zxcvbn
         complexity, msg = password_complexity_checker(password)
@@ -383,27 +382,27 @@ def createRecord():
         msg = ""
         if request.method == "POST":
             #if form.validate_on_submit():
-                defaultDate = request.form['defaultDate']
-                inputNRIC = request.form['inputNRIC']
-                inputDescription = request.form['inputDescription']
+            defaultDate = request.form['defaultDate']
+            inputNRIC = request.form['inputNRIC']
+            inputDescription = request.form['inputDescription']
 
-                # inputName = request.form['inputName']
-                inputName = ""
-                inputCreatedBy = request.form['inputCreatedBy']
+            # inputName = request.form['inputName']
+            inputName = ""
+            inputCreatedBy = request.form['inputCreatedBy']
 
-                checkUsers = Appointment.query.all()
-                for eachUser in checkUsers:
-                    if eachUser.patientNRIC == inputNRIC:
-                        inputName = eachUser.patientName
+            checkUsers = Appointment.query.all()
+            for eachUser in checkUsers:
+                if eachUser.patientNRIC == inputNRIC:
+                    inputName = eachUser.patientName
 
-                if (inputName == ""):
-                    print("No such NRIC in User Database")
-                    msg = "Incorrect NRIC"
-                else:
-                    newRecord = Record(dateCreated = defaultDate, createdBy = inputCreatedBy, patientName = inputName, patientNRIC = inputNRIC, description = inputDescription)
-                    db.session.add(newRecord)
-                    db.session.commit()
-                    return redirect('/viewRecord.html')
+            if (inputName == ""):
+                print("No such NRIC in User Database")
+                msg = "Incorrect NRIC"
+            else:
+                newRecord = Record(dateCreated = defaultDate, createdBy = inputCreatedBy, patientName = inputName, patientNRIC = inputNRIC, description = inputDescription)
+                db.session.add(newRecord)
+                db.session.commit()
+                return redirect('/viewRecord.html')
 
         return render_template('home/createRecord.html', segment="createRecord", form=form, msg=msg)
     else:

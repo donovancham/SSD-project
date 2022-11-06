@@ -47,8 +47,29 @@ pipeline {
                 sh """
                 echo "Running Unit Tests"
                 """
-                // // Warnings next gen
-                // recordIssues enabledForFailure: true, tools: owaspDependencyCheck()
+
+                // Executing tests
+                dir('services/web') {
+                    sh '''
+                    python3 -m venv venv
+                    source venv/bin/activate
+                    pip3 install -r requirements.txt
+                    python3 -m pytest -v --junit-xml=reports/result.xml
+                    deactivate
+                    '''
+
+                    // Cleanup
+                    sh '''
+                    rm -rf venv
+                    '''
+                }
+                
+            }
+            post {
+                always {
+                    // Publish report
+                    junit 'services/web/reports/pytest.xml'
+                }
             }
         }
 

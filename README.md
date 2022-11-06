@@ -28,6 +28,11 @@ OR
 $ python manage.py run
 ```
 
+**Testing**
+```console
+$ python -m pytest -vv
+```
+
 **Development**
 ```console
 $ docker-compose up -d --build
@@ -52,7 +57,72 @@ $ docker compose -f docker-compose.prod.yml logs -f -t
 
 ## Application Architecture
 - Project Name: Clinic Management System (CMS)
-- 
+- Project Link: https://jumpifzer0.me
+
+```sh
+├── Jenkinsfile                     # Jenkinsfile used to configure
+├── README.md                       # Contains the general documentations
+├── docker-compose.prod.yml         # Production docker-compose
+├── docker-compose.yml              # Development docker-compose
+├── docs                            # Contains the general documentations
+│   ├── devnotes                      # Notes for developers
+│   │   ├── ...
+│   └── images
+│       └── verify_button.png
+├── services                        # Main web app services
+│   ├── certbot                       # Generates HTTPS certs
+│   │   └── Dockerfile
+│   ├── nginx                         # Reverse proxy container
+│   │   ├── Dockerfile
+│   │   └── nginx.conf
+│   └── web                           # Web app container
+│       ├── Dockerfile
+│       ├── cmsapp                    # Main Flask application
+│       │   ├── __init__.py             # Main application entrypoint
+│       │   ├── config.py               # Configuration file
+│       │   ├── authentication        # Authentication blueprint
+│       │   │   ├── __init__.py
+│       │   │   ├── cmsemail.py
+│       │   │   ├── cmstoken.py
+│       │   │   ├── forms.py
+│       │   │   ├── models.py
+│       │   │   ├── routes.py
+│       │   │   └── util.py
+│       │   ├── home                  # General routes
+│       │   │   ├── __init__.py
+│       │   │   └── routes.py
+│       │   ├── static                # Static assets
+│       │   │   └── assets
+│       │   │       ├── css             # CSS files
+│       │   │       │   └── ...           
+│       │   │       ├── demo            # Some js files for dashboard
+│       │   │       │   └── ...
+│       │   │       ├── gulpfile.js
+│       │   │       ├── img             # Images
+│       │   │       │   └── ...
+│       │   │       ├── js              # Other js files
+│       │   │       ├── package.json
+│       │   │       └── scss            # SCSS files
+│       │   ├── templates             # HTML templates
+│       │   │   ├── accounts          
+│       │   │   │   ├── ...
+│       │   │   ├── home
+│       │   │   │   ├── ...
+│       │   │   ├── includes
+│       │   │   │   ├── ...
+│       │   │   └── layouts
+│       │   │       ├── ...
+│       │   └── tests                 # Tests folder
+│       │       ├── conftest.py         # Initialize test environment
+│       │       ├── functional          # Contains functional tests
+│       │       │   ├── ...
+│       │       └── unit                # Contains unit tests
+│       │           ├── ...
+│       ├── entrypoint.sh           # Application entrypoint script for production
+│       ├── manage.py               # Enables CLI interaction with app
+│       └── requirements.txt        # Requirements for Flask app
+└── sonar-project.properties      # Properties for Sonarqube static analysis
+```
 
 ## Changelog
 - v0.0
@@ -139,3 +209,8 @@ $ docker compose -f docker-compose.prod.yml logs -f -t
   - Added property configuration for sonar-project
   - Added generation of `sonar-report.json` for Warnings next gen
   - Fixed bugs for Sonarqube scanning stage in pipeline
+- v1.5
+  - Added tests
+    - Added unit tests for db models
+    - Added functional tests for routes
+  - Updated `Jenkinsfile` to publish test results from unit tests

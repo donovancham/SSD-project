@@ -5,14 +5,11 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv(".env.dev"))
 
 class Config(object):
-
     # Set up the App SECRET_KEY
     SECRET_KEY = os.getenv('SECRET_KEY')
-    print(SECRET_KEY)
 
     # Set up main static assets folder
     ASSETS_ROOT = os.getenv('ASSETS_ROOT')
-    print(ASSETS_ROOT)  
     
 
 class ProductionConfig(Config):
