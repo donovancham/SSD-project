@@ -136,7 +136,7 @@ pipeline {
         stage('Deploy: HTTPS Config') {
              steps {
                  sh '''
-                 docker exec cmsapp-proxy sh -c "mv /etc/nginx/conf.d/nginx.new /etc/nginx/conf.d/nginx.conf; nginx -s reload"
+                 docker exec cmsapp-proxy sh -c "mv /etc/nginx/conf.d/nginx.new /etc/nginx/conf.d/nginx.conf;"
                  '''
              }
         }
