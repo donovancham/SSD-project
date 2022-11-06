@@ -9,7 +9,7 @@ from flask_login import (
     login_manager
 )
 
-from cmsapp import db, login_manager, authorize, talisman
+from cmsapp import db, login_manager, authorize#, talisman
 from cmsapp.authentication import blueprint
 from cmsapp.authentication.forms import LoginForm, CreateAccountForm, BookApptForm, CreateRecordForm, OTPForm, PWResetForm, PWResetFuncForm
 from cmsapp.authentication.models import Appointment, User, Record, Role, Group
