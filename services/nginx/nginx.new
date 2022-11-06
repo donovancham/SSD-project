@@ -27,8 +27,12 @@ server {
     server_name jumpifzer0.me;                                             # uncomment when https is ready for testing
 
 
-    ssl_certificate /etc/nginx/ssl/live/jumpifzer0.me/fullchain.pem;       # uncomment when https is ready for testing
-    ssl_certificate_key /etc/nginx/ssl/live/jumpifzer0.me/privkey.pem;     # uncomment when https is ready for testing
+#    ssl_certificate /etc/nginx/ssl/live/jumpifzer0.me/fullchain.pem;       # uncomment when https is ready for testing
+#    ssl_certificate_key /etc/nginx/ssl/live/jumpifzer0.me/privkey.pem;     # uncomment when https is ready for testing
+
+    ssl_certificate /etc/nginx/ssl/archive/jumpifzer0.me/fullchain1.pem;       # uncomment when https is ready for testing
+    ssl_certificate_key /etc/nginx/ssl/archive/jumpifzer0.me/privkey1.pem   # uncomment when https is ready for testing
+
 
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers HIGH:!MEDIUM:!LOW:!aNULL:!MD5:!3DES:!RC4;
