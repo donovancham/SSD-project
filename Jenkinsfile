@@ -95,7 +95,6 @@ pipeline {
             steps {
                 withSonarQubeEnv('Sonarqube') { 
                     sh '''${scannerHome}/bin/sonar-scanner \
-                    -Dsonar.analysis.mode=preview \
                     -Dsonar.report.export.path=sonar-report.json
                     '''
                 }
