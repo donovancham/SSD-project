@@ -1,10 +1,16 @@
+// Defined to better control app execution based on workspace
 def basedir = env.WORKSPACE
+
+// Defined to control execution on live testing or live deploy environment
 def agentLabel
 if (BRANCH_NAME == "main") {
     agentLabel = "do3203"
 } else {
     agentLabel = "staging"
 }
+
+// Defined for Sonarqube
+def scannerHome = tool 'SonarScanner'
 
 pipeline {
     agent { 
@@ -86,13 +92,14 @@ pipeline {
         }
 
         stage('SonarQube analysis') {
-            def scannerHome = tool 'SonarScanner';
-            withSonarQubeEnv('Sonarqube') { 
-                sh '${scannerHome}/bin/sonar-scanner'
-            }
+            steps {
+                withSonarQubeEnv('Sonarqube') { 
+                    sh '${scannerHome}/bin/sonar-scanner'
+                }
 
-            // Warnings next gen
-            recordIssues enabledForFailure: true, tools: sonarQube()	
+                // Warnings next gen
+                recordIssues enabledForFailure: true, tools: sonarQube()
+            }
         }
 
         stage('Deploy: Open Ports') {
@@ -157,8 +164,11 @@ pipeline {
                 // Close ports
                 sh 'sudo ufw delete allow http'
                 sh 'sudo ufw delete allow https'
+                // Ensure sensitive files are removed
                 sh 'rm ./.db.prod.env'
                 sh 'rm ./.web.prod.env'
+                // Clean workspace to be safe
+                cleanWs()
             }
         }
     }
