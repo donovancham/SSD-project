@@ -99,7 +99,7 @@ def login_2FA():
             db.session.add(user)
             db.session.commit()
             login_user(user)
-            return redirect(url_for('authentication_blueprint.route_default'))
+            return redirect(url_for('authentication_blueprint.viewAppt'))
 
     return render_template('accounts/otp_auth.html', form=otp_form)
 
