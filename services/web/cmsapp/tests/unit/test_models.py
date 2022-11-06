@@ -1,4 +1,5 @@
 from cmsapp.authentication.models import User, Appointment, Record
+import datetime
 
 def test_user_create(init_db):
     """
@@ -32,8 +33,8 @@ def test_appointment_create(init_db):
     patientNRIC and appointmentDetail is correct
     """
     # Given
-    inputDate = "2022-09-10"
-    inputTime = "0800"
+    inputDate = datetime.date.today().strftime("%Y/%m/%d")
+    inputTime = "08:00"
     inputDetail = "He's a little sick."
     inputNRIC = "123a"
     inputName = "Adam"
