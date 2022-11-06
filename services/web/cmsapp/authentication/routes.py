@@ -9,7 +9,7 @@ from flask_login import (
     login_manager
 )
 
-from cmsapp import db, login_manager, authorize#, talisman
+from cmsapp import db, login_manager, authorize, talisman
 from cmsapp.authentication import blueprint
 from cmsapp.authentication.forms import LoginForm, CreateAccountForm, BookApptForm, CreateRecordForm, OTPForm, PWResetForm, PWResetFuncForm
 from cmsapp.authentication.models import Appointment, User, Record, Role, Group
@@ -35,7 +35,7 @@ def route_default():
 # Login & Registration
 
 @blueprint.route('/login', methods=['GET', 'POST'])
-#@talisman()
+@talisman()
 def login():
     login_form = LoginForm(request.form)
     if 'login' in request.form:
@@ -82,7 +82,7 @@ def login():
 
 
 @blueprint.route('/login_2fa',methods=['GET','POST'])
-#@talisman()
+@talisman()
 def login_2FA():
     otp_form = OTPForm(request.form)
 
@@ -105,7 +105,7 @@ def login_2FA():
 
 
 @blueprint.route('/register', methods=['GET', 'POST'])
-#@talisman()
+@talisman()
 def register():
     create_account_form = CreateAccountForm(request.form)
     if 'register' in request.form:
@@ -210,7 +210,7 @@ def register():
 
 # for 2FA confirmation
 @blueprint.route('/confirm/<token>', methods=['GET'])
-#@talisman()
+@talisman()
 def confirm_email(token):
 
         url_buffer = ""
@@ -236,34 +236,34 @@ def confirm_email(token):
 
 
 @blueprint.route('/confirmation_success')
-#@talisman()
+@talisman()
 def confirmation_success():
     return render_template('accounts/account_confirmation_success.html')
 
 @blueprint.route('/confirmation_confirmed')
-#@talisman()
+@talisman()
 def confirmation_confirmed():
     return render_template('accounts/account_confirmation_confirmed.html')
 
 @blueprint.route('/confirmation_invalid')
-#@talisman()
+@talisman()
 def confirmation_invalid():
     return render_template('accounts/account_confirmation_invalid.html')
 
 @blueprint.route('/not_verified')
-#@talisman()
+@talisman()
 def account_not_verified():
     return render_template('accounts/not_verified.html')
 
 @blueprint.route('/logout')
-#@talisman()
+@talisman()
 def logout():
     logout_user()
     return redirect(url_for('authentication_blueprint.login'))
 
 
 @blueprint.route('/password_reset', methods=['GET','POST'])
-#@talisman()
+@talisman()
 def password_reset():
     reset_form = PWResetForm()
 
@@ -292,7 +292,7 @@ def password_reset():
 
 
 @blueprint.route('/password_reset_func/<token>',methods=['GET','POST'])
-#@talisman()
+@talisman()
 def password_reset_func(token):
         pass_reset_func = PWResetFuncForm()
         email = confirm_token(token)
@@ -327,26 +327,26 @@ def password_reset_func(token):
 
 
 @blueprint.route('/pw_reset_sent')
-#@talisman()
+@talisman()
 def pw_reset_sent():
     return render_template('accounts/pw_reset_sent.html')
 
 
 @blueprint.route('/pw_reset_invalid')
-#@talisman()
+@talisman()
 def pw_reset_invalid():
     return render_template('accounts/pw_reset_invalid.html')
 
 
 @blueprint.route('/password_reset_successful')
-#@talisman()
+@talisman()
 def password_resetted():
     return render_template('accounts/password_reset_successful.html')
 
 
 
 @blueprint.route('/bookAppointment.html', methods=['GET', 'POST'])
-#@talisman()
+@talisman()
 @login_required
 def bookAppt():
     if current_user.userrole == "Doctor":
@@ -371,7 +371,7 @@ def bookAppt():
         return render_template('home/bookAppointment.html', segment="bookAppointment", form=form)
 
 @blueprint.route('/createRecord.html', methods=['GET', 'POST'])
-#@talisman()
+@talisman()
 @login_required
 def createRecord():
     form = CreateRecordForm()
@@ -411,7 +411,7 @@ def createRecord():
 
 
 @blueprint.route('/viewAppointment.html', methods=['GET', 'POST'])
-#@talisman()
+@talisman()
 @login_required
 def viewAppt():
     data = Appointment.query.all()
@@ -440,7 +440,7 @@ def viewAppt():
     return render_template('home/viewAppointment.html', segment="viewAppointment", data=data, form=form)
 
 @blueprint.route('/viewRecord.html', methods=['GET', 'POST'])
-#@talisman()
+@talisman()
 @login_required
 def viewRecord():
     form = CreateRecordForm()
@@ -465,7 +465,7 @@ def viewRecord():
     return render_template('home/viewRecord.html', segment="viewRecord", data=data, form=form)
 
 @blueprint.route('/updateRecord.html', methods=['GET', 'POST'])
-#@talisman()
+@talisman()
 @login_required
 def updateRecord():
     # RBAC check if user is a Doctor
@@ -497,7 +497,7 @@ def updateRecord():
     return render_template('home/updateRecord.html', segment="updateRecord", data=data, form=form)
 
 @blueprint.route('/updateAppointment.html', methods=['GET', 'POST'])
-#@talisman()
+@talisman()
 @login_required
 def updateAppt():
     # RBAC check if user is a Nurse of Patient
