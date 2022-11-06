@@ -1,18 +1,6 @@
 version: '3.8'
 
 services:
-  certbot:
-    container_name: cmsapp-web-certbot
-    build: ./services/certbot
-    command: certonly --webroot --webroot-path /var/www/certbot/ -d jumpifzer0.me --email jumpifzer0@protonmail.com --agree-tos
-    image: certbot/certbot:latest
-    depends_on:
-      - nginx
-    networks:
-      - frontend
-    volumes:
-      - ./certbot/www/:/var/www/certbot/:rw
-      - ./certbot/conf/:/etc/letsencrypt/:rw
   nginx:
     container_name: cmsapp-proxy
     build: ./services/nginx
@@ -23,13 +11,10 @@ services:
       - web
     networks:
       - frontend
-    volumes:
-      - ./certbot/www:/var/www/certbot/:ro
-      - ./certbot/conf/:/etc/nginx/ssl/:ro
   web:
     container_name: cmsapp-web
     build: ./services/web
-    command: gunicorn --bind 0.0.0.0:32984 manage:app
+    command: gunicorn -w 3 --bind 0.0.0.0:32984 manage:app
     expose:
       - 32984
     env_file:
@@ -48,7 +33,6 @@ services:
       - ./.db.prod.env
     networks:
       - backend
-
 
 networks:
   frontend:
