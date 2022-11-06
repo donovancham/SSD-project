@@ -40,7 +40,7 @@ def login():
     login_form = LoginForm(request.form)
     if 'login' in request.form:
         # read form data
-        username = request.form['username']
+        username = request.form['username'].upper()
         password = request.form['password']
 
         # Locate user
@@ -52,7 +52,7 @@ def login():
             # Checks to see if the user's Email is verified
             if user.confirmed:
 
-                email = user.email
+                email = user.email.upper()
 
                 # Creates a new OTP based on a random secret
                 secret = pyotp.random_base32()
@@ -110,13 +110,13 @@ def register():
     create_account_form = CreateAccountForm(request.form)
     if 'register' in request.form:
 
-        username= request.form['username']
-        email= request.form['email']
-        nric= request.form['nric']
+        username= request.form['username'].upper()
+        email= request.form['email'].upper()
+        nric= request.form['nric'].upper()
         password= request.form['password']
         userroles= "Patient"
         #groups= request.form['groups']
-        name= request.form['name']
+        name= request.form['name'].upper()
 
         # Check password with zxcvbn
         complexity, msg = password_complexity_checker(password)
