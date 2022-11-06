@@ -361,11 +361,17 @@ def bookAppt():
                 inputNRIC = current_user.nric
                 inputName = current_user.name
 
-                newAppt = Appointment(appointmentDate = inputDate, appointmentTime = inputTime, patientName = inputName, patientNRIC = inputNRIC, appointmentDetail = inputDetail)
-                db.session.add(newAppt)
-                db.session.commit()
+                try:
+                    inputDate = datetime.strptime(inputDate,'%Y-%m-%d').date()
+                    inputTime = datetime.strptime(inputTime,'%H:%M').time()
 
-                return redirect('/viewAppointment.html')
+                    newAppt = Appointment(appointmentDate = inputDate, appointmentTime = inputTime, patientName = inputName, patientNRIC = inputNRIC, appointmentDetail = inputDetail)
+                    db.session.add(newAppt)
+                    db.session.commit()
+
+                    return redirect('/viewAppointment.html')
+               except:
+                    return render_template('home/bookAppointment.html', segment="bookAppointment", form=form)
 
         return render_template('home/bookAppointment.html', segment="bookAppointment", form=form)
 
@@ -512,17 +518,24 @@ def updateAppt():
         inputNRIC = request.form['inputNRIC']
         inputName = request.form['inputName']
 
-        entry = Appointment.query.get(int(inputID))
-        entry.appointmentDate = inputDate
-        entry.appointmentTime = inputTime
-        entry.patientNRIC = current_user.nric
-        entry.appointmentDetail = inputDetail
-        entry.patientName = current_user.name
 
-        db.session.commit()
-        print("Entry updated")
+        try;
+            inputDate = datetime.strptime(inputDate,'%Y-%m-%d').date()
+            inputTime = datetime.strptime(inputTime,'%H:%M').time()
 
-        return redirect("/viewAppointment.html")
+            entry = Appointment.query.get(int(inputID))
+            entry.appointmentDate = inputDate
+            entry.appointmentTime = inputTime
+            entry.patientNRIC = current_user.nric
+            entry.appointmentDetail = inputDetail
+            entry.patientName = current_user.name
+
+            db.session.commit()
+            print("Entry updated")
+
+            return redirect("/viewAppointment.html")
+        except:
+            return render_template('home/updateAppointment.html', segment="update", data=data, form=form)
 
     return render_template('home/updateAppointment.html', segment="update", data=data, form=form)
 
