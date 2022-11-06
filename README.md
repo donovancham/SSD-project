@@ -51,6 +51,8 @@ $ docker compose -f docker-compose.prod.yml logs -f -t
 - [Task-list](docs/devnotes/tasklist.md)
 
 ## Application Architecture
+- Project Name: Clinic Management System (CMS)
+- 
 
 ## Changelog
 - v0.0
@@ -129,3 +131,6 @@ $ docker compose -f docker-compose.prod.yml logs -f -t
     - Live-test (staging deploy before actual deploy)
     - Live-deploy (main deploy)
   - Removed some not updated documentations
+- v1.4-1
+  - Added Warning next gen plugin to `Jenkinsfile`
+  - Added Sonarqube installation into `Jenkinsfile`

@@ -44,6 +44,8 @@ pipeline {
                 sh """
                 echo "Running Unit Tests"
                 """
+                // // Warnings next gen
+                // recordIssues enabledForFailure: true, tools: owaspDependencyCheck()
             }
         }
 
@@ -68,6 +70,9 @@ pipeline {
 
                 // Publish report
                 dependencyCheckPublisher failedNewCritical: 1, failedNewHigh: 2, failedNewLow: 10, failedNewMedium: 5, failedTotalCritical: 1, failedTotalHigh: 2, failedTotalLow: 10, failedTotalMedium: 5, pattern: 'owasp-reports/dependency-check-report.xml'
+
+                // Warnings next gen
+                recordIssues enabledForFailure: true, tools: owaspDependencyCheck()
             }
         }
 
@@ -77,6 +82,17 @@ pipeline {
                 echo "Running Code Analysis"
                 """
             }
+            // recordIssues enabledForFailure: true, tools: [mavenConsole(), java(), javaDoc()]
+        }
+
+        stage('SonarQube analysis') {
+            def scannerHome = tool 'SonarScanner';
+            withSonarQubeEnv('Sonarqube') { 
+                sh '${scannerHome}/bin/sonar-scanner'
+            }
+
+            // Warnings next gen
+            recordIssues enabledForFailure: true, tools: sonarQube()	
         }
 
         stage('Deploy: Open Ports') {
