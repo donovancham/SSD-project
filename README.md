@@ -148,6 +148,37 @@ $ docker compose -f docker-compose.prod.yml logs -f -t
     - `docs/devnotes/init.md`
     - `README.md`
     - `docs/devnotes/env-setup.md`
+- v0.2
+  - Added Viewing of Appointment functionality
+    - `home/viewAppointment.html`
+  - Added Booking of Appointment functionality
+    - `home/bookAppointment.html`
+  - Added Viewing of Patient Records functionality
+    - `home/viewRecords.html`
+  - Added Creating of Patient Records functionality
+    - `home/createRecords.html`
+- v0.3
+  - Added Updating of Appointment functionality
+    - `home/updateAppointment.html`
+  - Added Deleting of Appointment functionality
+  - Added Updating of Patient Records functionality
+    - `home/updateRecords.html`
+  - Added Deleting of Patient Records functionality
+- v0.4
+  - Added Session control
+    - `home/viewAppointment.html`
+    - `home/bookAppointment.html`
+    - `home/viewRecords.html`
+    - `home/createRecords.html`
+    - `routes.py`
+- v0.5
+  - Added password hashing and password salting functionality
+    - `accounts/login.html`
+    - `accounts /register.html`
+- v0.6
+  - Added password hashing and 
+    - `accounts/login.html`
+    - `accounts /register.html`
 - v1.0
   - Added basic configuration setup of web stack
     - Copied existing development to `services/web`

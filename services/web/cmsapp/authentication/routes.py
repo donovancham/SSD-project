@@ -40,7 +40,7 @@ def login():
     login_form = LoginForm(request.form)
     if 'login' in request.form:
         # read form data
-        username = request.form['username']
+        username = request.form['username'].upper()
         password = request.form['password']
 
         # Locate user
@@ -52,7 +52,7 @@ def login():
             # Checks to see if the user's Email is verified
             if user.confirmed:
 
-                email = user.email
+                email = user.email.upper()
 
                 # Creates a new OTP based on a random secret
                 secret = pyotp.random_base32()
@@ -110,13 +110,13 @@ def register():
     create_account_form = CreateAccountForm(request.form)
     if 'register' in request.form:
 
-        username= request.form['username']
-        email= request.form['email']
-        nric= request.form['nric']
+        username= request.form['username'].upper()
+        email= request.form['email'].upper()
+        nric= request.form['nric'].upper()
         password= request.form['password']
         userroles= "Patient"
         #groups= request.form['groups']
-        name= request.form['name']
+        name= request.form['name'].upper()
 
         # Check password with zxcvbn
         complexity, msg = password_complexity_checker(password)
@@ -145,7 +145,7 @@ def register():
         user = User.query.filter_by(nric=nric).first()
         if user:
             return render_template('accounts/register.html',
-                                   msg='Nric already registered',
+                                   msg='NRIC already registered',
                                    success=False,
                                    form=create_account_form)
             
@@ -199,7 +199,7 @@ def register():
 
 
         return render_template('accounts/register.html',
-                               msg='Account created successfully.',
+                               msg='Account created successfully.\nClick the link in your email to activate your account',
                                success=True,
                                form=create_account_form)
 
@@ -267,7 +267,7 @@ def password_reset():
     reset_form = PWResetForm()
 
     if request.method == "POST":
-        email = request.values.get('email')
+        email = request.values.get('email').upper()
 
         user = User.query.filter_by(email=email).first()
 
@@ -360,12 +360,18 @@ def bookAppt():
 
                 inputNRIC = request.form['inputNRIC']
                 inputName = request.form['inputName']
+                
+                try:
+                    inputDate = datetime.strptime(inputDate,'%Y-%m-%d').date()
+                    inputTime = datetime.strptime(inputTime,'%H:%M').time()
 
-                newAppt = Appointment(appointmentDate = inputDate, appointmentTime = inputTime, patientName = inputName, patientNRIC = inputNRIC, appointmentDetail = inputDetail)
-                db.session.add(newAppt)
-                db.session.commit()
+                    newAppt = Appointment(appointmentDate = inputDate, appointmentTime = inputTime, patientName = inputName, patientNRIC = inputNRIC, appointmentDetail = inputDetail)
+                    db.session.add(newAppt)
+                    db.session.commit()
 
-                return redirect('/viewAppointment.html')
+                    return redirect('/viewAppointment.html')
+                except:
+                    return render_template('home/bookAppointment.html', segment="bookAppointment", form=form)
 
         return render_template('home/bookAppointment.html', segment="bookAppointment", form=form)
 
@@ -519,10 +525,23 @@ def updateAppt():
         entry.appointmentDetail = inputDetail
         entry.patientName = inputName
 
-        db.session.commit()
-        print("Entry updated")
+        try:
+            inputDate = datetime.strptime(inputDate,'%Y-%m-%d').date()
+            inputTime = datetime.strptime(inputTime,'%H:%M').time()
 
-        return redirect("/viewAppointment.html")
+            entry = Appointment.query.get(int(inputID))
+            entry.appointmentDate = inputDate
+            entry.appointmentTime = inputTime
+            entry.patientNRIC = current_user.nric
+            entry.appointmentDetail = inputDetail
+            entry.patientName = current_user.name
+
+            db.session.commit()
+            print("Entry updated")
+
+            return redirect("/viewAppointment.html")
+        except:
+            return render_template('home/updateAppointment.html', segment="update", data=data, form=form)
 
     return render_template('home/updateAppointment.html', segment="update", data=data, form=form)
 

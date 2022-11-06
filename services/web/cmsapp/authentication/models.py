@@ -56,7 +56,7 @@ class User(db.Model, UserMixin):
     # For 2FA
     confirmed = db.Column(db.Boolean, nullable=False, default=False)
     confirmed_on = db.Column(db.DateTime, nullable=True)
-    otp = db.Column(db.Integer)
+    otp = db.Column(db.String(64))
     reset_request = db.Column(db.Boolean, nullable=False, default=False)
 
 
@@ -98,8 +98,8 @@ class Appointment(db.Model):
     )
     
     appointmentID = db.Column(db.Integer, primary_key=True)
-    appointmentDate = db.Column(db.String(64), nullable = False)
-    appointmentTime = db.Column(db.String(64), nullable = False)
+    appointmentDate = db.Column(db.Date, nullable = False)
+    appointmentTime = db.Column(db.Time, nullable = False)
     patientName = db.Column(db.String(64), nullable = False)
     patientNRIC = db.Column(db.String(64), nullable = False)
     appointmentDetail = db.Column(db.String(64), nullable = False)
