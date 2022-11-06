@@ -1,5 +1,5 @@
 from cmsapp.authentication.models import User, Appointment, Record
-import datetime
+from datetime import datetime
 
 def test_user_create(init_db):
     """
