@@ -358,8 +358,8 @@ def bookAppt():
                 inputTime = request.form['inputTime']
                 inputDetail = request.form['inputDetail']
 
-                inputNRIC = request.form['inputNRIC']
-                inputName = request.form['inputName']
+                inputNRIC = current_user.nric
+                inputName = current_user.name
 
                 newAppt = Appointment(appointmentDate = inputDate, appointmentTime = inputTime, patientName = inputName, patientNRIC = inputNRIC, appointmentDetail = inputDetail)
                 db.session.add(newAppt)
@@ -515,9 +515,9 @@ def updateAppt():
         entry = Appointment.query.get(int(inputID))
         entry.appointmentDate = inputDate
         entry.appointmentTime = inputTime
-        entry.patientNRIC = inputNRIC
+        entry.patientNRIC = current_user.nric
         entry.appointmentDetail = inputDetail
-        entry.patientName = inputName
+        entry.patientName = current_user.name
 
         db.session.commit()
         print("Entry updated")
