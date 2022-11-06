@@ -518,17 +518,14 @@ def updateAppt():
         inputNRIC = request.form['inputNRIC']
         inputName = request.form['inputName']
 
-<<<<<<< HEAD
-=======
         entry = Appointment.query.get(int(inputID))
         entry.appointmentDate = inputDate
         entry.appointmentTime = inputTime
         entry.patientNRIC = inputNRIC
         entry.appointmentDetail = inputDetail
         entry.patientName = inputName
->>>>>>> origin/dev-production-env
 
-        try;
+        try:
             inputDate = datetime.strptime(inputDate,'%Y-%m-%d').date()
             inputTime = datetime.strptime(inputTime,'%H:%M').time()
 
