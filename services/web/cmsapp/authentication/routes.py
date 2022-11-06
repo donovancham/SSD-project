@@ -145,7 +145,7 @@ def register():
         user = User.query.filter_by(nric=nric).first()
         if user:
             return render_template('accounts/register.html',
-                                   msg='Nric already registered',
+                                   msg='NRIC already registered',
                                    success=False,
                                    form=create_account_form)
             
@@ -199,7 +199,7 @@ def register():
 
 
         return render_template('accounts/register.html',
-                               msg='Account created successfully.',
+                               msg='Account created successfully. Click the link in your email to activate your account',
                                success=True,
                                form=create_account_form)
 
@@ -267,7 +267,7 @@ def password_reset():
     reset_form = PWResetForm()
 
     if request.method == "POST":
-        email = request.values.get('email')
+        email = request.values.get('email').upper()
 
         user = User.query.filter_by(email=email).first()
 
@@ -358,8 +358,8 @@ def bookAppt():
                 inputTime = request.form['inputTime']
                 inputDetail = request.form['inputDetail']
 
-                inputNRIC = current_user.nric
-                inputName = current_user.name
+                inputNRIC = request.form['inputNRIC']
+                inputName = request.form['inputName']
 
                 newAppt = Appointment(appointmentDate = inputDate, appointmentTime = inputTime, patientName = inputName, patientNRIC = inputNRIC, appointmentDetail = inputDetail)
                 db.session.add(newAppt)
@@ -515,9 +515,9 @@ def updateAppt():
         entry = Appointment.query.get(int(inputID))
         entry.appointmentDate = inputDate
         entry.appointmentTime = inputTime
-        entry.patientNRIC = current_user.nric
+        entry.patientNRIC = inputNRIC
         entry.appointmentDetail = inputDetail
-        entry.patientName = current_user.name
+        entry.patientName = inputName
 
         db.session.commit()
         print("Entry updated")
