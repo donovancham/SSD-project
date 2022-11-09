@@ -13,11 +13,15 @@
                 <div class="col-lg-5">
                     <div class="card shadow-lg border-0 rounded-lg mt-5">
                         <div class="card-header"><h3 class="text-center font-weight-light my-4">Update Appointment</h3></div>
+                        <span class="text-center">
+                            {% if msg %}
+                                <span class="text-danger"> {{ msg | safe }} </span>
+                            {% endif %} 
+                        </span>
                         <div class="card-body">
                             <form role="form" method="post" action="/updateAppointment.html">
                                 {{ form.csrf_token }}
                                 <div class="form-floating mb-3">
-                                    <input type="hidden" id="inputID" name="inputID" value={{ data.appointmentID }}>
                                     {{ form.inputDate(placeholder="Select Date", class="form-control", value=data.appointmentDate, onkeydown="return false") }}
                                     <label for="inputDate">Date</label>
                                 </div>
@@ -29,27 +33,14 @@
                                     {{ form.inputDetail(class="form-control", value=data.appointmentDetail)}}
                                     <label for="inputDetail">Appointment Detail:</label>
                                 </div>
-
-                                {% if current_user.userrole == "Patient" %}
-                                    <div class="form-floating mb-3">
-                                        {{ form.inputNRIC(class="form-control", value=current_user.nric, readonly="readonly") }}
-                                        <label for="inputNRIC"> Patient NRIC (Last 4 Digit)</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        {{ form.inputName(class="form-control", value=current_user.name, readonly="readonly")}}
-                                        <label for="inputName">Patient Name:</label>
-                                    </div>
-                                {% endif %}
-                                {% if current_user.userrole == "Nurse" %}
-                                    <div class="form-floating mb-3">
-                                        {{ form.inputNRIC(class="form-control", value=data.patientNRIC) }}
-                                        <label for="inputNRIC"> Patient NRIC (Last 4 Digit)</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        {{ form.inputName(class="form-control", value=data.patientName)}}
-                                        <label for="inputName">Patient Name:</label>
-                                    </div>
-                                {% endif %}
+                                <div class="form-floating mb-3">
+                                    {{ form.inputNRIC(class="form-control", value=data.patientNRIC, readonly="readonly") }}
+                                    <label for="inputNRIC"> Patient NRIC (Last 4 Digit)</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    {{ form.inputName(class="form-control", value=data.patientName, readonly="readonly")}}
+                                    <label for="inputName">Patient Name:</label>
+                                </div>
                                 <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                                     <button class="btn btn-primary" id="bookApptBtn" type="submit">Update Appointment</button>
                                 </div>

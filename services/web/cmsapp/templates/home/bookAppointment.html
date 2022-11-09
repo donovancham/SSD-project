@@ -13,6 +13,11 @@
                 <div class="col-lg-5">
                     <div class="card shadow-lg border-0 rounded-lg mt-5">
                         <div class="card-header"><h3 class="text-center font-weight-light my-4">Book New Appointment</h3></div>
+                        <span class="text-center">
+                            {% if msg %}
+                                <span class="text-danger"> {{ msg | safe }} </span>
+                            {% endif %} 
+                        </span>
                         <div class="card-body">
                             <form role="form" method="post" action="">
                                 {{ form.csrf_token }}
@@ -43,10 +48,6 @@
                                     <div class="form-floating mb-3">
                                         {{ form.inputNRIC(class="form-control") }}
                                         <label for="inputNRIC"> Patient NRIC (Last 4 Digit)</label>
-                                    </div>
-                                    <div class="form-floating mb-3">
-                                        {{ form.inputName(class="form-control")}}
-                                        <label for="inputName">Patient Name:</label>
                                     </div>
                                 {% endif %}
                                 <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
