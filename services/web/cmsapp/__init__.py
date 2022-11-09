@@ -24,20 +24,20 @@ def register_extensions(app: Flask):
     authorize.init_app(app)
     
     # # Enable flask-talisman
-    # csp = {
-    #     'default-src':  [
-    #         '\'self\'',
-    #         '\'unsafe-inline\'',
-    #         'stackpath.bootstrapcdn.com',
-    #         'code.jquery.com',
-    #         'cdn.jsdelivr.net',
-    #         'cdnjs.cloudflare.com',
-    #     ]
-    # }
-    # talisman.init_app(
-    #     app,
-    #     content_security_policy=csp,
-    # )
+    csp = {
+        'default-src':  [
+            '\'self\'',
+            '\'unsafe-inline\'',
+            'stackpath.bootstrapcdn.com',
+            'code.jquery.com',
+            'cdn.jsdelivr.net',
+            'cdnjs.cloudflare.com',
+        ]
+    }
+    talisman.init_app(
+        app,
+        content_security_policy=csp,
+    )
 
 def register_blueprints(app: Flask):
     for module_name in ('authentication', 'home'):

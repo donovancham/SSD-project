@@ -113,7 +113,7 @@ class Record(db.Model, PermissionsMixin):
     )
 
     recordID = db.Column(db.Integer, primary_key=True)
-    dateCreated = db.Column(db.String(64), nullable = False)
+    dateCreated = db.Column(db.Date, nullable = False)
     createdBy = db.Column(db.String(64), nullable = False)
     patientName = db.Column(db.String(64), nullable = False)
     patientNRIC = db.Column(db.String(64), nullable = False)

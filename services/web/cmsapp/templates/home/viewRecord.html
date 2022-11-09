@@ -11,6 +11,11 @@
         <div class="container-fluid px-4">
             <h1 class="mt-4">All Patients' Records</h1>
             <div class="card mb-4">
+                <span class="text-center">
+                    {% if msg %}
+                        <span class="text-danger"> {{ msg | safe }} </span>
+                    {% endif %} 
+                </span>
                 <div class="card-body">
                     <table id="datatablesSimple">
                         <thead>
@@ -60,14 +65,14 @@
                                         <td>
                                             <form role="form" method="post" action="">
                                                 {{ form.csrf_token }}
-                                                <input type="text" value={{ rec.recordID }} id="inputID" name="inputID" hidden>
+                                                <input type="text" value={{ mask[rec.recordID] }} id="inputID" name="inputID" hidden>
                                                 <button id="updateApptBtn" name="updateApptBtn" type="submit">Update</button>
                                             </form>
                                         </td>
                                         <td>
                                             <form role="form" method="post" action="">
                                                 {{ form.csrf_token }}
-                                                <input type="text" value={{ rec.recordID }} id="inputID" name="inputID" hidden>
+                                                <input type="text" value={{ mask[rec.recordID] }} id="inputID" name="inputID" hidden>
                                                 <button id="deleteApptBtn" name="deleteApptBtn" type="submit">Delete</button>
                                             </form>
                                         </td>
