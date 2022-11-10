@@ -4,6 +4,8 @@ private/
 .env*
 .secrets
 *.env
+*.key
+*.crt
 
 # Flask .gitignore
 .DS_Store
