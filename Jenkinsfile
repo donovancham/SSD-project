@@ -151,7 +151,7 @@ pipeline {
 
         stage('Deploy: Starting Services') { 
             steps {
-                configFileProvider([configFile(fileId: '2f325b2f-2be0-4899-8829-4195a0afd001', targetLocation: '.db.prod.env'), configFile(fileId: '31b62b81-efb0-40c8-9915-c1235bd292b5', targetLocation: '.web.prod.env')]) {}
+                configFileProvider([configFile(fileId: '2f325b2f-2be0-4899-8829-4195a0afd001', targetLocation: '.db.prod.env'), configFile(fileId: '31b62b81-efb0-40c8-9915-c1235bd292b5', targetLocation: '.web.prod.env'), configFile(fileId: 'a29bf18a-9f36-4631-ac61-9841ce2ab486', targetLocation: 'services/nginx/certs/selfsigned.crt'), configFile(fileId: '18acff6d-749d-4014-9aca-0acc2407c90a', targetLocation: 'services/nginx/ssl/private/selfsigned.key')]) {}
                 sh """
                 echo "Deploying Code..."
                 """
@@ -163,14 +163,6 @@ pipeline {
             }
         }
 
-        stage('Deploy: HTTPS Config') {
-             steps {
-                 sh '''
-                 docker exec cmsapp-proxy sh -c "mv /etc/nginx/conf.d/nginx.new /etc/nginx/conf.d/nginx.conf;"
-                 '''
-             }
-        }
-        
         stage('Cleanup Files') {
             when {
                 branch 'main'
