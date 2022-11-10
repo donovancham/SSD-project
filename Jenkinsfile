@@ -163,14 +163,6 @@ pipeline {
             }
         }
 
-        stage('Deploy: HTTPS Config') {
-             steps {
-                 sh '''
-                 docker exec cmsapp-proxy sh -c "mv /etc/nginx/conf.d/nginx.new /etc/nginx/conf.d/nginx.conf;"
-                 '''
-             }
-        }
-        
         stage('Cleanup Files') {
             when {
                 branch 'main'
